@@ -1,6 +1,10 @@
 package com.example
 
-import com.example.plugins.*
+import com.example.config.configureHTTP
+import com.example.config.configureMonitoring
+import com.example.config.configureSecurity
+import com.example.config.configureSerialization
+import com.example.routes.configureRouting
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -12,7 +16,6 @@ fun main() {
 
 fun Application.module() {
     configureSerialization()
-    configureDatabases()
     configureMonitoring()
     configureHTTP()
     configureSecurity()
