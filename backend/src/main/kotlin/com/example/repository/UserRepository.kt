@@ -1,6 +1,6 @@
-package com.example.domain.repository
+package com.example.repository
 
-import com.example.domain.model.ExposedUser
+import com.example.model.ExposedUser
 
 interface UserRepository {
     suspend fun createUser(user: ExposedUser): Int

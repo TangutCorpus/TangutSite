@@ -1,4 +1,4 @@
-package com.example.infrastructure.config
+package com.example.config
 
 import io.ktor.http.*
 import io.ktor.server.application.*

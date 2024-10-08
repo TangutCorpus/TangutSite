@@ -1,4 +1,4 @@
-package com.example.infrastructure.config
+package com.example.config
 
 import org.jetbrains.exposed.sql.*
 

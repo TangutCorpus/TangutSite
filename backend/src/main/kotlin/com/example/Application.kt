@@ -1,10 +1,10 @@
 package com.example
 
-import com.example.infrastructure.config.configureHTTP
-import com.example.infrastructure.config.configureMonitoring
-import com.example.web.routes.configureRouting
-import com.example.infrastructure.config.configureSecurity
-import com.example.infrastructure.config.configureSerialization
+import com.example.config.configureHTTP
+import com.example.config.configureMonitoring
+import com.example.config.configureSecurity
+import com.example.config.configureSerialization
+import com.example.routes.configureRouting
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*

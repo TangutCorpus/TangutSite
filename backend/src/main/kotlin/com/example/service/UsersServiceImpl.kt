@@ -1,7 +1,7 @@
-package com.example.domain.service
+package com.example.service
 
-import com.example.domain.model.ExposedUser
-import com.example.domain.repository.UserRepository
+import com.example.model.ExposedUser
+import com.example.repository.UserRepository
 
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
     override suspend fun getAllUsers(): List<ExposedUser> {

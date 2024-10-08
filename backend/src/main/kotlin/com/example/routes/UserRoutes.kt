@@ -1,6 +1,6 @@
-package com.example.web.routes
+package com.example.routes
 
-import com.example.domain.service.UserService
+import com.example.service.UserService
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get

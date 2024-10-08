@@ -1,8 +1,8 @@
-package com.example.web.routes
+package com.example.routes
 
-import com.example.domain.service.UserServiceImpl
-import com.example.infrastructure.config.initDatabase
-import com.example.infrastructure.database.UserRepositoryImpl
+import com.example.config.initDatabase
+import com.example.repository.UserRepositoryImpl
+import com.example.service.UserServiceImpl
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.statuspages.*

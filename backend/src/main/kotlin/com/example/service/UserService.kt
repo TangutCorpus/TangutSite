@@ -1,6 +1,6 @@
-package com.example.domain.service
+package com.example.service
 
-import com.example.domain.model.ExposedUser
+import com.example.model.ExposedUser
 
 interface UserService {
     suspend fun getAllUsers(): List<ExposedUser>

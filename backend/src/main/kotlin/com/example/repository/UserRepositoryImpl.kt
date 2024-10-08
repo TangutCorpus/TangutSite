@@ -1,7 +1,6 @@
-package com.example.infrastructure.database
+package com.example.repository
 
-import com.example.domain.model.ExposedUser
-import com.example.domain.repository.UserRepository
+import com.example.model.ExposedUser
 import org.jetbrains.exposed.sql.*
 
 class UserRepositoryImpl(private val database: Database) : UserRepository {
