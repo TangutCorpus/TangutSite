@@ -1,4 +1,3 @@
-
 val kotlin_version: String by project
 val logback_version: String by project
 val exposed_version: String by project
@@ -43,3 +42,26 @@ dependencies {
     testImplementation("io.ktor:ktor-server-test-host-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
+
+tasks {
+    val fatJar = register<Jar>("fatJar") {
+        archiveBaseName.set("${project.name}-all")
+        archiveVersion.set(project.version.toString())
+        manifest {
+            attributes["Main-Class"] = "com.example.ApplicationKt"
+        }
+        from(sourceSets.main.get().output)
+
+        dependsOn(configurations.runtimeClasspath)
+        from({
+            configurations.runtimeClasspath.get().map { if (it.isDirectory) it else zipTree(it) }
+        })
+
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
+
+    build {
+        dependsOn(fatJar)
+    }
+}
+
