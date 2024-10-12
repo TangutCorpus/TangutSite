@@ -24,5 +24,4 @@ fun Application.module() {
     configureMonitoring()
     configureHTTP()
     configureSecurity()
-    configureRouting(userService)
 }
