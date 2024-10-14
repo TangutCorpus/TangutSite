@@ -1,0 +1,25 @@
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: "tangut"
+      POSTGRES_PASSWORD: "asS1fsad2fsD&W321"
+      POSTGRES_DB: "tangut_db"
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  ktor:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB}
+      DB_USER: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
+
+volumes:
+  pgdata:
