@@ -1,5 +1,6 @@
 package com.example
 
+import com.example.config.configureExceptionHandling
 import com.example.config.configureHTTP
 import com.example.config.configureMonitoring
 import com.example.config.configureSecurity
@@ -26,6 +27,7 @@ fun Application.module() {
     var textService = TextServiceImpl(textRepository)
 
     configureRouting(userService, textService)
+    configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
     configureHTTP()

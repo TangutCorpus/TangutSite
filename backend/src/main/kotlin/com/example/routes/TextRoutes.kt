@@ -11,12 +11,8 @@ fun Route.textRoutes(textService: TextService) {
 
     post("/texts") {
         val text = call.receive<Text>()
-        try {
-            textService.addText(text)
-            call.respondText("Text added successfully", status = HttpStatusCode.Created)
-        } catch (e: IllegalArgumentException) {
-            call.respondText(e.message ?: "Invalid data", status = HttpStatusCode.BadRequest)
-        }
+        textService.addText(text)
+        call.respondText("Text added successfully", status = HttpStatusCode.Created)
     }
 
     get("/texts/{id}") {
@@ -25,15 +21,12 @@ fun Route.textRoutes(textService: TextService) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@get
         }
-        try {
-            val text = textService.getTextById(id)
-            if (text != null) {
-                call.respondText(text.toString(), status = HttpStatusCode.OK)
-            } else {
-                call.respondText("Text not found", status = HttpStatusCode.NotFound)
-            }
-        } catch (e: Exception) {
-            call.respondText(e.message ?: "Error fetching text", status = HttpStatusCode.InternalServerError)
+
+        val text = textService.getTextById(id)
+        if (text != null) {
+            call.respondText(text.toString(), status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Text not found", status = HttpStatusCode.NotFound)
         }
     }
 
@@ -44,14 +37,8 @@ fun Route.textRoutes(textService: TextService) {
             return@put
         }
         val updatedText = call.receive<Text>()
-        try {
-            textService.updateText(updatedText.copy(id = id))
-            call.respondText("Text updated successfully", status = HttpStatusCode.OK)
-        } catch (e: IllegalArgumentException) {
-            call.respondText(e.message ?: "Invalid data", status = HttpStatusCode.BadRequest)
-        } catch (e: Exception) {
-            call.respondText(e.message ?: "Error updating text", status = HttpStatusCode.InternalServerError)
-        }
+        textService.updateText(updatedText.copy(id = id))
+        call.respondText("Text updated successfully", status = HttpStatusCode.OK)
     }
 
     delete("/texts/{id}") {
@@ -60,11 +47,7 @@ fun Route.textRoutes(textService: TextService) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@delete
         }
-        try {
-            textService.deleteTextById(id)
-            call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
-        } catch (e: Exception) {
-            call.respondText(e.message ?: "Error deleting text", status = HttpStatusCode.InternalServerError)
-        }
+        textService.deleteTextById(id)
+        call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
     }
 }
