@@ -17,7 +17,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
     }
 
     override suspend fun updateUser(
-        id: Int, user: ExposedUser
+        id: Int, user: ExposedUser,
     ): Boolean {
         TODO("Not yet implemented")
     }
@@ -25,6 +25,4 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
     override suspend fun deleteUser(id: Int): Boolean {
         TODO("Not yet implemented")
     }
-
-
 }
