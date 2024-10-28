@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 
 object TextFragments : Table() {
     val id = integer("id").autoIncrement()
-    val textId = integer("textId") //TODO: Make it a foreign key after the merging of all branches.
+    val textId = integer("textId").references(Texts.id, onDelete = ReferenceOption.CASCADE)
     val lineNumber = integer("lineNumber")
     val contentXML = text("contentXML")
     val commentXML = text("commentXML")
