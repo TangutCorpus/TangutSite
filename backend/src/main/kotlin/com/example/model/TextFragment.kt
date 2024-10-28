@@ -1,5 +1,6 @@
 package com.example.model
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 /**

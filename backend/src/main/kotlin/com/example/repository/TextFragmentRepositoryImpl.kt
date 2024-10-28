@@ -2,6 +2,7 @@ package com.example.repository
 
 import com.example.model.TextFragment
 import com.example.model.TextFragments
+import kotlinx.datetime.LocalDate
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -62,10 +63,8 @@ private fun ResultRow.toTextFragment(): TextFragment {
         id = this[TextFragments.id],
         textId = this[TextFragments.textId],
         lineNumber = this[TextFragments.lineNumber],
-        content = this[TextFragments.content],
-        comment = this[TextFragments.comment],
-        createdAt = this[TextFragments.createdAt]?.toString()
         contentXML = this[TextFragments.contentXML],
         commentXML = this[TextFragments.commentXML],
+        createdAt = this[TextFragments.createdAt]?.let { LocalDate.parse(it.toString()) }
     )
 }

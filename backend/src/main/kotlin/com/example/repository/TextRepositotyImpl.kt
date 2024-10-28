@@ -1,7 +1,9 @@
 package com.example.repository
 
 import com.example.model.Text
+import com.example.model.TextFragments
 import com.example.model.Texts
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
@@ -36,8 +38,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it) }
-        }
+            it[TextFragments.createdAt] = text.createdAt?.let { it -> LocalDateTime.parse(it.toString()) }        }
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {
@@ -45,7 +46,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it) }
+            it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
         }
     }
 
@@ -65,6 +66,6 @@ private fun ResultRow.toText(): Text {
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
         pureText = this[Texts.pureText],
-        createdAt = this[Texts.createdAt]?.toString()
+        createdAt = this[Texts.createdAt]?.let { LocalDate.parse(it.toString()) }
     )
 }
