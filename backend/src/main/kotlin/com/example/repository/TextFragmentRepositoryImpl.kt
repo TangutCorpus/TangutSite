@@ -30,20 +30,20 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
     override suspend fun addTextFragment(textFragment: TextFragment) = transaction(db) {
         TextFragments.insert {
             it[textId] = textFragment.textId
-            it[content] = textFragment.content
+            it[contentXML] = textFragment.contentXML
             it[lineNumber] = textFragment.lineNumber
-            it[comment] = textFragment.comment
-            it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it) }
+            it[commentXML] = textFragment.commentXML
+            it[createdAt] = textFragment.createdAt?.let { it -> LocalDateTime.parse(it.toString()) }
         }
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) = transaction(db) {
         TextFragments.update({ TextFragments.id eq textFragment.id!! }) {
             it[textId] = textFragment.textId
-            it[content] = textFragment.content
+            it[contentXML] = textFragment.contentXML
             it[lineNumber] = textFragment.lineNumber
-            it[comment] = textFragment.comment
-            it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it) }
+            it[commentXML] = textFragment.commentXML
+            it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it.toString()) }
         }
     }
 
@@ -65,5 +65,7 @@ private fun ResultRow.toTextFragment(): TextFragment {
         content = this[TextFragments.content],
         comment = this[TextFragments.comment],
         createdAt = this[TextFragments.createdAt]?.toString()
+        contentXML = this[TextFragments.contentXML],
+        commentXML = this[TextFragments.commentXML],
     )
 }

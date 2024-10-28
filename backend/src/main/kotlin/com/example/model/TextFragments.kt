@@ -9,6 +9,8 @@ object TextFragments : Table() {
     val lineNumber = integer("lineNumber")
     val content = text("content")
     val comment = text("comment")
+    val contentXML = text("contentXML")
+    val commentXML = text("commentXML")
     val createdAt = datetime("created_at").nullable()
     override val primaryKey = PrimaryKey(id)
 }
