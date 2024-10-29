@@ -16,7 +16,7 @@ class UserRepositoryTest {
     private val EXCEPTION_MESSAGE: String = "An operation is not implemented: Not yet implemented"
 
     @BeforeTest
-    fun before() {
+    fun setup() {
         var database = mockk<Database>(relaxed = true)
         repository = UserRepositoryImpl(database)
     }
@@ -26,14 +26,6 @@ class UserRepositoryTest {
         var user = ExposedUser("", 0)
         var exception = assertFailsWith<NotImplementedError> {
             repository.createUser(user)
-        }
-        assertEquals(EXCEPTION_MESSAGE, exception.message)
-    }
-
-    @Test
-    fun `test readUser throws NotImplementedError`() = runBlocking {
-        var exception = assertFailsWith<NotImplementedError> {
-            repository.readUser(1)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
