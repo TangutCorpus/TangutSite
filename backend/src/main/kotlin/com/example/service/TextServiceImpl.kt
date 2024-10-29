@@ -19,7 +19,7 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
 
     override suspend fun updateText(text: Text) {
         require(text.pureText.isNotBlank() && text.lineIds.isNotEmpty()) { "Text cannot be empty" }
-        require(text.canBeParsedToLocalDateTime()){ "Field 'createdAt': '${text.createdAt}' cannot be parsed to LocalDateTime" }
+        require(text.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${text.createdAt}' cannot be parsed to LocalDateTime" }
         textRepository.updateText(text)
     }
 

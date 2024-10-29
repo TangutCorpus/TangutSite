@@ -9,11 +9,11 @@ import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.update
 import java.time.LocalDateTime
 
@@ -38,7 +38,8 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[TextFragments.createdAt] = text.createdAt?.let { it -> LocalDateTime.parse(it.toString()) }        }
+            it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
+        }
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {

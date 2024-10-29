@@ -6,11 +6,11 @@ import kotlinx.datetime.LocalDate
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.time.LocalDateTime
 
@@ -34,7 +34,7 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
             it[contentXML] = textFragment.contentXML
             it[lineNumber] = textFragment.lineNumber
             it[commentXML] = textFragment.commentXML
-            it[createdAt] = textFragment.createdAt?.let { it -> LocalDateTime.parse(it.toString()) }
+            it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it.toString()) }
         }
     }
 

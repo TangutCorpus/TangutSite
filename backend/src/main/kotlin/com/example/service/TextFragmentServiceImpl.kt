@@ -13,13 +13,13 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
 
     override suspend fun addTextFragment(textFragment: TextFragment) {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
-        require(textFragment.canBeParsedToLocalDateTime()){ "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
+        require(textFragment.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
         fragmentRepository.addTextFragment(textFragment)
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
-        require(textFragment.canBeParsedToLocalDateTime()){ "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
+        require(textFragment.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
         fragmentRepository.updateTextFragment(textFragment)
     }
 
@@ -35,7 +35,7 @@ fun TextFragment.canBeParsedToLocalDateTime(): Boolean {
     return try {
         createdAt?.let { LocalDateTime.parse(it.toString()) }
         true
-    } catch (_: Exception){
+    } catch (_: Exception) {
         false
     }
 }
