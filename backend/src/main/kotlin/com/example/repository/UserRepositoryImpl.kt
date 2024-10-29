@@ -30,7 +30,4 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun addUser(user: ExposedUser) {
-        TODO("Not yet implemented")
-    }
 }

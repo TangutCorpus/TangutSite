@@ -9,5 +9,4 @@ interface UserRepository {
     suspend fun deleteUser(id: Int)
     suspend fun getAllUsers(): List<ExposedUser>
     suspend fun getUserById(i: Int): ExposedUser?
-    suspend fun addUser(user: ExposedUser)
 }
