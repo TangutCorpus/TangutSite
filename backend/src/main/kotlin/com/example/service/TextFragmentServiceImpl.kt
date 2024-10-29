@@ -11,12 +11,12 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
     }
 
     override suspend fun addTextFragment(textFragment: TextFragment) {
-        require(textFragment.content.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
+        require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
         fragmentRepository.addTextFragment(textFragment)
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) {
-        require(textFragment.content.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
+        require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
         fragmentRepository.updateTextFragment(textFragment)
     }
 
