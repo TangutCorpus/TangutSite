@@ -3,7 +3,8 @@ val ktor_version: String by project
 val logback_version: String by project
 val exposed_version: String by project
 val postgresql_version: String by project
-val kotlinxDatetimeVersion: String by project
+val kotlinx_datetime_version: String by project
+val serialization_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -26,23 +27,26 @@ repositories {
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm")
-    implementation("io.ktor:ktor-serialization-kotlinx-json-jvm")
-    implementation("io.ktor:ktor-server-content-negotiation-jvm")
+    implementation("io.ktor:ktor-server-core:$ktor_version")
+    implementation("io.ktor:ktor-serialization:$ktor_version")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktor_version")
+    implementation("io.ktor:ktor-server-call-logging:$ktor_version")
+    implementation("io.ktor:ktor-server-cors:$ktor_version")
+    implementation("io.ktor:ktor-server-host-common:$ktor_version")
+    implementation("io.ktor:ktor-server-sessions:$ktor_version")
+    implementation("io.ktor:ktor-server-auth:$ktor_version")
+    implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-server-netty:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
     implementation("org.jetbrains.exposed:exposed-core:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-jdbc:$exposed_version")
     implementation("org.jetbrains.exposed:exposed-java-time:$exposed_version")
     implementation("org.postgresql:postgresql:$postgresql_version")
-    implementation("io.ktor:ktor-server-call-logging-jvm")
-    implementation("io.ktor:ktor-server-cors-jvm")
-    implementation("io.ktor:ktor-server-host-common-jvm")
-    implementation("io.ktor:ktor-server-sessions-jvm")
-    implementation("io.ktor:ktor-server-auth-jvm")
-    implementation("io.ktor:ktor-server-auth-jwt-jvm")
-    implementation("io.ktor:ktor-server-netty-jvm")
-    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
     implementation("ch.qos.logback:logback-classic:$logback_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinxDatetimeVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
+
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
@@ -69,4 +73,3 @@ tasks {
         dependsOn(fatJar)
     }
 }
-
