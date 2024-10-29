@@ -2,6 +2,7 @@ package com.example.service
 
 import com.example.model.TextFragment
 import com.example.repository.TextFragmentRepository
+import java.time.LocalDateTime
 
 class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentRepository) : TextFragmentService {
     override suspend fun getTextFragmentById(id: Int): TextFragment? {
@@ -12,11 +13,13 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
 
     override suspend fun addTextFragment(textFragment: TextFragment) {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
+        require(textFragment.canBeParsedToLocalDateTime()){ "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
         fragmentRepository.addTextFragment(textFragment)
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
+        require(textFragment.canBeParsedToLocalDateTime()){ "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
         fragmentRepository.updateTextFragment(textFragment)
     }
 
@@ -26,4 +29,13 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
     }
 
     override suspend fun getAllTextFragments(): List<TextFragment> = fragmentRepository.getAllTextFragments()
+}
+
+fun TextFragment.canBeParsedToLocalDateTime(): Boolean {
+    return try {
+        createdAt?.let { LocalDateTime.parse(it.toString()) }
+        true
+    } catch (_: Exception){
+        false
+    }
 }
