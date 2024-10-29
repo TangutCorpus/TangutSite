@@ -1,5 +1,7 @@
-package com.example.routes
+package com.example.config
 
+import com.example.routes.textRoutes
+import com.example.routes.userRoutes
 import com.example.service.TextService
 import com.example.service.UserService
 import io.ktor.server.application.*
