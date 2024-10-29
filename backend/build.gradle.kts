@@ -5,6 +5,9 @@ val exposed_version: String by project
 val postgresql_version: String by project
 val kotlinx_datetime_version: String by project
 val serialization_version: String by project
+val mockk_version: String by project
+val kotlinx_coroutines_test: String by project
+val junit_jupiter_api: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -46,10 +49,14 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:$logback_version")
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_test")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
+    testImplementation("io.mockk:mockk:$mockk_version")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_api")
+
 }
 
 tasks {
