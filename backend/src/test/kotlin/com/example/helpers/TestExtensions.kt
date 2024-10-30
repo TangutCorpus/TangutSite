@@ -14,6 +14,11 @@ import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.ApplicationTestBuilder
 import io.mockk.coEvery
 import io.mockk.mockk
+import org.jetbrains.exposed.sql.Database
+
+fun getH2Database(): Database {
+    return Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
+}
 
 fun ApplicationTestBuilder.setupApp(defaultText: Text? = null) {
     environment {

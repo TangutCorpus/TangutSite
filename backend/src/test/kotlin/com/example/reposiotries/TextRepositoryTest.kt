@@ -1,12 +1,12 @@
 package com.example.reposiotries
 
+import com.example.helpers.getH2Database
 import com.example.model.Text
 import com.example.model.TextFragments
 import com.example.model.Texts
 import com.example.repository.TextRepository
 import com.example.repository.TextRepositoryImpl
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
@@ -16,7 +16,7 @@ import kotlin.test.*
 
 class TextRepositoryTest {
     private lateinit var repository: TextRepository
-    private val db = Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
+    private val db = getH2Database()
 
     private val sampleText = Text(1, "Text", listOf(1), "Text", null)
 
