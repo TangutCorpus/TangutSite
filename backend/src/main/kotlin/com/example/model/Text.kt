@@ -1,5 +1,6 @@
 package com.example.model
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 /**
@@ -18,5 +19,5 @@ data class Text(
     val comment: String,
     val lineIds: List<Int>,
     val pureText: String,
-    val createdAt: String?
+    val createdAt: LocalDate?,
 )
