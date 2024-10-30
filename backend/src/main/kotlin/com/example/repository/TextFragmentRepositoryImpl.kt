@@ -22,7 +22,8 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
     }
 
     override suspend fun getTextFragmentById(id: Int): TextFragment? = transaction(db) {
-        TextFragments.select(TextFragments.id)
+        TextFragments
+            .selectAll()
             .where { TextFragments.id eq id }
             .mapNotNull { it.toTextFragment() }
             .singleOrNull()

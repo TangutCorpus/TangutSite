@@ -27,7 +27,8 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
     }
 
     override suspend fun getTextById(id: Int): Text? = transaction(db) {
-        Texts.select(Texts.id)
+        Texts
+            .selectAll()
             .where { Texts.id eq id }
             .mapNotNull { it.toText() }
             .singleOrNull()
