@@ -22,7 +22,7 @@ fun Route.textRoutes(textService: TextService) {
 
     get("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
+        if (id == null || id <= 0) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@get
         }
@@ -37,7 +37,7 @@ fun Route.textRoutes(textService: TextService) {
 
     put("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
+        if (id == null || id <= 0) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@put
         }
@@ -52,7 +52,7 @@ fun Route.textRoutes(textService: TextService) {
 
     delete("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
+        if (id == null || id <= 0) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@delete
         }
