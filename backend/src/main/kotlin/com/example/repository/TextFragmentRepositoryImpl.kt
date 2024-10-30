@@ -35,7 +35,7 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
             it[lineNumber] = textFragment.lineNumber
             it[commentXML] = textFragment.commentXML
             it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it.toString()) }
-        }
+        } get TextFragments.id
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) = transaction(db) {

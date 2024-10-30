@@ -18,15 +18,15 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
         fragmentRepository.addTextFragment(textFragment)
     }
 
-    override suspend fun updateTextFragment(textFragment: TextFragment) {
+    override suspend fun updateTextFragment(textFragment: TextFragment): Boolean {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
         require(textFragment.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
-        fragmentRepository.updateTextFragment(textFragment)
+        return fragmentRepository.updateTextFragment(textFragment) != 0
     }
 
-    override suspend fun deleteTextFragmentById(id: Int) {
+    override suspend fun deleteTextFragmentById(id: Int): Boolean {
         require(id >= 0) { "ID cannot be negative" }
-        fragmentRepository.deleteTextFragmentById(id)
+        return fragmentRepository.deleteTextFragmentById(id) != 0
     }
 
     override suspend fun getAllTextFragments(): List<TextFragment> = fragmentRepository.getAllTextFragments()
