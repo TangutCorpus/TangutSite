@@ -8,6 +8,7 @@ val serialization_version: String by project
 val mockk_version: String by project
 val kotlinx_coroutines_test: String by project
 val junit_jupiter_api: String by project
+val h2_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -56,6 +57,7 @@ dependencies {
     testImplementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     testImplementation("io.mockk:mockk:$mockk_version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_api")
+    testImplementation("com.h2database:h2:$h2_version")
 
 }
 
