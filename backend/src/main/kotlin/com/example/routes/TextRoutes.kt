@@ -15,6 +15,11 @@ fun Route.textRoutes(textService: TextService) {
         call.respondText("Text added successfully", status = HttpStatusCode.Created)
     }
 
+    get("/texts") {
+        val texts = textService.getAllTexts()
+        call.respondText(texts.toString(), status = HttpStatusCode.OK)
+    }
+
     get("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
         if (id == null) {
