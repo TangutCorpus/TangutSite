@@ -2,7 +2,8 @@ package com.example.service
 
 import com.example.model.TextFragment
 import com.example.repository.TextFragmentRepository
-import java.time.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 
 class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentRepository) : TextFragmentService {
     override suspend fun getTextFragmentById(id: Int): TextFragment? {
@@ -33,7 +34,7 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
 
 fun TextFragment.canBeParsedToLocalDateTime(): Boolean {
     return try {
-        createdAt?.let { LocalDateTime.parse(it.toString()) }
+        createdAt?.atStartOfDayIn(TimeZone.currentSystemDefault())
         true
     } catch (_: Exception) {
         false
