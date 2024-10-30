@@ -12,24 +12,23 @@ import com.example.service.UserService
 import io.ktor.server.application.Application
 import io.ktor.server.config.ApplicationConfig
 import io.ktor.server.testing.ApplicationTestBuilder
+import io.mockk.coEvery
+import io.mockk.mockk
 
-fun ApplicationTestBuilder.setupApp() {
-
+fun ApplicationTestBuilder.setupApp(defaultText: Text? = null) {
     environment {
         config = ApplicationConfig("application-test.conf")
     }
     application {
-        testModule()
+        testModule(defaultText)
     }
 }
 
-    val mockDatabase = initDatabase(environment.config)
+fun Application.testModule(defaultText: Text?) {
+    val mockTextService = createMockTextService(defaultText)
+    val mockUserService = createMockUserService()
 
-    val userRepository = UserRepositoryImpl(mockDatabase)
-    val userService = UserServiceImpl(userRepository)
-fun Application.testModule() {
-
-    configureRouting(userService, textService)
+    configureRouting(mockUserService, mockTextService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
@@ -37,3 +36,16 @@ fun Application.testModule() {
     configureSecurity()
 }
 
+private fun createMockTextService(defaultText: Text?) = mockk<TextService>(relaxed = true).apply {
+    if (defaultText != null) {
+        coEvery { addText(any()) } returns Unit
+        coEvery { getTextById(any()) } returns null
+        coEvery { getTextById(1) } returns defaultText
+        coEvery { getAllTexts() } returns listOf(defaultText)
+        coEvery { deleteTextById(1) } returns true
+        coEvery { updateText(any()) } returns false
+        coEvery { updateText(defaultText) } returns true
+    }
+}
+
+private fun createMockUserService() = mockk<UserService>(relaxed = true)
