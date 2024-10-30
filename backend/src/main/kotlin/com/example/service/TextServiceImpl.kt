@@ -17,15 +17,15 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
         textRepository.addText(text)
     }
 
-    override suspend fun updateText(text: Text) {
+    override suspend fun updateText(text: Text): Boolean {
         require(text.pureText.isNotBlank() && text.lineIds.isNotEmpty()) { "Text cannot be empty" }
         require(text.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${text.createdAt}' cannot be parsed to LocalDateTime" }
-        textRepository.updateText(text)
+        return textRepository.updateText(text) != 0
     }
 
-    override suspend fun deleteTextById(id: Int) {
+    override suspend fun deleteTextById(id: Int): Boolean {
         require(id >= 0) { "ID cannot be negative" }
-        textRepository.deleteTextById(id)
+        return textRepository.deleteTextById(id) != 0
     }
 
     override suspend fun getAllTexts(): List<Text> = textRepository.getAllTexts()

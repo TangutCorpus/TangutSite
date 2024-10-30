@@ -37,8 +37,12 @@ fun Route.textRoutes(textService: TextService) {
             return@put
         }
         val updatedText = call.receive<Text>()
-        textService.updateText(updatedText.copy(id = id))
-        call.respondText("Text updated successfully", status = HttpStatusCode.OK)
+        if (textService.updateText(updatedText.copy(id = id))) {
+            call.respondText("Text updated successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Text not modified", status = HttpStatusCode.NotModified)
+        }
+
     }
 
     delete("/texts/{id}") {
@@ -47,7 +51,10 @@ fun Route.textRoutes(textService: TextService) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@delete
         }
-        textService.deleteTextById(id)
-        call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
+        if (textService.deleteTextById(id)) {
+            call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Text not deleted", status = HttpStatusCode.NotModified)
+        }
     }
 }

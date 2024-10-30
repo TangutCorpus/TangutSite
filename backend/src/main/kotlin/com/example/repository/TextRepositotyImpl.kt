@@ -39,7 +39,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
             it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
-        }
+        } get Texts.id
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {
