@@ -1,7 +1,6 @@
 package com.example.routes
 
 import com.example.helpers.setupApp
-import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.HttpStatusCode

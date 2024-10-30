@@ -19,7 +19,6 @@ import java.time.LocalDateTime
 
 
 class TextRepositoryImpl(private val db: Database) : TextRepository {
-
     init {
         transaction(db) {
             SchemaUtils.create(Texts)
@@ -39,7 +38,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
+            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
         } get Texts.id
     }
 

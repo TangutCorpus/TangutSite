@@ -8,7 +8,6 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
 
 fun Route.textRoutes(textService: TextService) {
-
     post("/texts") {
         val text = call.receive<Text>()
         textService.addText(text)
@@ -26,7 +25,6 @@ fun Route.textRoutes(textService: TextService) {
             call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
             return@get
         }
-
         val text = textService.getTextById(id)
         if (text != null) {
             call.respondText(text.toString(), status = HttpStatusCode.OK)

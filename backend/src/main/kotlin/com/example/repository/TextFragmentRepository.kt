@@ -1,7 +1,6 @@
 package com.example.repository
 
 import com.example.model.TextFragment
-import org.jetbrains.exposed.sql.statements.InsertStatement
 
 interface TextFragmentRepository {
     suspend fun getTextFragmentById(id: Int): TextFragment?

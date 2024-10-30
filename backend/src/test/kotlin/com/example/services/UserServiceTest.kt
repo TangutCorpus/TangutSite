@@ -12,20 +12,20 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class UserServiceTest {
-    private lateinit var setvice: UserService
+    private lateinit var service: UserService
     private val EXCEPTION_MESSAGE: String = "An operation is not implemented: Not yet implemented"
 
     @BeforeTest
     fun setup() {
         var repository = mockk<UserRepository>(relaxed = true)
-        setvice = UserServiceImpl(repository)
+        service = UserServiceImpl(repository)
     }
 
     @Test
     fun `test createUser throws NotImplementedError`() = runBlocking {
         var user = ExposedUser("", 0)
         var exception = assertFailsWith<NotImplementedError> {
-            setvice.createUser(user)
+            service.createUser(user)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
@@ -34,7 +34,7 @@ class UserServiceTest {
     fun `test updateUser throws NotImplementedError`() = runBlocking {
         var user = ExposedUser("", 0)
         var exception = assertFailsWith<NotImplementedError> {
-            setvice.updateUser(1, user)
+            service.updateUser(1, user)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
@@ -42,7 +42,7 @@ class UserServiceTest {
     @Test
     fun `test deleteUser throws NotImplementedError`() = runBlocking {
         var exception = assertFailsWith<NotImplementedError> {
-            setvice.deleteUser(1)
+            service.deleteUser(1)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
@@ -50,7 +50,7 @@ class UserServiceTest {
     @Test
     fun `test getAllUsers throws NotImplementedError`() = runBlocking {
         var exception = assertFailsWith<NotImplementedError> {
-            setvice.getAllUsers()
+            service.getAllUsers()
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
@@ -58,7 +58,7 @@ class UserServiceTest {
     @Test
     fun `test getUserById throws NotImplementedError`() = runBlocking {
         var exception = assertFailsWith<NotImplementedError> {
-            setvice.getUserById(1)
+            service.getUserById(1)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }

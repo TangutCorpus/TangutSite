@@ -58,7 +58,6 @@ dependencies {
     testImplementation("io.mockk:mockk:$mockk_version")
     testImplementation("org.junit.jupiter:junit-jupiter-api:$junit_jupiter_api")
     testImplementation("com.h2database:h2:$h2_version")
-
 }
 
 tasks {
