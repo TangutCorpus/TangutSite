@@ -6,7 +6,8 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
 
 class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentRepository) : TextFragmentService {
-    override suspend fun getTextFragmentById(id: Int): TextFragment? {
+    override suspend fun getTextFragmentById(id: Int?): TextFragment? {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
         return fragmentRepository.getTextFragmentById(id)
             ?: throw NoSuchElementException("No fragment found with id $id")
@@ -24,7 +25,8 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
         return fragmentRepository.updateTextFragment(textFragment) != 0
     }
 
-    override suspend fun deleteTextFragmentById(id: Int): Boolean {
+    override suspend fun deleteTextFragmentById(id: Int?): Boolean {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
         return fragmentRepository.deleteTextFragmentById(id) != 0
     }

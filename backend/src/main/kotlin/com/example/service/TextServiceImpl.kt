@@ -7,7 +7,8 @@ import kotlinx.datetime.atStartOfDayIn
 
 class TextServiceImpl(private val textRepository: TextRepository) : TextService {
 
-    override suspend fun getTextById(id: Int): Text? {
+    override suspend fun getTextById(id: Int?): Text? {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
         return textRepository.getTextById(id) ?: throw NoSuchElementException("No text found with id $id")
     }
@@ -24,7 +25,8 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
         return textRepository.updateText(text) != 0
     }
 
-    override suspend fun deleteTextById(id: Int): Boolean {
+    override suspend fun deleteTextById(id: Int?): Boolean {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
         return textRepository.deleteTextById(id) != 0
     }

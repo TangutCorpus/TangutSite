@@ -21,10 +21,6 @@ fun Route.textRoutes(textService: TextService) {
 
     get("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null || id <= 0) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@get
-        }
         val text = textService.getTextById(id)
         if (text != null) {
             call.respondText(text.toString(), status = HttpStatusCode.OK)
@@ -35,10 +31,6 @@ fun Route.textRoutes(textService: TextService) {
 
     put("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null || id <= 0) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@put
-        }
         val updatedText = call.receive<Text>()
         if (textService.updateText(updatedText.copy(id = id))) {
             call.respondText("Text updated successfully", status = HttpStatusCode.OK)
@@ -50,10 +42,6 @@ fun Route.textRoutes(textService: TextService) {
 
     delete("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null || id <= 0) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@delete
-        }
         if (textService.deleteTextById(id)) {
             call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
         } else {
