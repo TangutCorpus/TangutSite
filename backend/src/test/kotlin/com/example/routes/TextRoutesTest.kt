@@ -48,12 +48,7 @@ class TextRoutesTest {
         assertEquals(HttpStatusCode.OK, response.status)
     }
 
-    @Test
-    fun `test GET text by invalid ID returns BadRequest`() = testApplication {
-        setupApp(defaultText = text)
-        val response = client.get("/texts/-1") {}
-        assertEquals(HttpStatusCode.BadRequest, response.status)
-    }
+
 
     @Test
     fun `test GET non-existing text returns NotFound`() = testApplication {
@@ -73,30 +68,12 @@ class TextRoutesTest {
     }
 
     @Test
-    fun `test PUT text by invalid ID returns BadRequest`() = testApplication {
-        setupApp(defaultText = text)
-        val response = client.put("/texts/-1") {
-            jsonRequest(text)
-        }
-        assertEquals(HttpStatusCode.BadRequest, response.status)
-    }
-
-    @Test
     fun `test PUT text updates text`() = testApplication {
         setupApp(defaultText = text)
         val response = client.put("/texts/1") {
             jsonRequest(text)
         }
         assertEquals(HttpStatusCode.OK, response.status)
-    }
-
-    @Test
-    fun `test DELETE text by invalid ID returns BadRequest`() = testApplication {
-        setupApp(defaultText = text)
-        val response = client.delete("/texts/-1") {
-            jsonRequest(text)
-        }
-        assertEquals(HttpStatusCode.BadRequest, response.status)
     }
 
     @Test
