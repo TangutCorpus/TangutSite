@@ -9,6 +9,8 @@ import com.example.config.initDatabase
 import com.example.repository.TextRepositoryImpl
 import com.example.repository.UserRepositoryImpl
 import com.example.config.configureRouting
+import com.example.repository.TextFragmentRepositoryImpl
+import com.example.service.TextFragmentServiceImpl
 import com.example.service.TextServiceImpl
 import com.example.service.UserServiceImpl
 import io.ktor.server.application.*
@@ -26,7 +28,10 @@ fun Application.module() {
     var textRepository = TextRepositoryImpl(database)
     var textService = TextServiceImpl(textRepository)
 
-    configureRouting(userService, textService)
+    var textFragmentRepository = TextFragmentRepositoryImpl(database)
+    var textFragmentService = TextFragmentServiceImpl(textFragmentRepository)
+
+    configureRouting(userService, textService, textFragmentService )
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
