@@ -8,20 +8,19 @@ import io.ktor.server.response.respondText
 import io.ktor.server.routing.*
 
 fun Route.textRoutes(textService: TextService) {
-
     post("/texts") {
         val text = call.receive<Text>()
         textService.addText(text)
         call.respondText("Text added successfully", status = HttpStatusCode.Created)
     }
 
+    get("/texts") {
+        val texts = textService.getAllTexts()
+        call.respondText(texts.toString(), status = HttpStatusCode.OK)
+    }
+
     get("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@get
-        }
-
         val text = textService.getTextById(id)
         if (text != null) {
             call.respondText(text.toString(), status = HttpStatusCode.OK)
@@ -32,22 +31,21 @@ fun Route.textRoutes(textService: TextService) {
 
     put("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@put
-        }
         val updatedText = call.receive<Text>()
-        textService.updateText(updatedText.copy(id = id))
-        call.respondText("Text updated successfully", status = HttpStatusCode.OK)
+        if (textService.updateText(updatedText.copy(id = id))) {
+            call.respondText("Text updated successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Text not modified", status = HttpStatusCode.NotModified)
+        }
+
     }
 
     delete("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
-        if (id == null) {
-            call.respondText("Invalid ID", status = HttpStatusCode.BadRequest)
-            return@delete
+        if (textService.deleteTextById(id)) {
+            call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("Text not deleted", status = HttpStatusCode.NotModified)
         }
-        textService.deleteTextById(id)
-        call.respondText("Text deleted successfully", status = HttpStatusCode.OK)
     }
 }

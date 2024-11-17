@@ -2,10 +2,12 @@ package com.example.service
 
 import com.example.model.TextFragment
 import com.example.repository.TextFragmentRepository
-import java.time.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 
 class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentRepository) : TextFragmentService {
-    override suspend fun getTextFragmentById(id: Int): TextFragment? {
+    override suspend fun getTextFragmentById(id: Int?): TextFragment? {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
         return fragmentRepository.getTextFragmentById(id)
             ?: throw NoSuchElementException("No fragment found with id $id")
@@ -17,15 +19,16 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
         fragmentRepository.addTextFragment(textFragment)
     }
 
-    override suspend fun updateTextFragment(textFragment: TextFragment) {
+    override suspend fun updateTextFragment(textFragment: TextFragment): Boolean {
         require(textFragment.contentXML.isNotBlank() && textFragment.textId >= 0) { "Fragment cannot be empty" }
         require(textFragment.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${textFragment.createdAt}' cannot be parsed to LocalDateTime" }
-        fragmentRepository.updateTextFragment(textFragment)
+        return fragmentRepository.updateTextFragment(textFragment) != 0
     }
 
-    override suspend fun deleteTextFragmentById(id: Int) {
+    override suspend fun deleteTextFragmentById(id: Int?): Boolean {
+        require(id != null) { "ID cannot be empty" }
         require(id >= 0) { "ID cannot be negative" }
-        fragmentRepository.deleteTextFragmentById(id)
+        return fragmentRepository.deleteTextFragmentById(id) != 0
     }
 
     override suspend fun getAllTextFragments(): List<TextFragment> = fragmentRepository.getAllTextFragments()
@@ -33,7 +36,7 @@ class TextFragmentServiceImpl(private val fragmentRepository: TextFragmentReposi
 
 fun TextFragment.canBeParsedToLocalDateTime(): Boolean {
     return try {
-        createdAt?.let { LocalDateTime.parse(it.toString()) }
+        createdAt?.atStartOfDayIn(TimeZone.currentSystemDefault())
         true
     } catch (_: Exception) {
         false

@@ -8,7 +8,7 @@ import com.example.config.configureSerialization
 import com.example.config.initDatabase
 import com.example.repository.TextRepositoryImpl
 import com.example.repository.UserRepositoryImpl
-import com.example.routes.configureRouting
+import com.example.config.configureRouting
 import com.example.service.TextServiceImpl
 import com.example.service.UserServiceImpl
 import io.ktor.server.application.*

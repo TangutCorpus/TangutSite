@@ -22,7 +22,8 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
     }
 
     override suspend fun getTextFragmentById(id: Int): TextFragment? = transaction(db) {
-        TextFragments.select(TextFragments.id)
+        TextFragments
+            .selectAll()
             .where { TextFragments.id eq id }
             .mapNotNull { it.toTextFragment() }
             .singleOrNull()
@@ -35,7 +36,7 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
             it[lineNumber] = textFragment.lineNumber
             it[commentXML] = textFragment.commentXML
             it[createdAt] = textFragment.createdAt?.let { LocalDateTime.parse(it.toString()) }
-        }
+        } get TextFragments.id
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) = transaction(db) {

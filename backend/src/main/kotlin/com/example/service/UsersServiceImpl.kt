@@ -12,7 +12,7 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         TODO("Not yet implemented")
     }
 
-    override suspend fun addUser(user: ExposedUser) {
+    override suspend fun createUser(user: ExposedUser) {
         TODO("Not yet implemented")
     }
 

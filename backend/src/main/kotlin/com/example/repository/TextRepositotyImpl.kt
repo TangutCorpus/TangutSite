@@ -19,7 +19,6 @@ import java.time.LocalDateTime
 
 
 class TextRepositoryImpl(private val db: Database) : TextRepository {
-
     init {
         transaction(db) {
             SchemaUtils.create(Texts)
@@ -27,7 +26,8 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
     }
 
     override suspend fun getTextById(id: Int): Text? = transaction(db) {
-        Texts.select(Texts.id)
+        Texts
+            .selectAll()
             .where { Texts.id eq id }
             .mapNotNull { it.toText() }
             .singleOrNull()
@@ -38,8 +38,8 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
-        }
+            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
+        } get Texts.id
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {
