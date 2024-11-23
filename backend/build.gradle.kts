@@ -9,6 +9,7 @@ val mockk_version: String by project
 val kotlinx_coroutines_test: String by project
 val junit_jupiter_api: String by project
 val h2_version: String by project
+val rsql_parser_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.20"
@@ -51,6 +52,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-datetime:$kotlinx_datetime_version")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serialization_version")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:$kotlinx_coroutines_test")
+    implementation("cz.jirutka.rsql:rsql-parser:$rsql_parser_version")
 
     testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlin_version")
