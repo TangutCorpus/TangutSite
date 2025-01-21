@@ -21,20 +21,21 @@ fun getH2Database(): Database {
     return Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
 }
 
-fun ApplicationTestBuilder.setupApp(defaultText: Text? = null) {
+fun ApplicationTestBuilder.setupApp(defaultText: Text? = null, defaultTextFragment: TextFragment? = null) {
     environment {
         config = ApplicationConfig("application-test.conf")
     }
     application {
-        testModule(defaultText)
+        testModule(defaultText, defaultTextFragment)
     }
 }
 
-fun Application.testModule(defaultText: Text?) {
+fun Application.testModule(defaultText: Text?, defaultTextFragment: TextFragment?) {
     val mockTextService = createMockTextService(defaultText)
+    val mockFragmentService = createMockTextFragmentService(defaultTextFragment)
     val mockUserService = createMockUserService()
     val mockSearchService = createMockSearchService(defaultText)
-
+    
     configureRouting(mockUserService, mockTextService, mockSearchService)
     configureExceptionHandling()
     configureSerialization()
@@ -62,5 +63,18 @@ private fun createMockTextService(defaultText: Text?) = mockk<TextService>(relax
         coEvery { updateText(defaultText) } returns true
     }
 }
+
+private fun createMockTextFragmentService(defaultTextFragment: TextFragment?) =
+    mockk<TextFragmentService>(relaxed = true).apply {
+        if (defaultTextFragment != null) {
+            coEvery { addTextFragment(any()) } returns Unit
+            coEvery { getTextFragmentById(any()) } returns null
+            coEvery { getTextFragmentById(1) } returns defaultTextFragment
+            coEvery { getAllTextFragments() } returns listOf(defaultTextFragment)
+            coEvery { deleteTextFragmentById(1) } returns true
+            coEvery { updateTextFragment(any()) } returns false
+            coEvery { updateTextFragment(defaultTextFragment) } returns true
+        }
+    }
 
 private fun createMockUserService() = mockk<UserService>(relaxed = true)

@@ -19,5 +19,6 @@ fun Application.configureRouting(userService: UserService, textService: TextServ
         searchRoutes(searchService)
         userRoutes(userService)
         textRoutes(textService)
+        textFragmentRoutes(textFragmentService)
     }
 }
