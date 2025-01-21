@@ -7,8 +7,7 @@ import com.example.config.configureRouting
 import com.example.config.configureSecurity
 import com.example.config.configureSerialization
 import com.example.model.Text
-import com.example.model.TextFragment
-import com.example.service.TextFragmentService
+import com.example.service.SearchService
 import com.example.service.TextService
 import com.example.service.UserService
 import io.ktor.server.application.Application
@@ -35,13 +34,22 @@ fun Application.testModule(defaultText: Text?, defaultTextFragment: TextFragment
     val mockTextService = createMockTextService(defaultText)
     val mockFragmentService = createMockTextFragmentService(defaultTextFragment)
     val mockUserService = createMockUserService()
-
-    configureRouting(mockUserService, mockTextService, mockFragmentService)
+    val mockSearchService = createMockSearchService(defaultText)
+    
+    configureRouting(mockUserService, mockTextService, mockSearchService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
     configureHTTP()
     configureSecurity()
+}
+
+private fun createMockSearchService(defaultText: Text?) = mockk<SearchService>(relaxed = true).apply {
+    if (defaultText != null) {
+        coEvery { search("comment=='Sample Comment' and pureText=='Sample Text'") } returns listOf(defaultText)
+        coEvery { search("comment=='Nonexistent'") } returns emptyList()
+        coEvery { returnAllSearchResults() } returns listOf(defaultText)
+    }
 }
 
 private fun createMockTextService(defaultText: Text?) = mockk<TextService>(relaxed = true).apply {
