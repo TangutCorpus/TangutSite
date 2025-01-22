@@ -45,6 +45,6 @@ class SearchRoutesTest {
         setupApp(defaultText = text)
         val response = client.get("/search")
         assertEquals(HttpStatusCode.OK, response.status)
-        assertEquals(response.bodyAsText(), listOf<Text>(text).toString())
+        assertEquals(response.bodyAsText(), Json.encodeToString(listOf<Text>(text)))
     }
 }

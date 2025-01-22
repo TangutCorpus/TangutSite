@@ -4,7 +4,7 @@ import com.example.model.Text
 import com.example.service.TextService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.textRoutes(textService: TextService) {
@@ -16,14 +16,14 @@ fun Route.textRoutes(textService: TextService) {
 
     get("/texts") {
         val texts = textService.getAllTexts()
-        call.respondText(texts.toString(), status = HttpStatusCode.OK)
+        call.respond(texts)
     }
 
     get("/texts/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
         val text = textService.getTextById(id)
         if (text != null) {
-            call.respondText(text.toString(), status = HttpStatusCode.OK)
+            call.respond(text)
         } else {
             call.respondText("Text not found", status = HttpStatusCode.NotFound)
         }

@@ -1,10 +1,10 @@
 package com.example.routes
-
+//
 import com.example.model.TextFragment
 import com.example.service.TextFragmentService
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
-import io.ktor.server.response.respondText
+import io.ktor.server.response.*
 import io.ktor.server.routing.Route
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
@@ -21,14 +21,14 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
 
     get("/fragments") {
         val fragments = textFragmentService.getAllTextFragments()
-        call.respondText(fragments.toString(), status = HttpStatusCode.OK)
+        call.respond(fragments)
     }
 
     get("/fragments/{id}") {
         val id = call.parameters["id"]?.toIntOrNull()
         val fragment = textFragmentService.getTextFragmentById(id)
         if (fragment != null) {
-            call.respondText(fragment.toString(), status = HttpStatusCode.OK)
+            call.respond(fragment)
         } else {
             call.respondText("Fragment not found", status = HttpStatusCode.NotFound)
         }
