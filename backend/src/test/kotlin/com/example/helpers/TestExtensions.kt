@@ -7,7 +7,9 @@ import com.example.config.configureRouting
 import com.example.config.configureSecurity
 import com.example.config.configureSerialization
 import com.example.model.Text
+import com.example.model.TextFragment
 import com.example.service.SearchService
+import com.example.service.TextFragmentService
 import com.example.service.TextService
 import com.example.service.UserService
 import io.ktor.server.application.Application
@@ -36,7 +38,7 @@ fun Application.testModule(defaultText: Text?, defaultTextFragment: TextFragment
     val mockUserService = createMockUserService()
     val mockSearchService = createMockSearchService(defaultText)
     
-    configureRouting(mockUserService, mockTextService, mockSearchService)
+    configureRouting(mockUserService, mockTextService, mockSearchService, mockFragmentService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
