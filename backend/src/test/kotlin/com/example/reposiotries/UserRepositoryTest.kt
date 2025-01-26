@@ -1,6 +1,6 @@
 package com.example.reposiotries
 
-import com.example.model.ExposedUser
+import com.example.model.User
 import com.example.repository.UserRepository
 import com.example.repository.UserRepositoryImpl
 import io.mockk.mockk
@@ -23,7 +23,7 @@ class UserRepositoryTest {
 
     @Test
     fun `test createUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
+        var user = User("", 0)
         var exception = assertFailsWith<NotImplementedError> {
             repository.createUser(user)
         }
@@ -32,7 +32,7 @@ class UserRepositoryTest {
 
     @Test
     fun `test updateUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
+        var user = User("", 0)
         var exception = assertFailsWith<NotImplementedError> {
             repository.updateUser(1, user)
         }

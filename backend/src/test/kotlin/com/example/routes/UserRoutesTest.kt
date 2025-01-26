@@ -1,7 +1,7 @@
 package com.example.routes
 
 import com.example.helpers.setupApp
-import com.example.model.ExposedUser
+import com.example.model.User
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
@@ -30,7 +30,7 @@ class UserRoutesTest {
 
         val response = client.post("/users") {
             contentType(ContentType.Application.Json)
-            setBody(ExposedUser("Test", 20))
+            setBody(User("Test", 20))
         }
         assertEquals(HttpStatusCode.NotImplemented, response.status)
         assertEquals("Not yet implemented", response.bodyAsText())
@@ -57,7 +57,7 @@ class UserRoutesTest {
 
         val response = client.put("/users/1") {
             contentType(ContentType.Application.Json)
-            setBody(ExposedUser("Test", 20))
+            setBody(User("Test", 20))
         }
         assertEquals(HttpStatusCode.NotImplemented, response.status)
         assertEquals("Not yet implemented", response.bodyAsText())

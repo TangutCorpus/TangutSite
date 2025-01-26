@@ -1,6 +1,6 @@
 package com.example.services
 
-import com.example.model.ExposedUser
+import com.example.model.User
 import com.example.repository.UserRepository
 import com.example.service.UserService
 import com.example.service.UserServiceImpl
@@ -23,7 +23,7 @@ class UserServiceTest {
 
     @Test
     fun `test createUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
+        var user = User("", 0)
         var exception = assertFailsWith<NotImplementedError> {
             service.createUser(user)
         }
@@ -32,7 +32,7 @@ class UserServiceTest {
 
     @Test
     fun `test updateUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
+        var user = User("", 0)
         var exception = assertFailsWith<NotImplementedError> {
             service.updateUser(1, user)
         }

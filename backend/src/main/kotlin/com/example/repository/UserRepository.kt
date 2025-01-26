@@ -1,11 +1,11 @@
 package com.example.repository
 
-import com.example.model.ExposedUser
+import com.example.model.User
 
 interface UserRepository {
-    suspend fun createUser(user: ExposedUser): Int
-    suspend fun updateUser(id: Int, user: ExposedUser): Boolean
+    suspend fun createUser(user: User): Int
+    suspend fun updateUser(id: Int, user: User): Boolean
     suspend fun deleteUser(id: Int)
-    suspend fun getAllUsers(): List<ExposedUser>
-    suspend fun getUserById(i: Int): ExposedUser?
+    suspend fun getAllUsers(): List<User>
+    suspend fun getUserById(i: Int): User?
 }
