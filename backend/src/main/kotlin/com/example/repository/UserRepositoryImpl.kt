@@ -29,7 +29,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         } get Users.id
     }
 
-    override suspend fun updateUser(id: UUID, user: User): Int = transaction(db) {
+    override suspend fun updateUser(user: User): Int = transaction(db) {
         Users.update({ Users.id eq user.id }) {
             it[name] = user.name
             it[email] = user.email

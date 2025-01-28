@@ -7,6 +7,6 @@ interface UserService {
     suspend fun getAllUsers(): List<User>
     suspend fun getUserById(id: UUID?): User?
     suspend fun createUser(user: User)
-    suspend fun updateUser(id: UUID?, user: User): Boolean
+    suspend fun updateUser(user: User): Boolean
     suspend fun deleteUserById(id: UUID?): Boolean
 }

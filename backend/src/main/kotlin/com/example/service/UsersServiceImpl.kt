@@ -20,13 +20,12 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         userRepository.createUser(user)
     }
 
-    override suspend fun updateUser(id: UUID?, user: User): Boolean {
-        require(id != null) { "ID cannot be empty" }
+    override suspend fun updateUser(user: User): Boolean {
         require(user.nickname.length <= 255) { "User nickname cannot be longer than 255." }
         require(user.name.length <= 255) { "User name cannot be longer than 255." }
         require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
 
-        return userRepository.updateUser(id, user) != 0
+        return userRepository.updateUser(user) != 0
 
     }
 
