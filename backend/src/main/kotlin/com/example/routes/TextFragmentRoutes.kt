@@ -1,5 +1,5 @@
 package com.example.routes
-//
+
 import com.example.model.TextFragment
 import com.example.service.TextFragmentService
 import io.ktor.http.HttpStatusCode
@@ -10,7 +10,6 @@ import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
-import kotlin.text.toIntOrNull
 
 fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
     post("/fragments") {
@@ -25,7 +24,7 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
     }
 
     get("/fragments/{id}") {
-        val id = call.parameters["id"]?.toIntOrNull()
+        val id = call.parameters["id"]?.toUUIDOrNull()
         val fragment = textFragmentService.getTextFragmentById(id)
         if (fragment != null) {
             call.respond(fragment)
@@ -35,7 +34,7 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
     }
 
     put("/fragments/{id}") {
-        val id = call.parameters["id"]?.toIntOrNull()
+        val id = call.parameters["id"]?.toUUIDOrNull() ?: return@put
         val updatedText = call.receive<TextFragment>()
         if (textFragmentService.updateTextFragment(updatedText.copy(id = id))) {
             call.respondText("Fragment updated successfully", status = HttpStatusCode.OK)
@@ -46,7 +45,7 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
     }
 
     delete("/fragments/{id}") {
-        val id = call.parameters["id"]?.toIntOrNull()
+        val id = call.parameters["id"]?.toUUIDOrNull()
         if (textFragmentService.deleteTextFragmentById(id)) {
             call.respondText("Fragment deleted successfully", status = HttpStatusCode.OK)
         } else {

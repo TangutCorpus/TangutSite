@@ -1,11 +1,12 @@
 package com.example.repository
 
 import com.example.model.User
+import java.util.UUID
 
 interface UserRepository {
-    suspend fun createUser(user: User): Int
-    suspend fun updateUser(id: Int, user: User): Boolean
-    suspend fun deleteUser(id: Int)
+    suspend fun createUser(user: User): UUID
+    suspend fun updateUser(id: UUID, user: User): Boolean
+    suspend fun deleteUser(id: UUID)
     suspend fun getAllUsers(): List<User>
-    suspend fun getUserById(i: Int): User?
+    suspend fun getUserById(i: UUID): User?
 }

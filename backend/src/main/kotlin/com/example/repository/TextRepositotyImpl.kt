@@ -35,6 +35,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.time.LocalDateTime
+import java.util.UUID
 
 
 class TextRepositoryImpl(private val db: Database) : TextRepository {
@@ -44,19 +45,12 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
         }
     }
 
-    override suspend fun getTextById(id: Int): Text? = transaction(db) {
-        Texts
-            .selectAll()
-            .where { Texts.id eq id }
-            .mapNotNull { it.toText() }
-            .singleOrNull()
+    override suspend fun getTextById(id: UUID): Text? = transaction(db) {
+        Texts.selectAll().where { Texts.id eq id }.mapNotNull { it.toText() }.singleOrNull()
     }
 
     override suspend fun getTextsByQuery(query: String): List<Text> = transaction(db) {
-        Texts
-            .selectAll()
-            .search(query)
-            .mapNotNull { it.toText() }
+        Texts.selectAll().search(query).mapNotNull { it.toText() }
     }
 
     override suspend fun addText(text: Text) = transaction(db) {
@@ -69,7 +63,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {
-        Texts.update({ Texts.id eq text.id!! }) {
+        Texts.update({ Texts.id eq text.id }) {
             it[comment] = text.comment
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
@@ -77,13 +71,12 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
         }
     }
 
-    override suspend fun deleteTextById(id: Int) = transaction(db) {
+    override suspend fun deleteTextById(id: UUID) = transaction(db) {
         Texts.deleteWhere { Texts.id eq id }
     }
 
     override suspend fun getAllTexts(): List<Text> = transaction(db) {
-        Texts.selectAll()
-            .map { it.toText() }
+        Texts.selectAll().map { it.toText() }
     }
 }
 
@@ -93,8 +86,7 @@ private fun ResultRow.toText(): Text {
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
         pureText = this[Texts.pureText],
-        createdAt = this[Texts.createdAt]?.let { LocalDate.parse(it.toString()) }
-    )
+        createdAt = this[Texts.createdAt]?.let { LocalDate.parse(it.toString()) })
 }
 
 fun Query.search(query: String): Query = transaction {
@@ -120,22 +112,18 @@ private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
         val argument = node.arguments[0]
 
         return when (selector) {
-            "id" -> applyIntComparison(Texts.id, operator, argument)
+            "id" -> applyUUIDComparison(Texts.id, operator, argument)
             "comment" -> applyStringComparison(Texts.comment, operator, argument)
             "pureText" -> applyStringComparison(Texts.pureText, operator, argument)
             else -> throw IllegalArgumentException("Unknown field: $selector")
         }
     }
 
-    private fun applyIntComparison(column: Column<Int>, operator: ComparisonOperator, argument: String): Op<Boolean> {
-        val intValue = argument.toIntOrNull() ?: throw IllegalArgumentException("Invalid integer: $argument")
+    private fun applyUUIDComparison(column: Column<UUID>, operator: ComparisonOperator, argument: String): Op<Boolean> {
+        val intValue = argument.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid integer: $argument")
         return when (operator.symbol) {
             "==" -> column eq intValue
             "!=" -> column neq intValue
-            "=lt=" -> column less intValue
-            "=gt=" -> column greater intValue
-            "=le=" -> column lessEq intValue
-            "=ge=" -> column greaterEq intValue
             else -> throw IllegalArgumentException("Unsupported operator: ${operator.symbol}")
         }
     }
@@ -149,5 +137,13 @@ private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
             "=in=" -> column like "%$argument%"
             else -> throw IllegalArgumentException("Unsupported operator: ${operator.symbol}")
         }
+    }
+}
+
+fun String.toUUIDOrNull(): UUID? {
+    return try {
+        UUID.fromString(this)
+    } catch (e: IllegalArgumentException) {
+        null
     }
 }

@@ -2,19 +2,20 @@ package com.example.repository
 
 import com.example.model.User
 import org.jetbrains.exposed.sql.*
+import java.util.UUID
 
 class UserRepositoryImpl(private val database: Database) : UserRepository {
-    override suspend fun createUser(user: User): Int {
+    override suspend fun createUser(user: User): UUID {
         TODO("Not yet implemented")
     }
 
     override suspend fun updateUser(
-        id: Int, user: User
+        id: UUID, user: User
     ): Boolean {
         TODO("Not yet implemented")
     }
 
-    override suspend fun deleteUser(id: Int) {
+    override suspend fun deleteUser(id: UUID) {
         TODO("Not yet implemented")
     }
 
@@ -22,7 +23,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
         TODO("Not yet implemented")
     }
 
-    override suspend fun getUserById(i: Int): User? {
+    override suspend fun getUserById(i: UUID): User? {
         TODO("Not yet implemented")
     }
 
