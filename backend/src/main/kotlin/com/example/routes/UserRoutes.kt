@@ -1,28 +1,51 @@
 package com.example.routes
 
+import com.example.model.Text
+import com.example.model.User
 import com.example.service.UserService
 import io.ktor.http.HttpStatusCode
-import io.ktor.server.response.respondText
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.delete
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.put
+import io.ktor.server.request.receive
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 
 fun Route.userRoutes(userService: UserService) {
     post("/users") {
-        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+        val user = call.receive<User>()
+        userService.createUser(user)
+        call.respondText("User created successfully", status = HttpStatusCode.Created)
     }
 
     get("/users/{id}") {
-        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+        val id = call.parameters["id"]?.toUUIDOrNull()
+        val updatedUser = call.receive<User>()
+        if (userService.updateUser(updatedUser.copy(id = id!!))) {
+            call.respondText("User updated successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("User not modified", status = HttpStatusCode.NotModified)
+        }
+    }
+
+    get("/users"){
+        val users = userService.getAllUsers()
+        call.respond(users)
     }
 
     put("/users/{id}") {
-        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+        val id = call.parameters["id"]?.toUUIDOrNull()
+        val updatedUser = call.receive<User>()
+        if (userService.updateUser(updatedUser.copy(id = id!!))) {
+            call.respondText("User updated successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("User not modified", status = HttpStatusCode.NotModified)
+        }
     }
 
     delete("/users/{id}") {
-        call.respondText("Not yet implemented", status = HttpStatusCode.NotImplemented)
+        val id = call.parameters["id"]?.toUUIDOrNull()
+        if (userService.deleteUserById(id)) {
+            call.respondText("User deleted successfully", status = HttpStatusCode.OK)
+        } else {
+            call.respondText("User not deleted", status = HttpStatusCode.NotModified)
+        }
     }
 }
