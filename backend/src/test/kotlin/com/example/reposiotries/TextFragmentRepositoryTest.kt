@@ -1,5 +1,6 @@
 package com.example.reposiotries
 
+import com.example.helpers.DefaultParams
 import com.example.helpers.getH2Database
 import com.example.model.TextFragment
 import com.example.model.TextFragments
@@ -14,15 +15,15 @@ import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.LocalDateTime
-import kotlin.properties.Delegates
 import kotlin.test.*
 
 class TextFragmentRepositoryTest {
     private lateinit var repository: TextFragmentRepositoryImpl
     private val db = getH2Database()
 
-    private var textId by Delegates.notNull<Int>()
-    private val sampleFragment = TextFragment(null, 0, 1, "Test", "Test", null)
+    private var textId = DefaultParams.textID
+    private val sampleFragment =
+        TextFragment(DefaultParams.textFragmentId, DefaultParams.textID, 1, "Test", "Test", null)
 
     @BeforeTest
     fun setup() {
