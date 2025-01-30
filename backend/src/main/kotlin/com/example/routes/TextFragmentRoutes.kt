@@ -2,6 +2,7 @@ package com.example.routes
 
 import com.example.model.TextFragment
 import com.example.service.TextFragmentService
+import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.*

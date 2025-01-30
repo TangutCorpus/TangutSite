@@ -3,6 +3,7 @@ package com.example.repository
 import com.example.model.Text
 import com.example.model.TextFragments
 import com.example.model.Texts
+import com.example.utils.toUUIDOrNull
 import cz.jirutka.rsql.parser.RSQLParser
 import cz.jirutka.rsql.parser.ast.AndNode
 import cz.jirutka.rsql.parser.ast.ComparisonNode
@@ -20,10 +21,6 @@ import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.greaterEq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.less
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.and
@@ -137,13 +134,5 @@ private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
             "=in=" -> column like "%$argument%"
             else -> throw IllegalArgumentException("Unsupported operator: ${operator.symbol}")
         }
-    }
-}
-
-fun String.toUUIDOrNull(): UUID? {
-    return try {
-        UUID.fromString(this)
-    } catch (e: IllegalArgumentException) {
-        null
     }
 }

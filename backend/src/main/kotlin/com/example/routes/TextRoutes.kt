@@ -2,11 +2,11 @@ package com.example.routes
 
 import com.example.model.Text
 import com.example.service.TextService
+import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.util.UUID
 
 fun Route.textRoutes(textService: TextService) {
     post("/texts") {
@@ -47,13 +47,5 @@ fun Route.textRoutes(textService: TextService) {
         } else {
             call.respondText("Text not deleted", status = HttpStatusCode.NotModified)
         }
-    }
-}
-
-fun String.toUUIDOrNull(): UUID? {
-    return try {
-        UUID.fromString(this)
-    } catch (e: IllegalArgumentException) {
-        null
     }
 }
