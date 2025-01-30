@@ -14,6 +14,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule
 import java.util.UUID
 
+@OptIn(ExperimentalSerializationApi::class)
 fun Application.configureSerialization() {
     install(ContentNegotiation) {
         json(Json {
