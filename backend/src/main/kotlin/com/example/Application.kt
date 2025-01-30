@@ -9,8 +9,10 @@ import com.example.config.initDatabase
 import com.example.repository.TextRepositoryImpl
 import com.example.repository.UserRepositoryImpl
 import com.example.config.configureRouting
+import com.example.repository.RefreshTokenRepositoryImpl
 import com.example.repository.TextFragmentRepositoryImpl
 import com.example.service.SearchServiceImpl
+import com.example.service.SecurityServiceImpl
 import com.example.service.TextFragmentServiceImpl
 import com.example.service.TextServiceImpl
 import com.example.service.UserServiceImpl
@@ -34,10 +36,13 @@ fun Application.module() {
 
     var searchService = SearchServiceImpl(textRepository)
 
-    configureRouting(userService, textService, searchService, textFragmentService)
+    var refreshTokenRepository = RefreshTokenRepositoryImpl(database)
+    var securityService = SecurityServiceImpl(userRepository, refreshTokenRepository, config)
+
+    configureRouting(userService, textService, searchService, textFragmentService, securityService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
     configureHTTP()
-    configureSecurity()
+    configureSecurity(securityService)
 }
