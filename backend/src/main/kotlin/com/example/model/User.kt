@@ -33,3 +33,13 @@ data class User(
     val createdAt: LocalDate =
         LocalDate.parse(System.currentTimeMillis().toString()),
 )
+
+fun User.updateFromExposedUser(exposedUser: ExposedUser): User {
+    return this.copy(
+        username = exposedUser.username,
+        email = exposedUser.email,
+        avatarUrl = exposedUser.avatarUrl,
+        displayName = exposedUser.displayName,
+        biography = exposedUser.biography,
+    )
+}
