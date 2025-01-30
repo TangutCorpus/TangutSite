@@ -20,23 +20,24 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
     override suspend fun createUser(user: User): UUID = transaction(db) {
         Users.insert {
             it[id] = user.id
-            it[name] = user.name
+            it[displayName] = user.displayName
+            it[avatarUrl] = user.avatarUrl
             it[email] = user.email
             it[password] = user.password
             it[biography] = user.biography
-            it[nickname] = user.nickname
-            it[createdAt] = user.createdAt?.let { LocalDateTime.parse(it.toString()) }
+            it[username] = user.username
+            it[createdAt] = user.createdAt.let { LocalDateTime.parse(it.toString()) }
         } get Users.id
     }
 
     override suspend fun updateUser(user: User): Int = transaction(db) {
         Users.update({ Users.id eq user.id }) {
-            it[name] = user.name
+            it[displayName] = user.displayName
             it[email] = user.email
+            it[avatarUrl] = user.avatarUrl
             it[password] = user.password
             it[biography] = user.biography
-            it[nickname] = user.nickname
-            it[createdAt] = user.createdAt?.let { LocalDateTime.parse(it.toString()) }
+            it[username] = user.username
         }
     }
 
@@ -51,15 +52,24 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
     override suspend fun getUserById(id: UUID): User? = transaction(db) {
         Users.selectAll().where { Users.id eq id }.mapNotNull { it.toUser() }.singleOrNull()
     }
+
+    override suspend fun getUserByUsername(username: String): User? = transaction(db) {
+        Users.selectAll().where { Users.username eq username }.mapNotNull { it.toUser() }.singleOrNull()
+    }
+
+    override suspend fun getUserByEmail(email: String): User? = transaction(db) {
+        Users.selectAll().where { Users.email eq email }.mapNotNull { it.toUser() }.singleOrNull()
+    }
 }
 
 private fun ResultRow.toUser(): User {
     return User(id = this[Users.id],
-        name = this[Users.name],
+        displayName = this[Users.displayName],
+        avatarUrl = this[Users.avatarUrl],
         email = this[Users.email],
         biography = this[Users.biography],
-        nickname = this[Users.nickname],
+        username = this[Users.username],
         password = this[Users.password],
         role = this[Users.role],
-        createdAt = this[Users.createdAt]?.let { LocalDate.parse(it.toString()) })
+        createdAt = this[Users.createdAt].let { LocalDate.parse(it.toString()) })
 }

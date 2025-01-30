@@ -14,19 +14,28 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.getUserById(id)
     }
 
-    override suspend fun createUser(user: User) {
-        require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
-
-        userRepository.createUser(user)
+    override suspend fun getUserByUsername(nickname: String?): User? {
+        require(nickname != null && !nickname.isBlank()) { "ID cannot be empty" }
+        return userRepository.getUserByUsername(nickname)
     }
 
-    override suspend fun updateUser(user: User): Boolean {
-        require(user.nickname.length <= 255) { "User nickname cannot be longer than 255." }
-        require(user.name.length <= 255) { "User name cannot be longer than 255." }
+    override suspend fun getUserByEmail(email: String?): User? {
+        require(email != null && !email.isBlank()) { "Email cannot be empty" }
+        return userRepository.getUserByEmail(email)
+    }
+
+    override suspend fun createUser(user: User?): UUID {
+        requireNotNull(user) { "User format is incorrect" }
         require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
+        return userRepository.createUser(user)
+    }
 
+    override suspend fun updateUser(user: User?): Boolean {
+        requireNotNull(user) { "User format is incorrect" }
+        require(user.username.length <= 255) { "User nickname cannot be longer than 255." }
+        require(user.displayName.length <= 255) { "User name cannot be longer than 255." }
+        require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
         return userRepository.updateUser(user) != 0
-
     }
 
     override suspend fun deleteUserById(id: UUID?): Boolean {
@@ -43,3 +52,4 @@ fun User.canBeParsedToLocalDateTime(): Boolean {
         false
     }
 }
+

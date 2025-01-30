@@ -6,12 +6,13 @@ import org.jetbrains.exposed.sql.javatime.datetime
 
 object Users : Table() {
     val id = uuid("id")
-    val nickname = text("nickname").check { it.charLength() less 255 }
-    val email = text("email")
+    val username = text("username").check { it.charLength() less 255 }.uniqueIndex()
+    val email = text("email").uniqueIndex()
     val password = text("password")
-    val name = text("name").check { it.charLength() less 255 }
+    val avatarUrl = text("avatarUrl")
+    val displayName = text("displayName").check { it.charLength() less 255 }
     val biography = text("biography")
-    val role = text("role")
-    val createdAt = datetime("createdAt").nullable()
+    val role = enumeration<UserRoles>("role")
+    val createdAt = datetime("createdAt")
     override val primaryKey = PrimaryKey(id)
 }
