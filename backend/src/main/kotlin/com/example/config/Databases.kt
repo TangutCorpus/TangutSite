@@ -10,8 +10,8 @@ fun initDatabase(config: ApplicationConfig): Database {
     val driver = config.property("ktor.db.driver").getString()
 
     var database = Database.connect(
-        dbUrl,
-        driver,
+        url = dbUrl,
+        driver = driver,
         user = dbUser,
         password = dbPassword
     )
