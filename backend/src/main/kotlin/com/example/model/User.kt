@@ -29,4 +29,5 @@ data class User(
     val biography: String = "",
     val role: String = "Editor",
     val createdAt: LocalDate?,
+    val role: UserRoles = UserRoles.EDITOR,
 )
