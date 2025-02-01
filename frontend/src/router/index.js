@@ -5,7 +5,7 @@ import AboutPage from '@/components/AboutPage.vue'
 
 const routes = [
   { path: '/', component: HomeView },
-  { path: '/auth', component: AuthView },
+  { path: '/about', component: AboutPage },
   { path: '/:pathMatch(.*)*', component: NotFoundView } // Redirect unknown paths to 404
 ]
 
