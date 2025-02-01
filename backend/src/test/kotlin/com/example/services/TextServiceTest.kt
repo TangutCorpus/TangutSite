@@ -1,5 +1,6 @@
 package com.example.services
 
+import com.example.helpers.DefaultParams
 import com.example.model.Text
 import com.example.repository.TextRepository
 import com.example.service.TextService
@@ -20,39 +21,32 @@ import kotlin.test.assertFailsWith
 
 class TextServiceTest {
     private lateinit var service: TextService
-    private val text = Text(1, "Text", listOf(0, 1, 2), "Text", Clock.System.todayIn(TimeZone.currentSystemDefault()))
+    private val text = Text(DefaultParams.textID, listOf(DefaultParams.textFragmentId), "Text", "Text", Clock.System.todayIn(TimeZone.currentSystemDefault()))
     private val textWithEmptyFields =
-        Text(1, "", listOf(0, 1, 2), "", Clock.System.todayIn(TimeZone.currentSystemDefault()))
+        Text(DefaultParams.textID, listOf(DefaultParams.textFragmentId), "", "",  Clock.System.todayIn(TimeZone.currentSystemDefault()))
     private val repository = mockk<TextRepository>(relaxed = true)
 
     @BeforeTest
     fun setup() {
         service = TextServiceImpl(repository)
 
-        coEvery { repository.getTextById(1) } returns text
-        coEvery { repository.getTextById(-1) } throws IllegalArgumentException("ID cannot be negative")
-        coEvery { repository.getTextById(2) } returns null
-        coEvery { repository.addText(text) } returns 1
+        coEvery { repository.getTextById(DefaultParams.textID) } returns text
+        coEvery { repository.getTextById(DefaultParams.invalidId) } returns null
+        coEvery { repository.addText(text) } returns DefaultParams.textID
         coEvery { repository.updateText(text) } returns 1
-        coEvery { repository.deleteTextById(1) } returns 1
+        coEvery { repository.deleteTextById(DefaultParams.textID) } returns 1
         coEvery { repository.getAllTexts() } returns listOf(text)
     }
 
     @Test
     fun `test get text by valid id returns text`() = runBlocking {
-        assertEquals(text, service.getTextById(1))
-    }
-
-    @Test
-    fun `test get text by invalid id throws exception`() = runBlocking {
-        val exception = assertFailsWith<IllegalArgumentException> { service.getTextById(-1) }
-        assertEquals("ID cannot be negative", exception.message)
+        assertEquals(text, service.getTextById(DefaultParams.textID))
     }
 
     @Test
     fun `test get text by non-existent id throws NoSuchElementException`() = runBlocking {
-        val exception = assertFailsWith<NoSuchElementException> { service.getTextById(2) }
-        assertEquals("No text found with id 2", exception.message)
+        val exception = assertFailsWith<NoSuchElementException> { service.getTextById(DefaultParams.invalidId) }
+        assertTrue(exception.message?.startsWith("No text found with id") == true)
     }
 
     @Test
@@ -80,13 +74,7 @@ class TextServiceTest {
 
     @Test
     fun `test delete text by valid id`() = runBlocking {
-        assertTrue(service.deleteTextById(1))
-    }
-
-    @Test
-    fun `test delete text by invalid id throws exception`() = runBlocking {
-        val exception = assertFailsWith<IllegalArgumentException> { service.deleteTextById(-1) }
-        assertEquals("ID cannot be negative", exception.message)
+        assertTrue(service.deleteTextById(DefaultParams.textID))
     }
 
     @Test

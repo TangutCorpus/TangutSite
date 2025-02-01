@@ -5,8 +5,8 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object TextFragments : Table() {
-    val id = integer("id").autoIncrement()
-    val textId = integer("textId").references(Texts.id, onDelete = ReferenceOption.CASCADE)
+    val id = uuid("id")
+    val textId = uuid("textId").references(Texts.id, onDelete = ReferenceOption.CASCADE)
     val lineNumber = integer("lineNumber")
     val contentXML = text("contentXML")
     val commentXML = text("commentXML")

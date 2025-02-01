@@ -13,6 +13,7 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
 import java.time.LocalDateTime
+import java.util.UUID
 
 class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentRepository {
     init {
@@ -21,12 +22,8 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
         }
     }
 
-    override suspend fun getTextFragmentById(id: Int): TextFragment? = transaction(db) {
-        TextFragments
-            .selectAll()
-            .where { TextFragments.id eq id }
-            .mapNotNull { it.toTextFragment() }
-            .singleOrNull()
+    override suspend fun getTextFragmentById(id: UUID): TextFragment? = transaction(db) {
+        TextFragments.selectAll().where { TextFragments.id eq id }.mapNotNull { it.toTextFragment() }.singleOrNull()
     }
 
     override suspend fun addTextFragment(textFragment: TextFragment) = transaction(db) {
@@ -40,7 +37,7 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
     }
 
     override suspend fun updateTextFragment(textFragment: TextFragment) = transaction(db) {
-        TextFragments.update({ TextFragments.id eq textFragment.id!! }) {
+        TextFragments.update({ TextFragments.id eq textFragment.id }) {
             it[textId] = textFragment.textId
             it[contentXML] = textFragment.contentXML
             it[lineNumber] = textFragment.lineNumber
@@ -49,23 +46,20 @@ class TextFragmentRepositoryImpl(private val db: Database) : TextFragmentReposit
         }
     }
 
-    override suspend fun deleteTextFragmentById(id: Int) = transaction(db) {
+    override suspend fun deleteTextFragmentById(id: UUID) = transaction(db) {
         TextFragments.deleteWhere { TextFragments.id eq id }
     }
 
     override suspend fun getAllTextFragments(): List<TextFragment> = transaction(db) {
-        TextFragments.selectAll()
-            .map { it.toTextFragment() }
+        TextFragments.selectAll().map { it.toTextFragment() }
     }
 }
 
 private fun ResultRow.toTextFragment(): TextFragment {
-    return TextFragment(
-        id = this[TextFragments.id],
+    return TextFragment(id = this[TextFragments.id],
         textId = this[TextFragments.textId],
         lineNumber = this[TextFragments.lineNumber],
         contentXML = this[TextFragments.contentXML],
         commentXML = this[TextFragments.commentXML],
-        createdAt = this[TextFragments.createdAt]?.let { LocalDate.parse(it.toString()) }
-    )
+        createdAt = this[TextFragments.createdAt]?.let { LocalDate.parse(it.toString()) })
 }

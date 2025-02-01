@@ -1,10 +1,11 @@
 package com.example.reposiotries
 
+import com.example.helpers.DefaultParams
+import com.example.helpers.DefaultParams.textID
 import com.example.helpers.getH2Database
 import com.example.model.Text
 import com.example.model.TextFragments
 import com.example.model.Texts
-import com.example.repository.TextRepository
 import com.example.repository.TextRepositoryImpl
 import cz.jirutka.rsql.parser.RSQLParserException
 import kotlinx.coroutines.runBlocking
@@ -19,9 +20,12 @@ class TextRepositoryTest {
     private lateinit var repository: TextRepositoryImpl
     private val db = getH2Database()
 
-    private val sampleText1 = Text(1, "Sample comment 1", listOf(1, 2), "Example text 1", null)
-    private val sampleText2 = Text(2, "Sample comment 2", listOf(2, 3), "Example text 2", null)
-    private val sampleText3 = Text(3, "Different comment", listOf(3, 4), "Additional text", null)
+    private val sampleText1 =
+        Text(textID, listOf(DefaultParams.textFragmentId), "Sample comment 1", "Example text 1", null)
+    private val sampleText2 =
+        Text(textID, listOf(DefaultParams.textFragmentId), "Sample comment 2", "Example text 2", null)
+    private val sampleText3 =
+        Text(textID, listOf(DefaultParams.textFragmentId), "Different comment", "Additional text", null)
 
     @BeforeTest
     fun setup() {
@@ -32,18 +36,22 @@ class TextRepositoryTest {
             SchemaUtils.create(Texts)
 
             Texts.insert {
+                it[id] = sampleText1.id
                 it[comment] = sampleText1.comment
                 it[lineIds] = sampleText1.lineIds.toString()
                 it[pureText] = sampleText1.pureText
                 it[createdAt] = null
             }
             Texts.insert {
+                it[id] = sampleText2.id
                 it[comment] = sampleText2.comment
                 it[lineIds] = sampleText2.lineIds.toString()
                 it[pureText] = sampleText2.pureText
                 it[createdAt] = null
             }
+
             Texts.insert {
+                it[id] = sampleText3.id
                 it[comment] = sampleText3.comment
                 it[lineIds] = sampleText3.lineIds.toString()
                 it[pureText] = sampleText3.pureText
@@ -55,13 +63,13 @@ class TextRepositoryTest {
 
     @Test
     fun `get text by valid id returns text`(): Unit = runBlocking {
-        assertNotNull(repository.getTextById(1))
-        assertEquals(1, repository.deleteTextById(1))
+        assertNotNull(repository.getTextById(textID))
+        assertEquals(1, repository.deleteTextById(textID))
     }
 
     @Test
     fun `get text by invalid id returns null`() = runBlocking {
-        assertNull(repository.getTextById(22222))
+        assertNull(repository.getTextById(DefaultParams.invalidId))
     }
 
     @Test
@@ -76,32 +84,21 @@ class TextRepositoryTest {
 
     @Test
     fun `delete text by invalid id does nothing`() = runBlocking {
-        assertEquals(0, repository.deleteTextById(2222))
+        assertEquals(0, repository.deleteTextById(DefaultParams.invalidId))
     }
 
     @Test
     fun `get texts by valid id equals operator`() = runBlocking {
-        val result = repository.getTextsByQuery("id==1")
+        val result = repository.getTextsByQuery("id==${textID}")
         assertEquals(listOf(sampleText1), result)
     }
 
     @Test
     fun `get texts by id not equal operator`() = runBlocking {
-        val result = repository.getTextsByQuery("id!=1")
+        val result = repository.getTextsByQuery("id!=${textID}")
         assertEquals(listOf(sampleText2, sampleText3), result)
     }
 
-    @Test
-    fun `get texts by id less than operator`() = runBlocking {
-        val result = repository.getTextsByQuery("id=lt=3")
-        assertEquals(listOf(sampleText1, sampleText2), result)
-    }
-
-    @Test
-    fun `get texts by id greater than operator`() = runBlocking {
-        val result = repository.getTextsByQuery("id=gt=1")
-        assertEquals(listOf(sampleText2, sampleText3), result)
-    }
 
     @Test
     fun `get texts by exact match on comment`() = runBlocking {

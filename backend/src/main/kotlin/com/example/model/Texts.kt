@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.javatime.datetime
 
 object Texts : Table() {
-    val id = integer("id").autoIncrement()
+    val id = uuid("id")
     val comment = text("comment")
     val lineIds = text("line_ids")
     val pureText = text("pure_text")

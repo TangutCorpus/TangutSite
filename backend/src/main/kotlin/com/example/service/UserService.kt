@@ -1,11 +1,14 @@
 package com.example.service
 
-import com.example.model.ExposedUser
+import com.example.model.User
+import java.util.UUID
 
 interface UserService {
-    suspend fun getAllUsers(): List<ExposedUser>
-    suspend fun getUserById(id: Int): ExposedUser?
-    suspend fun createUser(user: ExposedUser)
-    suspend fun updateUser(id: Int, user: ExposedUser): Boolean
-    suspend fun deleteUser(id: Int): Boolean
+    suspend fun getAllUsers(): List<User>
+    suspend fun getUserById(id: UUID?): User?
+    suspend fun getUserByUsername(username: String?): User?
+    suspend fun getUserByEmail(email: String?): User?
+    suspend fun createUser(user: User?): UUID
+    suspend fun updateUser(user: User?): Boolean
+    suspend fun deleteUserById(id: UUID?): Boolean
 }

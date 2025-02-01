@@ -1,30 +1,20 @@
 package com.example.routes
 
+import com.example.helpers.DefaultParams
+import com.example.helpers.jsonRequest
 import com.example.helpers.setupApp
-import com.example.model.Text
 import com.example.model.TextFragment
-import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.put
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
 import io.ktor.http.HttpStatusCode
-import io.ktor.http.contentType
 import io.ktor.server.testing.testApplication
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.junit.Test
 import kotlin.test.assertEquals
 
 class TextFragmentRoutesTest {
-    private val fragment = TextFragment(1, 1, 1, "", "", null)
-
-    private fun HttpRequestBuilder.jsonRequest(fragment: TextFragment) {
-        contentType(ContentType.Application.Json)
-        setBody(Json.encodeToString(fragment))
-    }
+    private val fragment = TextFragment(DefaultParams.textFragmentId, DefaultParams.textID, 1, "", "", null)
 
     @Test
     fun `test POST fragment creates fragment`() = testApplication {
