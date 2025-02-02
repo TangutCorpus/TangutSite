@@ -25,9 +25,8 @@ const emit = defineEmits(['toggleAuthForm'])
 
 const menuItems = [
   { name: 'Библиотека', route: '/library' },
-  { name: 'Грамматика', route: '/grammar' },
   { name: 'О нас', route: '/about' },
-  { name: 'Вход / Регистрация', route: '/auth' }
+  { name: 'Вход', route: '/auth' }
 ]
 
 const handleMenuItemClick = (path: string) => {
