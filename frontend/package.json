@@ -7,6 +7,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@vueuse/integrations": "^12.5.0",
+    "sortablejs": "^1.15.6",
     "vite-plugin-vue-devtools": "^7.7.0",
     "vue": "^3.4.15",
     "vue-router": "^4.5.0"
