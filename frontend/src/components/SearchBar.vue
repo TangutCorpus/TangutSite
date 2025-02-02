@@ -1,10 +1,10 @@
 <template>
-  <div ref="searchContainer" class="relative w-full">
-    <div class="flex items-center">
+  <div ref="searchContainer" class="relative w-full flex flex-col items-center">
+    <div class="flex w-1/2 mb-5 mx-auto mt-4">
       <input
         ref="searchInput"
-        v-model="search"
-        class="w-1/2 px-4 ml-[24%] py-2 border rounded-l rounded-r focus:outline-none focus:ring-2 focus:ring-blue-500"
+        v-model="userQuery"
+        class="flex-1 px-4 py-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
         placeholder="Введите запрос..."
         type="text"
         @focus="showHistory = true"
@@ -12,126 +12,108 @@
       />
       <button
         ref="searchButton"
-        class="bg-black text-white px-4 py-2.5 rounded-r rounded-l hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500 ml-5"
+        class="bg-black text-white px-4 py-2 rounded-r hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
         @click="handleSearch"
       >
-        <svg
-          class="h-5 w-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          />
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2" />
         </svg>
       </button>
     </div>
-    <div
-      v-if="showHistory && (searchHistory.length > 0  || filteredSuggestions.length > 0 )"
-      :style="{ width: suggestionWidth }"
-      class="absolute ml-[24%] top-full mt-2 bg-white rounded-md shadow-md history-container"
-    >
-      <div
-        v-for="(suggestion, index) in filteredSuggestions"
-        :key="index"
-        class="w-full px-4 py-3 border-b border-gray-200 last:border-b-0 hover:bg-gray-100 cursor-pointer block text-black"
-        @click="selectSuggestion(suggestion)"
+
+    <div class="flex items-center gap-4 relative">
+      <button
+        class="px-4 py-2 border rounded hover:bg-gray-100 focus:outline-none"
+        @click="toggleTangutPopup"
       >
-        {{ suggestion.title }}, {{ suggestion.author }}
-      </div>
-      <div
-        v-for="(history, index) in searchHistory"
-        :key="index"
-        class="w-full px-4 py-3 border-b border-gray-200 last:border-b-0 hover:bg-gray-100 cursor-pointer block text-black"
-        @click="selectHistory(history)"
+        {{ tangutIcon }}
+      </button>
+      <h2>Область поиска</h2>
+      <button
+        :class="{ 'bg-blue-500 text-white': searchMode === 'text', 'bg-gray-200': searchMode !== 'text' }"
+        class="px-4 py-2 border rounded focus:outline-none"
+        @click="setSearchMode('text')"
       >
-        {{ history }}
+        Тексты
+      </button>
+      <button
+        :class="{ 'bg-blue-500 text-white': searchMode === 'article', 'bg-gray-200': searchMode !== 'article' }"
+        class="px-4 py-2 border rounded focus:outline-none"
+        @click="setSearchMode('article')"
+      >
+        Словарь
+      </button>
+      <div
+        v-if="showTangutPopup"
+        class="absolute left-0 top-full mt-1 p-4 bg-white border rounded shadow-lg z-20"
+      >
+        <button
+          class="absolute top-1 right-1 text-sm text-gray-500 hover:text-gray-700 focus:outline-none"
+          @click="toggleTangutPopup"
+        >
+          X
+        </button>
+        <div class="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto">
+          <div
+            v-for="(radical, index) in radicals"
+            :key="index"
+            class="cursor-pointer text-xl hover:bg-gray-200 p-1 text-center"
+            @click="selectRadical(radical)"
+          >
+            {{ radical }}
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
-<script lang="ts" setup>
-import { computed, defineEmits, defineProps, onBeforeUnmount, onMounted, onUpdated, ref } from 'vue'
 
-const showSuggestions = ref(false)
+<script lang="ts" setup>
+import { computed, defineEmits, ref } from 'vue'
+
 const emit = defineEmits(['select-suggestion', 'all-results'])
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchButton = ref<HTMLButtonElement | null>(null)
-const suggestionWidth = ref('0px')
 const searchContainer = ref<HTMLDivElement | null>(null)
-const search = ref('')
-const props = defineProps<{
-  suggestions: { title: string; author: string, id: number }[]
-}>()
-const searchHistory = ref<string[]>(JSON.parse(localStorage.getItem('searchHistory') || '[]'))
+const userQuery = ref('')
+const searchMode = ref<'text' | 'article'>('text')
 const showHistory = ref(false)
+const showTangutPopup = ref(false)
+const tangutIcon = 'Выборать компоненты'
 
-
-const selectSuggestion = (suggestion: { title: string; author: string, id: number }) => {
-  emit('select-suggestion', suggestion)
-}
-
-const selectHistory = (history: string) => {
-  search.value = history
-  showHistory.value = false
-  handleSearch()
-}
-
-const filteredSuggestions = computed(() => {
-  if (!search.value) {
-    return []
+const radicals = computed(() => {
+  const start = 0x18800
+  const end = 0x18AFF
+  const arr: string[] = []
+  for (let cp = start; cp <= end; cp++) {
+    arr.push(String.fromCodePoint(cp))
   }
-  return props.suggestions.filter(suggestion =>
-    suggestion.title.toLowerCase().includes(search.value.toLowerCase()) || suggestion.author.toLowerCase().includes(search.value.toLowerCase())
-  )
+  return arr
 })
+const toggleTangutPopup = () => {
+  showTangutPopup.value = !showTangutPopup.value
+}
+
+const selectRadical = (radical: string) => {
+  userQuery.value += radical
+}
+
+
+const searchQuery = computed(() => `chosen:${searchMode.value} ${userQuery.value}`)
+
+const setSearchMode = (mode: 'text' | 'article') => {
+  searchMode.value = mode
+}
+
 const handleSearch = () => {
-  if (search.value && !searchHistory.value.includes(search.value)) {
-    if (searchHistory.value.length >= 5) {
-      searchHistory.value.pop()
-    }
-    searchHistory.value.unshift(search.value)
-    localStorage.setItem('searchHistory', JSON.stringify(searchHistory.value))
-  }
-  showHistory.value = false
-  emit('all-results', filteredSuggestions.value)
-}
-onMounted(() => {
-  updateSuggestionWidth()
-  document.addEventListener('click', onClickOutside)
-})
-onUpdated(() => {
-  updateSuggestionWidth()
-})
-const updateSuggestionWidth = () => {
-  if (searchInput.value && searchButton.value) {
-    const inputLeft = searchInput.value.getBoundingClientRect().left
-    const buttonRight = searchButton.value.getBoundingClientRect().right
-    suggestionWidth.value = `${buttonRight - inputLeft}px`
-  }
-}
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', onClickOutside)
-})
-
-const onClickOutside = (event: MouseEvent) => {
-  if (searchContainer.value && !searchContainer.value.contains(event.target as Node)) {
-    showSuggestions.value = false
+  if (userQuery.value) {
     showHistory.value = false
+    emit('all-results', searchQuery.value)
   }
 }
-
 </script>
 
 <style>
-.history-container {
-  z-index: 10;
-}
 </style>
