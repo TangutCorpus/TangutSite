@@ -3,11 +3,13 @@ import HomeView from '@/views/HomeView.vue'
 import NotFoundView from '@/views/NotFoundView.vue'
 import AboutPage from '@/components/AboutPage.vue'
 import TextView from '@/views/TextView.vue'
+import LibraryView from '@/views/LibraryView.vue'
 
 const routes = [
   { path: '/', component: HomeView },
   { path: '/about', component: AboutPage },
   { path: '/text', component: TextView },
+  { path: '/library', component: LibraryView },
   { path: '/:pathMatch(.*)*', component: NotFoundView } // Redirect unknown paths to 404
 ]
 
