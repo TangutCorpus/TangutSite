@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import TeamMember from './TeamMember.vue';
+import TeamMember from '@/components/TeamMember.vue';
 import { defineProps } from 'vue';
 const props = defineProps({ members: Array });
 </script>

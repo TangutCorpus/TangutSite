@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import notFoundImage from '../assets/images/404.svg'
+import notFoundImage from '@/assets/images/404.svg'
 </script>
 
 <style scoped>

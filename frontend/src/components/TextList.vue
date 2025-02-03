@@ -4,7 +4,8 @@
       <blockquote class="italic text-gray-800">{{ text.content }}</blockquote>
       <hr class="my-4 border-gray-300" />
 
-      <h2 class="text-lg font-semibold flex items-center cursor-pointer text-blue-600" @click="toggleTranslation(index)">
+      <h2 class="text-lg font-semibold flex items-center cursor-pointer text-blue-600"
+          @click="toggleTranslation(index)">
         Переводы
         <span class="ml-2">{{ text.showTranslation ? '▴' : '▿' }}</span>
       </h2>
@@ -20,8 +21,9 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
-const props = defineProps({ texts: Array });
-const toggleTranslation = index => props.texts[index].showTranslation = !props.texts[index].showTranslation;
-const getLanguageName = lang => ({ ru: 'Русский', en: 'English' }[lang] || lang);
+import { ref, defineProps } from 'vue'
+
+const props = defineProps({ texts: Array })
+const toggleTranslation = index => props.texts[index].showTranslation = !props.texts[index].showTranslation
+const getLanguageName = lang => ({ ru: 'Русский', en: 'English' }[lang] || lang)
 </script>

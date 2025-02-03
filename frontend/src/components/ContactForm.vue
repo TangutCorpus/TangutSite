@@ -8,5 +8,5 @@
 </template>
 
 <script setup>
-import BaseButton from './BaseButton.vue';
+import BaseButton from '@/components/BaseButton.vue';
 </script>
