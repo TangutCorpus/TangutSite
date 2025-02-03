@@ -1,29 +1,28 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '@/pages/HomePage/HomePage.vue'
-import NotFoundView from '@/pages/NotFoundPage/NotFoundPage.vue'
+import HomePage from '@/pages/HomePage/HomePage.vue'
+import NotFoundPage from '@/pages/NotFoundPage/NotFoundPage.vue'
 import AboutPage from '@/pages/AboutPage/AboutPage.vue'
-import TextView from '@/pages/TextPage/TextPage.vue'
-import UserView from '@/pages/UserPage/UserPage.vue'
-import LibraryView from '@/pages/MainLibraryPage/MainLibraryPage.vue'
-import TextFragmentView from '@/pages/TextFragmentPage/TextFragmentPage.vue'
-import UserEditView from '@/pages/UserEditPage/UserEditPage.vue'
-import TextEditView from '@/pages/TextEditPage/TextEditPage.vue'
-import SearchResults from '@/pages/SearchResultPage/SearchResultPage.vue'
-import TextFragmentEditView from '@/pages/TextFragmentEditPage/TextFragmentEditPage.vue'
+import TextPage from '@/pages/TextPage/TextPage.vue'
+import UserPage from '@/pages/UserPage/UserPage.vue'
+import LibraryPage from '@/pages/MainLibraryPage/MainLibraryPage.vue'
+import TextFragmentPage from '@/pages/TextFragmentPage/TextFragmentPage.vue'
+import UserEditPage from '@/pages/UserEditPage/UserEditPage.vue'
+import TextEditPage from '@/pages/TextEditPage/TextEditPage.vue'
+import SearchResultPage from '@/pages/SearchResultPage/SearchResultPage.vue'
+import TextFragmentEditPage from '@/pages/TextFragmentEditPage/TextFragmentEditPage.vue'
 
 const routes = [
-  { path: '/', component: HomeView },
+  { path: '/', component: HomePage },
+  { path: '/search', component: SearchResultPage },
+  { path: '/user', component: UserPage },
+  { path: '/user/edit', component: UserEditPage },
+  { path: '/text', component: TextPage },
+  { path: '/text/edit', component: TextEditPage },
+  { path: '/fragment', component: TextFragmentPage },
+  { path: '/fragment/edit', component: TextFragmentEditPage },
+  { path: '/library', component: LibraryPage },
   { path: '/about', component: AboutPage },
-  { path: '/text', component: TextView },
-  { path: '/text/edit', component: TextEditView },
-  { path: '/search', component: SearchResults },
-  { path: '/user', component: UserView },
-  { path: '/user/edit', component: UserEditView },
-  {path: '/fragment', component: TextFragmentView},
-  {path: '/fragment/edit', component: TextFragmentEditView},
-
-  { path: '/library', component: LibraryView },
-  { path: '/:pathMatch(.*)*', component: NotFoundView } // Redirect unknown paths to 404
+  { path: '/:pathMatch(.*)*', component: NotFoundPage }
 ]
 
 const router = createRouter({
