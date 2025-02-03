@@ -1,0 +1,42 @@
+<template>
+  <div class="container mx-auto p-6 max-w-4xl">
+    <div class="bg-white shadow rounded-lg p-6 relative">
+      <label class="block text-lg font-semibold mb-2">Название текста</label>
+      <input v-model="text.title" class="w-full p-2 border rounded mb-4" type="text">
+      <TextMetadataEdit v-model:metadata="text.metadata" class="mb-6" />
+      <GlossedTextEdit v-model:textBlocks="text.fragments" class="mb-6" />
+      <BaseButton class="mb-4 w-full" @click="addGloss">Добавить глоссированный текст</BaseButton>
+      <TextCommentCardEdit v-model:comments="text.comments" class="mb-6" />
+      <BaseButton class="mb-4 w-full" @click="addComment">Добавить комментарий</BaseButton>
+      <BaseButton class="mt-6 w-full" primary @click="saveText">Сохранить</BaseButton>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue'
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
+import TextMetadataEdit from '@/pages/TextEditPage/components/TextMetadataEdit.vue'
+import GlossedTextEdit from '@/pages/TextEditPage/components/GlossedTextEdit.vue'
+import TextCommentCardEdit from '@/pages/TextEditPage/components/TextCommentCardEdit.vue'
+
+const text = ref({
+  title: '',
+  metadata: {},
+  fragments: [],
+  comments: []
+})
+
+const saveText = () => {
+  console.log('Сохранение текста', text.value)
+}
+
+const addGloss = () => {
+  text.value.fragments.push({ title: '', text: '', gloss: '', comment: '' })
+}
+
+const addComment = () => {
+  text.value.comments.push([''])
+}
+
+</script>
