@@ -60,7 +60,7 @@ const metadataProxy = computed({
 const addProperty = () => {
   if (selectedProperty.value && !propertiesChosen.value.includes(selectedProperty.value)) {
     propertiesChosen.value.push(selectedProperty.value)
-    selectedProperty.value = ""
+    selectedProperty.value = ''
   }
 }
 

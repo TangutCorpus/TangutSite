@@ -7,6 +7,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-const props = defineProps({ primary: Boolean });
+import { defineProps } from 'vue'
+
+const props = defineProps({ primary: Boolean })
 </script>

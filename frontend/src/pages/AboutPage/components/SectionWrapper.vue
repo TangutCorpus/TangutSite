@@ -6,6 +6,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-const props = defineProps({ id: String, title: String });
+import { defineProps } from 'vue'
+
+const props = defineProps({ id: String, title: String })
 </script>

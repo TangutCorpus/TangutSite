@@ -14,6 +14,7 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
-const props = defineProps({ headers: Array, rows: Array });
+import { defineProps } from 'vue'
+
+const props = defineProps({ headers: Array, rows: Array })
 </script>

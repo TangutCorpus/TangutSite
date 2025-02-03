@@ -14,7 +14,7 @@
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue';
+import { computed, defineProps } from 'vue'
 
 const props = defineProps({
   text: Object,
@@ -22,13 +22,13 @@ const props = defineProps({
     type: Number,
     default: 8
   }
-});
+})
 
 const chunkedChapters = computed(() => {
-  const result = [];
+  const result = []
   for (let i = 0; i < props.text.chapters.length; i += props.maxPerRow) {
-    result.push(props.text.chapters.slice(i, i + props.maxPerRow));
+    result.push(props.text.chapters.slice(i, i + props.maxPerRow))
   }
-  return result;
-});
+  return result
+})
 </script>

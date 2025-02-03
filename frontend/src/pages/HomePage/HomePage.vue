@@ -5,6 +5,6 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import SearchBar from '@/components/SearchBarComponent/SearchBar.vue'
 </script>

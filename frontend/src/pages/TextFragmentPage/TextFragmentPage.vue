@@ -10,19 +10,20 @@
         <TranslationList :texts="texts" />
       </div>
     </div>
-    <ImageSlider v-if="isSliderOpen" :images="images" :isSliderOpen="isSliderOpen" @close-slider="isSliderOpen = false" />
+    <ImageSlider v-if="isSliderOpen" :images="images" :isSliderOpen="isSliderOpen"
+                 @close-slider="isSliderOpen = false" />
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import ImageGallery from '@/pages/TextFragmentPage/components/ImageGallery.vue';
-import ImageSlider from '@/pages/TextFragmentPage/components/ImageSlider.vue';
-import TranslationList from '@/pages/TextFragmentPage/components/TranslationList.vue';
-import testImage from '@/assets/images/404.svg';
+import { ref } from 'vue'
+import ImageGallery from '@/pages/TextFragmentPage/components/ImageGallery.vue'
+import ImageSlider from '@/pages/TextFragmentPage/components/ImageSlider.vue'
+import TranslationList from '@/pages/TextFragmentPage/components/TranslationList.vue'
+import testImage from '@/assets/images/404.svg'
 
-const images = ref([testImage, testImage, testImage]);
-const isSliderOpen = ref(false);
+const images = ref([testImage, testImage, testImage])
+const isSliderOpen = ref(false)
 
 const texts = ref([
   {
@@ -47,5 +48,5 @@ const texts = ref([
       en: 'Edsay itaevay eolay inyay iamday empersay orttitorpay.'
     }
   }
-]);
+])
 </script>

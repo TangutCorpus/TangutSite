@@ -10,7 +10,7 @@
       </div>
       <p class="text-gray-500">@{{ user.username }}</p>
 
-      <UserContactEdit v-model:email="user.email" v-model:created-at="user.createdAt" class="mt-6 w-full" />
+      <UserContactEdit v-model:created-at="user.createdAt" v-model:email="user.email" class="mt-6 w-full" />
 
       <UserBiographyEdit v-model:biography="user.biography" class="mt-6 w-full" />
     </div>
@@ -18,12 +18,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import UserAvatarUpload from '@/pages/UserEditPage/components/UserAvatarUpload.vue';
-import UserContactEdit from '@/pages/UserEditPage/components/UserContactEdit.vue';
-import UserBiographyEdit from '@/pages/UserEditPage/components/UserBiographyEdit.vue';
-import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
-import DefaultAvatar from '@/assets/images/404.svg';
+import { ref } from 'vue'
+import UserAvatarUpload from '@/pages/UserEditPage/components/UserAvatarUpload.vue'
+import UserContactEdit from '@/pages/UserEditPage/components/UserContactEdit.vue'
+import UserBiographyEdit from '@/pages/UserEditPage/components/UserBiographyEdit.vue'
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
+import DefaultAvatar from '@/assets/images/404.svg'
 
 const user = ref({
   id: '123e4567-e89b-12d3-a456-426614174000',
@@ -34,9 +34,9 @@ const user = ref({
   biography: 'Здесь может быть ваша биография...',
   role: 'Editor',
   createdAt: '2025-02-01'
-});
+})
 
 const saveChanges = () => {
-  console.log('Сохранение изменений', user.value);
-};
+  console.log('Сохранение изменений', user.value)
+}
 </script>

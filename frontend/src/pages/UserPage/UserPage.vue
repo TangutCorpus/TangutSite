@@ -9,7 +9,7 @@
       </div>
       <p class="text-gray-500">@{{ user.username }}</p>
 
-      <UserContact :email="user.email" :created-at="user.createdAt" class="mt-6 w-full" />
+      <UserContact :created-at="user.createdAt" :email="user.email" class="mt-6 w-full" />
 
       <UserBiography :biography="user.biography" class="mt-6 w-full" />
     </div>
@@ -17,12 +17,12 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import UserAvatar from '@/pages/UserPage/components/UserAvatar.vue';
-import UserContact from '@/pages/UserPage/components/UserContact.vue';
-import UserBiography from '@/pages/UserPage/components/UserBiography.vue';
-import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
-import DefaultAvatar from '@/assets/images/404.svg';
+import { ref } from 'vue'
+import UserAvatar from '@/pages/UserPage/components/UserAvatar.vue'
+import UserContact from '@/pages/UserPage/components/UserContact.vue'
+import UserBiography from '@/pages/UserPage/components/UserBiography.vue'
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
+import DefaultAvatar from '@/assets/images/404.svg'
 
 const user = ref({
   id: '123e4567-e89b-12d3-a456-426614174000',
@@ -33,9 +33,9 @@ const user = ref({
   biography: 'Здесь может быть ваша биография...',
   role: 'Editor',
   createdAt: '2025-02-01'
-});
+})
 
 const editProfile = () => {
-  console.log('Редактирование профиля');
-};
+  console.log('Редактирование профиля')
+}
 </script>

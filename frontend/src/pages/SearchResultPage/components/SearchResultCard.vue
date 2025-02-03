@@ -7,5 +7,5 @@
 </template>
 
 <script setup>
-defineProps({ result: Object });
+defineProps({ result: Object })
 </script>

@@ -11,13 +11,14 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue';
+import { defineProps, ref } from 'vue'
+
 const props = defineProps({
   title: String,
   tag: {
     type: String,
     default: 'h2'
   }
-});
-const isOpen = ref(true);
+})
+const isOpen = ref(true)
 </script>

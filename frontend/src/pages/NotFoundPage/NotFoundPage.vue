@@ -2,6 +2,6 @@
   <NotFoundPage />
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import NotFoundPage from '@/pages/NotFoundPage/components/NotFoundPage.vue'
 </script>

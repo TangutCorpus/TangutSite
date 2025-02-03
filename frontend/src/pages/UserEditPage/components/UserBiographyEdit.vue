@@ -6,13 +6,13 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits, computed } from 'vue';
+import { computed, defineEmits, defineProps } from 'vue'
 
-const props = defineProps({ biography: String });
-const emit = defineEmits(['update:biography']);
+const props = defineProps({ biography: String })
+const emit = defineEmits(['update:biography'])
 
 const biographyProxy = computed({
   get: () => props.biography,
   set: (value) => emit('update:biography', value)
-});
+})
 </script>

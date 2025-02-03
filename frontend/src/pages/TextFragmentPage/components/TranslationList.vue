@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps } from 'vue'
+import { defineProps } from 'vue'
 
 const props = defineProps({ texts: Array })
 const toggleTranslation = index => props.texts[index].showTranslation = !props.texts[index].showTranslation

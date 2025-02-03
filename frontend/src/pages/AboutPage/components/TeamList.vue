@@ -5,7 +5,8 @@
 </template>
 
 <script setup>
-import TeamMember from '@/pages/AboutPage/components/TeamMemberCard.vue';
-import { defineProps } from 'vue';
-const props = defineProps({ members: Array });
+import TeamMember from '@/pages/AboutPage/components/TeamMemberCard.vue'
+import { defineProps } from 'vue'
+
+const props = defineProps({ members: Array })
 </script>

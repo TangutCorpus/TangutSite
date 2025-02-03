@@ -11,5 +11,6 @@
 
 <script setup>
 import { defineProps } from 'vue'
+
 const props = defineProps({ textBlocks: Array })
 </script>

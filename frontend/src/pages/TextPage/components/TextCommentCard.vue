@@ -4,8 +4,8 @@
 
     <div v-for="(comment, index) in comments" :key="index" class="mb-4">
       <div class="flex items-center gap-2">
-        <b>{{index + 1}}.</b>
-        <p class="w-full p-3 border rounded bg-gray-100">{{comment}}</p>
+        <b>{{ index + 1 }}.</b>
+        <p class="w-full p-3 border rounded bg-gray-100">{{ comment }}</p>
       </div>
 
       <hr v-if="index < comments.length - 1" class="my-4 border-t border-gray-300">
@@ -15,6 +15,5 @@
 
 <script setup>
 import { defineProps } from 'vue';
-
 const props = defineProps({ comments: Array });
 </script>
