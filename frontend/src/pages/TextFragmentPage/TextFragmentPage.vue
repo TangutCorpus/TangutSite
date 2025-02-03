@@ -7,7 +7,7 @@
     <div class="">
       <ImageGallery :images="images" @open-slider="isSliderOpen = true" />
       <div class="mt-6">
-        <TextList :texts="texts" />
+        <TranslationList :texts="texts" />
       </div>
     </div>
     <ImageSlider v-if="isSliderOpen" :images="images" :isSliderOpen="isSliderOpen" @close-slider="isSliderOpen = false" />
@@ -16,9 +16,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import ImageGallery from '@/components/ImageGallery.vue';
-import ImageSlider from '@/components/ImageSlider.vue';
-import TextList from '@/components/TextList.vue';
+import ImageGallery from '@/pages/TextFragmentPage/components/ImageGallery.vue';
+import ImageSlider from '@/pages/TextFragmentPage/components/ImageSlider.vue';
+import TranslationList from '@/pages/TextFragmentPage/components/TranslationList.vue';
 import testImage from '@/assets/images/404.svg';
 
 const images = ref([testImage, testImage, testImage]);

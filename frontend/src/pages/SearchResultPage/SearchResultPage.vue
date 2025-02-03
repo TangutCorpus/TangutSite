@@ -9,8 +9,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import SearchBar from '@/components/SearchBar.vue';
-import SearchResultCard from '@/components/SearchResultCard.vue';
+import SearchBar from '@/components/SearchBarComponent/SearchBar.vue';
+import SearchResultCard from '@/pages/SearchResultPage/components/SearchResultCard.vue';
 
 const searchQuery = ref('');
 const searchMode = ref('text');

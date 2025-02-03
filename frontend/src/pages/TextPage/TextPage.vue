@@ -27,7 +27,7 @@
       </CollapsibleSection>
     </div>
     <div class="col-span-3">
-      <GlossText :textBlocks="texts" />
+      <GlossedText :textBlocks="texts" />
       <TextCommentCard :comments="comments" />
     </div>
   </div>
@@ -35,9 +35,9 @@
 
 <script setup>
 import { ref } from 'vue'
-import CollapsibleSection from '@/components/CollapsibleSection.vue'
-import GlossText from '@/components/GlossText.vue'
-import TextCommentCard from '@/components/TextCommentCard.vue'
+import CollapsibleSection from '@/pages/TextPage/components/CollapsibleSection.vue'
+import GlossedText from '@/pages/TextPage/components/GlossedText.vue'
+import TextCommentCard from '@/pages/TextPage/components/TextCommentCard.vue'
 
 const comments = ref([
   'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',

@@ -1,13 +1,13 @@
 <template>
   <div class="container mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    <LibraryItem v-for="text in texts" :key="text.id" :text="text" :maxPerRow="10" @select="goToText" />
+    <LibraryCard v-for="text in texts" :key="text.id" :text="text" :maxPerRow="10" @select="goToText" />
   </div>
 </template>
 
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import LibraryItem from '@/components/LibraryItem.vue';
+import LibraryCard from '@/pages/MainLibraryPage/components/LibraryCard.vue';
 
 const router = useRouter();
 

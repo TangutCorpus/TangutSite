@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import FAQItem from '@/components/FAQItem.vue';
+import FAQItem from '@/pages/AboutPage/components/FAQItem.vue';
 import { defineProps } from 'vue';
 const props = defineProps({ faqs: Array });
 </script>

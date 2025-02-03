@@ -19,10 +19,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import UserAvatarUpload from '@/components/UserAvatarUpload.vue';
-import UserContactEdit from '@/components/UserContactEdit.vue';
-import UserBiographyEdit from '@/components/UserBiographyEdit.vue';
-import BaseButton from '@/components/BaseButton.vue';
+import UserAvatarUpload from '@/pages/UserEditPage/components/UserAvatarUpload.vue';
+import UserContactEdit from '@/pages/UserEditPage/components/UserContactEdit.vue';
+import UserBiographyEdit from '@/pages/UserEditPage/components/UserBiographyEdit.vue';
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
 import DefaultAvatar from '@/assets/images/404.svg';
 
 const user = ref({

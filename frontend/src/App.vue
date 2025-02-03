@@ -12,9 +12,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import HeaderNav from '@/components/HeaderNav.vue'
-import MainContent from '@/components/MainContent.vue'
-import AuthComponent from '@/components/AuthComponent.vue'
+import HeaderNav from '@/components/HeadernavComponent/HeaderNavComponent.vue'
+import MainContent from '@/components/MainContentComponent/MainContentComponent.vue'
+import AuthComponent from '@/components/AuthComponent/AuthComponent.vue'
 
 const showAuth = ref(false)
 const currentPage = ref<'home' | 'auth' | 'article'>('home')

@@ -18,10 +18,10 @@
 
 <script setup>
 import { ref } from 'vue';
-import UserAvatar from '@/components/UserAvatar.vue';
-import UserContact from '@/components/UserContact.vue';
-import UserBiography from '@/components/UserBiography.vue';
-import BaseButton from '@/components/BaseButton.vue';
+import UserAvatar from '@/pages/UserPage/components/UserAvatar.vue';
+import UserContact from '@/pages/UserPage/components/UserContact.vue';
+import UserBiography from '@/pages/UserPage/components/UserBiography.vue';
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
 import DefaultAvatar from '@/assets/images/404.svg';
 
 const user = ref({

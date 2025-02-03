@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import FeatureItem from '@/components/FeatureItem.vue';
+import FeatureItem from '@/pages/AboutPage/components/FeatureItem.vue';
 import { defineProps } from 'vue';
 const props = defineProps({ features: Array });
 </script>

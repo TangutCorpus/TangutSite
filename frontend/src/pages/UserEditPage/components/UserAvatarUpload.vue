@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, watch } from 'vue';
-import BaseButton from '@/components/BaseButton.vue';
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
 
 const props = defineProps({ modelValue: String });
 const emit = defineEmits(['update:modelValue']);

@@ -10,7 +10,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import NotFound from '@/components/NotFoundPage.vue'
+import NotFound from '@/pages/NotFoundPage/components/NotFoundPage.vue'
 import image404 from '@/assets/images/404.svg'
 
 const route = useRoute()

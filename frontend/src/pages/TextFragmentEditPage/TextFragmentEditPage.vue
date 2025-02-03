@@ -4,7 +4,7 @@
       <label class="block text-lg font-semibold mb-2">Название текста</label>
       <input v-model="text.title" type="text" class="w-full p-2 border rounded mb-4">
       <ImageUpload :images="text.images" @update:images="updateImages" :single="false" class="mb-6" />
-      <TextListEdit class="mb-6" />
+      <TranslationListEdit class="mb-6" />
       <BaseButton @click="saveText" class="mt-6 w-full">Сохранить</BaseButton>
     </div>
   </div>
@@ -12,9 +12,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import BaseButton from '@/components/BaseButton.vue';
-import ImageUpload from '@/components/ImageUpload.vue';
-import TextListEdit from '@/components/TextListEdit.vue'
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
+import ImageUpload from '@/pages/UserEditPage/components/ImageUpload.vue';
+import TranslationListEdit from '@/pages/TextFragmentEditPage/components/TranslationListEdit.vue'
 
 const text = ref({
   title: '',

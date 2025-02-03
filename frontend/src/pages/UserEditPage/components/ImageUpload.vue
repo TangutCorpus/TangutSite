@@ -26,7 +26,7 @@
 
 <script setup>
 import { ref, defineProps, defineEmits, computed, nextTick } from 'vue';
-import BaseButton from '@/components/BaseButton.vue';
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue';
 
 const props = defineProps({ images: Array });
 const emit = defineEmits(['update:images']);
