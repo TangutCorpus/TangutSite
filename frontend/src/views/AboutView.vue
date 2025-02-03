@@ -30,7 +30,7 @@ import PricingTable from '@/components/PricingTable.vue';
 import ContactForm from '@/components/ContactForm.vue';
 import FAQList from '@/components/FAQList.vue';
 import SectionWrapper from '@/components/SectionWrapper.vue';
-import Image from '@/assets/404.svg'
+import Image from '@/assets/images/404.svg'
 
 const features = ref([{ title: "Lorem Ipsum", description: "Lorem Ipsum" }]);
 const team = ref([

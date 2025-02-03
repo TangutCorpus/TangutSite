@@ -23,7 +23,7 @@ import UserAvatarUpload from '@/components/UserAvatarUpload.vue';
 import UserContactEdit from '@/components/UserContactEdit.vue';
 import UserBiographyEdit from '@/components/UserBiographyEdit.vue';
 import BaseButton from '@/components/BaseButton.vue';
-import DefaultAvatar from '@/assets/404.svg';
+import DefaultAvatar from '@/assets/images/404.svg';
 
 const user = ref({
   id: '123e4567-e89b-12d3-a456-426614174000',

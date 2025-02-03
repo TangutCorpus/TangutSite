@@ -19,7 +19,7 @@ import { ref } from 'vue';
 import ImageGallery from '@/components/ImageGallery.vue';
 import ImageSlider from '@/components/ImageSlider.vue';
 import TextList from '@/components/TextList.vue';
-import testImage from '@/assets/404.svg';
+import testImage from '@/assets/images/404.svg';
 
 const images = ref([testImage, testImage, testImage]);
 const isSliderOpen = ref(false);

@@ -11,7 +11,7 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import NotFound from '@/components/NotFoundPage.vue'
-import image404 from '@/assets/404.svg'
+import image404 from '@/assets/images/404.svg'
 
 const route = useRoute()
 
