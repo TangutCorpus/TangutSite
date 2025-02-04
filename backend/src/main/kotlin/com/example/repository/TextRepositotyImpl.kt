@@ -79,8 +79,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
 }
 
 private fun ResultRow.toText(): Text {
-    return Text(
-        id = this[Texts.id],
+    return Text(id = this[Texts.id],
         title = this[Texts.title],
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
@@ -112,14 +111,14 @@ private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
 
         return when (selector) {
             "id" -> applyUUIDComparison(Texts.id, operator, argument)
-            "comment" -> applyStringComparison(Texts.comment, operator, argument)
-            "pureText" -> applyStringComparison(Texts.pureText, operator, argument)
+            "comment" -> applyTextComparison(Texts.comment, operator, argument)
+            "pureText" -> applyTextComparison(Texts.pureText, operator, argument)
             else -> throw IllegalArgumentException("Unknown field: $selector")
         }
     }
 
     private fun applyUUIDComparison(column: Column<UUID>, operator: ComparisonOperator, argument: String): Op<Boolean> {
-        val intValue = argument.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid integer: $argument")
+        val intValue = argument.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid UUID: $argument")
         return when (operator.symbol) {
             "==" -> column eq intValue
             "!=" -> column neq intValue
@@ -127,7 +126,7 @@ private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
         }
     }
 
-    private fun applyStringComparison(
+    private fun applyTextComparison(
         column: Column<String>, operator: ComparisonOperator, argument: String
     ): Op<Boolean> {
         return when (operator.symbol) {
