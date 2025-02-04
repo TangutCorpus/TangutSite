@@ -3,42 +3,30 @@ package com.example.plugins
 import com.example.model.UserRoles
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.application.ApplicationCall
-import io.ktor.server.application.createRouteScopedPlugin
+import io.ktor.server.application.createApplicationPlugin
 import io.ktor.server.auth.AuthenticationChecked
 import io.ktor.server.auth.jwt.JWTPrincipal
 import io.ktor.server.auth.principal
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.util.AttributeKey
 
 /**
- * Configuration class for the Role-Based Authorization Plugin.
+ * Role-Based Authorization Plugin for Ktor.
  *
- * This class allows specifying a set of roles that are permitted to access a route.
- *
- * @property roles A set of UserRoles that define access permissions for routes.
+ * This plugin checks if the authenticated user has the required role(s) to access a route.
+ * If the user does not have the required role, it returns a 403 Forbidden response.
  */
-class RoleBasedPluginConfiguration {
-    var roles: Set<UserRoles> = emptySet()
-}
+val RoleBasedAuthorizationPlugin = createApplicationPlugin("RoleBasedAuthorizationPlugin") {
+    on(AuthenticationChecked) { call ->
+        val userRole = getRoleFromToken(call)
+        val requiredRoles = call.attributes.getOrNull(requiredRolesKey)
 
-/**
- * A Ktor plugin for role-based authorization.
- *
- * This plugin restricts access to routes based on user roles defined in JWT tokens.
- * If users does not have a required role, they receive a 403 Forbidden response.
- */
-val RoleBasedAuthorizationPlugin =
-    createRouteScopedPlugin("RoleBasedAuthorizationPlugin", createConfiguration = ::RoleBasedPluginConfiguration) {
-        val roles = pluginConfig.roles
-
-        on(AuthenticationChecked) { call ->
-            val userRole = getRoleFromToken(call)
-
-            if (userRole == null || userRole !in roles) {
-                call.respond(HttpStatusCode.Forbidden)
-            }
+        if (userRole == null || (requiredRoles != null && userRole !in requiredRoles)) {
+            call.respond(HttpStatusCode.Forbidden)
         }
     }
+}
 
 /**
  * Extracts the user role from the JWT token in the request.
@@ -47,24 +35,22 @@ val RoleBasedAuthorizationPlugin =
  * @return The user's role if available, otherwise null.
  */
 private fun getRoleFromToken(call: ApplicationCall): UserRoles? {
-    return call.principal<JWTPrincipal>()
-        ?.payload
-        ?.getClaim("role")
-        ?.asString()
+    return call.principal<JWTPrincipal>()?.payload?.getClaim("role")?.asString()
         ?.let { runCatching { UserRoles.valueOf(it) }.getOrNull() }
 }
+
+private val requiredRolesKey = AttributeKey<Set<UserRoles>>("requiredRoles")
 
 /**
  * Extension function for defining role-protected routes.
  *
- * Installs the RoleBasedAuthorizationPlugin and restricts access to users with any of the specified roles.
+ * This function allows specifying one or more roles required to access a route.
+ * The required roles are stored as an attribute and checked by the authorization plugin.
  *
- * @param hasAnyRole A list of roles that are allowed to access the route.
+ * @param hasAnyRole A list of roles allowed to access the route.
  * @param build The route configuration.
  */
 fun Route.hasAnyRole(vararg hasAnyRole: UserRoles, build: Route.() -> Unit) {
-    install(RoleBasedAuthorizationPlugin) {
-        roles = hasAnyRole.toSet()
-    }
+    attributes.put(requiredRolesKey, hasAnyRole.toSet())
     build()
 }
