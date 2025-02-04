@@ -10,10 +10,10 @@ import com.example.repository.TextRepositoryImpl
 import com.example.repository.UserRepositoryImpl
 import com.example.config.configureRouting
 import com.example.repository.RefreshTokenRepositoryImpl
-import com.example.repository.TextFragmentRepositoryImpl
+import com.example.repository.TextPageRepositoryImpl
 import com.example.service.SearchServiceImpl
 import com.example.service.SecurityServiceImpl
-import com.example.service.TextFragmentServiceImpl
+import com.example.service.TextPageServiceImpl
 import com.example.service.TextServiceImpl
 import com.example.service.UserServiceImpl
 import io.ktor.server.application.*
@@ -31,15 +31,15 @@ fun Application.module() {
     var textRepository = TextRepositoryImpl(database)
     var textService = TextServiceImpl(textRepository)
 
-    var textFragmentRepository = TextFragmentRepositoryImpl(database)
-    var textFragmentService = TextFragmentServiceImpl(textFragmentRepository)
+    var textPageRepository = TextPageRepositoryImpl(database)
+    var textPageService = TextPageServiceImpl(textPageRepository)
 
     var searchService = SearchServiceImpl(textRepository)
 
     var refreshTokenRepository = RefreshTokenRepositoryImpl(database)
     var securityService = SecurityServiceImpl(userRepository, refreshTokenRepository, config)
 
-    configureRouting(userService, textService, searchService, textFragmentService, securityService)
+    configureRouting(userService, textService, searchService, textPageService, securityService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
