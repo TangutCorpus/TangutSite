@@ -30,7 +30,7 @@ const texts = ref([
     page: 1,
     title: 'Lorem Ipsum',
     content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    href: '/fragment/1',
+    href: '/page/1',
     showTranslation: false,
     translation: {
       ru: 'Лорем ипсум долор сит амет, консектетур адиписцинг элит.',
@@ -41,7 +41,7 @@ const texts = ref([
     page: 2,
     title: 'Sed Eiusmod',
     content: 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-    href: '/fragment/2',
+    href: '/page/2',
     showTranslation: false,
     translation: {
       ru: 'Сед до эйусмод темпор инцидидунт ут лаборате эт долоре магна аликуа.',

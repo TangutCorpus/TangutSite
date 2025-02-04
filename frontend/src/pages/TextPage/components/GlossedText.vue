@@ -2,7 +2,7 @@
   <div>
     <div v-for="(block, index) in textBlocks" :key="index"
          class="bg-gray-100 p-6 rounded-lg mb-6 border-l-4 border-blue-500">
-      <h2 class="text-lg font-bold"><a :href="`/fragment/${block.link}`">{{ block.title }}</a></h2>
+      <h2 class="text-lg font-bold"><a :href="`/page/${block.link}`">{{ block.title }}</a></h2>
 
       <pre class="bg-white p-4 border rounded">{{ block.text }}</pre>
 
