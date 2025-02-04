@@ -2,7 +2,6 @@ package com.example.routes
 
 import com.example.model.ExposedUser
 import com.example.model.UserRoles
-import com.example.model.toUser
 import com.example.model.updateFromExposedUser
 import com.example.plugins.hasAnyRole
 import com.example.service.UserService
@@ -13,7 +12,7 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
 fun Route.userRoutes(userService: UserService) {
-    hasAnyRole(UserRoles.EDITOR){
+    hasAnyRole(UserRoles.EDITOR) {
         get("/users/{id}") {
             val id = call.parameters["id"]?.toUUIDOrNull()
             userService.getUserById(id)?.let { user -> call.respond(HttpStatusCode.OK, user) }
@@ -39,9 +38,7 @@ fun Route.userRoutes(userService: UserService) {
                 call.respondText("User not deleted", status = HttpStatusCode.NotModified)
             }
         }
-    }
 
-    hasAnyRole(UserRoles.ADMIN){
         get("/users") {
             val users = userService.getAllUsers()
             call.respond(HttpStatusCode.OK, users)
