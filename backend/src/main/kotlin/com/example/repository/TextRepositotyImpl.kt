@@ -1,7 +1,7 @@
 package com.example.repository
 
 import com.example.model.Text
-import com.example.model.TextFragments
+import com.example.model.TextPages
 import com.example.model.Texts
 import com.example.utils.toUUIDOrNull
 import cz.jirutka.rsql.parser.RSQLParser
@@ -66,7 +66,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[title] = text.title
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
-            it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
+            it[TextPages.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
         }
     }
 

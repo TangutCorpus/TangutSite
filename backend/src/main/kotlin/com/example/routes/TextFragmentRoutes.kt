@@ -1,7 +1,7 @@
 package com.example.routes
 
-import com.example.model.TextFragment
-import com.example.service.TextFragmentService
+import com.example.model.TextPage
+import com.example.service.TextPageService
 import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
@@ -12,21 +12,21 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 
-fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
+fun Route.textPageRoutes(textPageService: TextPageService) {
     post("/fragments") {
-        val fragment = call.receive<TextFragment>()
-        textFragmentService.addTextFragment(fragment)
+        val fragment = call.receive<TextPage>()
+        textPageService.addTextPage(fragment)
         call.respondText("Fragment added successfully", status = HttpStatusCode.Created)
     }
 
     get("/fragments") {
-        val fragments = textFragmentService.getAllTextFragments()
+        val fragments = textPageService.getAllTextPages()
         call.respond(fragments)
     }
 
     get("/fragments/{id}") {
         val id = call.parameters["id"]?.toUUIDOrNull()
-        val fragment = textFragmentService.getTextFragmentById(id)
+        val fragment = textPageService.getTextPageById(id)
         if (fragment != null) {
             call.respond(fragment)
         } else {
@@ -36,8 +36,8 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
 
     put("/fragments/{id}") {
         val id = call.parameters["id"]?.toUUIDOrNull() ?: return@put
-        val updatedText = call.receive<TextFragment>()
-        if (textFragmentService.updateTextFragment(updatedText.copy(id = id))) {
+        val updatedText = call.receive<TextPage>()
+        if (textPageService.updateTextPage(updatedText.copy(id = id))) {
             call.respondText("Fragment updated successfully", status = HttpStatusCode.OK)
         } else {
             call.respondText("Fragment not modified", status = HttpStatusCode.NotModified)
@@ -47,7 +47,7 @@ fun Route.textFragmentRoutes(textFragmentService: TextFragmentService) {
 
     delete("/fragments/{id}") {
         val id = call.parameters["id"]?.toUUIDOrNull()
-        if (textFragmentService.deleteTextFragmentById(id)) {
+        if (textPageService.deleteTextPageById(id)) {
             call.respondText("Fragment deleted successfully", status = HttpStatusCode.OK)
         } else {
             call.respondText("Fragment not deleted", status = HttpStatusCode.NotModified)
