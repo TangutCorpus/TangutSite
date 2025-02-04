@@ -9,7 +9,7 @@
         <router-link
           v-for="chapter in chunk"
           :key="chapter"
-          :to="`/fragment/${chapter}`"
+          :to="`/page/${chapter}`"
           class="px-3 py-1 mt-2 bg-blue-200 text-blue-700 rounded text-sm hover:bg-blue-300 transition"
         >
           {{ chapter }}
