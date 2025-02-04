@@ -53,6 +53,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
     override suspend fun addText(text: Text) = transaction(db) {
         Texts.insert {
             it[comment] = text.comment
+            it[title] = text.title
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
             it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
@@ -62,6 +63,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
     override suspend fun updateText(text: Text) = transaction(db) {
         Texts.update({ Texts.id eq text.id }) {
             it[comment] = text.comment
+            it[title] = text.title
             it[lineIds] = Json.encodeToString(text.lineIds)
             it[pureText] = text.pureText
             it[TextFragments.createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
@@ -80,6 +82,7 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
 private fun ResultRow.toText(): Text {
     return Text(
         id = this[Texts.id],
+        title = this[Texts.title],
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
         pureText = this[Texts.pureText],
