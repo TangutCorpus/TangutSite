@@ -2,7 +2,7 @@ package com.example.helpers
 
 import com.example.config.UUIDSerializer
 import com.example.model.Text
-import com.example.model.TextFragment
+import com.example.model.TextPage
 import com.example.model.User
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.setBody
@@ -29,7 +29,7 @@ fun HttpRequestBuilder.jsonRequest(text: Text) {
     setBody(testJson.encodeToString(text))
 }
 
-fun HttpRequestBuilder.jsonRequest(fragment: TextFragment) {
+fun HttpRequestBuilder.jsonRequest(fragment: TextPage) {
     contentType(ContentType.Application.Json)
     setBody(testJson.encodeToString(fragment))
 }
