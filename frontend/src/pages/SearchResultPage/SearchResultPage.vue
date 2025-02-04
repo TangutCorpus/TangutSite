@@ -12,6 +12,7 @@ import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import SearchBar from '@/components/SearchBarComponent/SearchBar.vue'
 import SearchResultCard from '@/pages/SearchResultPage/components/SearchResultCard.vue'
+import api from '@/helpers/http/http'
 
 const route = useRoute()
 const searchQuery = ref(route.query.query || '')
@@ -21,7 +22,8 @@ const errorMessage = ref('')
 
 const fetchResults = async () => {
   try {
-    const response = await fetch(`/api/search?query=${encodeURIComponent(route.query.query)}`)
+    const query = (route.query.query ?? []).toString();
+    const response = await api.get(`/search?query=pureText=in=${encodeURIComponent(query)}`)
 
     if (!response.ok) {
       throw new Error(`Server error: ${response.status} ${response.statusText}`)
