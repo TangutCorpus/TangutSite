@@ -1,5 +1,6 @@
 package com.example.config
 
+import com.example.plugins.RoleBasedAuthorizationPlugin
 import com.example.routes.authRoutes
 import com.example.routes.searchRoutes
 import com.example.routes.textPageRoutes
@@ -20,6 +21,8 @@ fun Application.configureRouting(
     textPageService: TextPageService,
     securityService: SecurityService
 ) {
+    install(RoleBasedAuthorizationPlugin)
+    
     routing {
         authRoutes(securityService, userService)
         searchRoutes(searchService)
