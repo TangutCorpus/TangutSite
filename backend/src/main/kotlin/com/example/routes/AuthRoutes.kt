@@ -8,11 +8,15 @@ import com.example.model.UserLoginRequest
 import com.example.model.toUser
 import com.example.service.SecurityService
 import com.example.service.UserService
+import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
+import io.ktor.server.auth.UserIdPrincipal
+import io.ktor.server.auth.principal
 import io.ktor.server.request.receive
 import io.ktor.server.request.receiveParameters
 import io.ktor.server.response.respond
 import io.ktor.server.routing.Route
+import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 
 fun Route.authRoutes(securityService: SecurityService, userService: UserService) {
@@ -20,7 +24,9 @@ fun Route.authRoutes(securityService: SecurityService, userService: UserService)
         val loginRequest = call.receive<UserLoginRequest>()
         val user = userService.getUserByEmail(loginRequest.email)
 
-        if (user != null && BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password.toCharArray()).verified) {
+        if (user != null && BCrypt.verifyer()
+                .verify(loginRequest.password.toCharArray(), user.password.toCharArray()).verified
+        ) {
             val accessToken = securityService.createAccessToken(user.email, user.role)
             val refreshToken = securityService.createRefreshToken(user.email, user.role)
             securityService.saveRefreshToken(user.id, refreshToken)
@@ -34,8 +40,7 @@ fun Route.authRoutes(securityService: SecurityService, userService: UserService)
     post("/auth/signup") {
         val exposedUser = call.receive<ExposedUser>()
         val password = call.receiveParameters()["password"] ?: return@post call.respond(
-            HttpStatusCode.BadRequest,
-            "Password required"
+            HttpStatusCode.BadRequest, "Password required"
         )
 
         if (!isValidPassword(password)) {
@@ -60,7 +65,22 @@ fun Route.authRoutes(securityService: SecurityService, userService: UserService)
             call.respond(HttpStatusCode.Unauthorized, "Invalid or expired refresh token")
         }
     }
+
+    get("/users/me") {
+        val userId = call.principal<UserIdPrincipal>()?.name
+        if (userId != null) {
+            val user = userService.getUserById(userId.toUUIDOrNull())
+            if (user != null) {
+                call.respond(user)
+            } else {
+                call.respond(HttpStatusCode.NotFound, "User not found")
+            }
+        } else {
+            call.respond(HttpStatusCode.Unauthorized, "User not authenticated")
+        }
+    }
 }
+
 
 /**
  * It's a temporary function which is to be replaced.
