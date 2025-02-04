@@ -1,13 +1,19 @@
 <template>
   <div class="bg-gray-100 shadow rounded-lg p-6">
-    <h2 class="text-xl font-bold text-blue-600 cursor-pointer" @click="$emit('select', text.id)">
+    <router-link :to="`/text/${text.id}`" class="text-xl font-bold text-blue-600 hover:underline">
       {{ text.title }}
-    </h2>
+    </router-link>
+
     <div class="mt-2">
       <div v-for="(chunk, index) in chunkedChapters" :key="index" class="flex flex-wrap justify-center gap-2">
-        <span v-for="chapter in chunk" :key="chapter" class="px-3 py-1 mt-2 bg-blue-200 text-blue-700 rounded text-sm">
+        <router-link
+          v-for="chapter in chunk"
+          :key="chapter"
+          :to="`/fragment/${chapter}`"
+          class="px-3 py-1 mt-2 bg-blue-200 text-blue-700 rounded text-sm hover:bg-blue-300 transition"
+        >
           {{ chapter }}
-        </span>
+        </router-link>
       </div>
     </div>
   </div>
@@ -26,8 +32,8 @@ const props = defineProps({
 
 const chunkedChapters = computed(() => {
   const result = []
-  for (let i = 0; i < props.text.chapters.length; i += props.maxPerRow) {
-    result.push(props.text.chapters.slice(i, i + props.maxPerRow))
+  for (let i = 0; i < props.text.lineIds.length; i += props.maxPerRow) {
+    result.push(props.text.lineIds.slice(i, i + props.maxPerRow))
   }
   return result
 })
