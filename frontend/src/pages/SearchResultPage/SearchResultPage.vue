@@ -1,6 +1,6 @@
 <template>
   <div class="container mx-auto p-6">
-    <SearchBar v-model:mode="searchMode" v-model:query="searchQuery" class="mb-6" @all-results="updateResults" />
+    <SearchBar v-model:mode="searchMode" v-model:query="searchQuery" class="mb-6" />
     <div class="grid grid-cols-1 gap-6">
       <SearchResultCard v-for="result in results" :key="result.id" :result="result" />
     </div>
@@ -8,21 +8,48 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
+import { useRoute } from 'vue-router'
 import SearchBar from '@/components/SearchBarComponent/SearchBar.vue'
 import SearchResultCard from '@/pages/SearchResultPage/components/SearchResultCard.vue'
 
-const searchQuery = ref('')
+const route = useRoute()
+const searchQuery = ref(route.query.query || '')
 const searchMode = ref('text')
 const results = ref([])
-const updateResults = (query) => {
-  searchQuery.value = query
-  results.value = fetchResults(query)
+const errorMessage = ref('')
+
+const fetchResults = async () => {
+  try {
+    const response = await fetch(`/api/search?query=${encodeURIComponent(route.query.query)}`)
+
+    if (!response.ok) {
+      throw new Error(`Server error: ${response.status} ${response.statusText}`)
+    }
+
+    const contentType = response.headers.get('content-type')
+    if (!contentType || !contentType.includes('application/json')) {
+      const text = await response.text() // Get response as text for debugging
+      throw new Error(`Unexpected response format: ${text}`)
+    }
+
+    results.value = await response.json()
+  } catch (error) {
+    console.error('Error fetching search results:', error.message)
+    errorMessage.value = `Failed to load search results: ${error.message}`
+  }
 }
-const fetchResults = (query) => {
-  return [
-    { id: 1, title: 'Результат 1', description: 'Описание результата 1', href: '/text/1' },
-    { id: 2, title: 'Результат 2', description: 'Описание результата 2', href: '/text/2' }
-  ]
-}
+
+onMounted(() => {
+  if (searchQuery.value) {
+    fetchResults(searchQuery.value)
+  }
+})
+
+watch(() => route.query.query, (newQuery) => {
+  if (newQuery) {
+    searchQuery.value = newQuery
+    fetchResults(newQuery)
+  }
+})
 </script>

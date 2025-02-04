@@ -71,17 +71,23 @@
 
 
 <script lang="ts" setup>
-import { computed, defineEmits, ref } from 'vue'
+import { computed, defineProps, ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
-const emit = defineEmits(['select-suggestion', 'all-results'])
+const props = defineProps<{ query: string; mode: string }>()
+const emit = defineEmits(['update:query', 'update:mode'])
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchButton = ref<HTMLButtonElement | null>(null)
 const searchContainer = ref<HTMLDivElement | null>(null)
-const userQuery = ref('')
+const userQuery = ref(props.query || '')
 const searchMode = ref<'text' | 'article'>('text')
 const showHistory = ref(false)
 const showTangutPopup = ref(false)
 const tangutIcon = 'Выборать компоненты'
+const router = useRouter()
+
+
+
 
 const radicals = computed(() => {
   const start = 0x18800
@@ -92,6 +98,7 @@ const radicals = computed(() => {
   }
   return arr
 })
+
 const toggleTangutPopup = () => {
   showTangutPopup.value = !showTangutPopup.value
 }
@@ -100,20 +107,19 @@ const selectRadical = (radical: string) => {
   userQuery.value += radical
 }
 
-
-const searchQuery = computed(() => `chosen:${searchMode.value} ${userQuery.value}`)
-
 const setSearchMode = (mode: 'text' | 'article') => {
   searchMode.value = mode
 }
 
+watch(() => props.query, (newQuery) => {
+  userQuery.value = newQuery || ''
+})
+
 const handleSearch = () => {
-  if (userQuery.value) {
+  if (userQuery.value && searchMode.value == 'text') {
     showHistory.value = false
-    emit('all-results', searchQuery.value)
+    emit('update:query', userQuery.value)
+    router.push({ path: '/search', query: { query: userQuery.value } })
   }
 }
 </script>
-
-<style>
-</style>
