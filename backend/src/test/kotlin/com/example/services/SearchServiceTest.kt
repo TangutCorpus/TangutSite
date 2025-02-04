@@ -1,5 +1,6 @@
 package com.example.services
 
+import com.example.helpers.DefaultParams
 import com.example.model.Text
 import com.example.repository.TextRepository
 import com.example.service.SearchServiceImpl
@@ -16,9 +17,9 @@ class SearchServiceTest {
     private lateinit var service: SearchServiceImpl
     private val textRepository = mockk<TextRepository>(relaxed = true)
     private val text = Text(
-        1,
+        DefaultParams.textID,
+        listOf(DefaultParams.textFragmentId),
         "Example comment 1",
-        listOf(1, 2, 3),
         "Some text here",
         Clock.System.todayIn(TimeZone.currentSystemDefault())
     )

@@ -1,6 +1,4 @@
-package com.example.services
-
-import com.example.model.ExposedUser
+import com.example.model.User
 import com.example.repository.UserRepository
 import com.example.service.UserService
 import com.example.service.UserServiceImpl
@@ -10,55 +8,78 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
+import java.util.UUID
+import kotlinx.datetime.LocalDate
 
 class UserServiceTest {
     private lateinit var service: UserService
-    private val EXCEPTION_MESSAGE: String = "An operation is not implemented: Not yet implemented"
+    private val EXCEPTION_MESSAGE = "An operation is not implemented: Not yet implemented"
 
     @BeforeTest
     fun setup() {
-        var repository = mockk<UserRepository>(relaxed = true)
+        val repository = mockk<UserRepository>(relaxed = true)
         service = UserServiceImpl(repository)
     }
 
     @Test
-    fun `test createUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
-        var exception = assertFailsWith<NotImplementedError> {
+    fun `createUser should throw NotImplementedError`() = runBlocking {
+        val user = User(
+            id = UUID.randomUUID(),
+            nickname = "testUser",
+            email = "test@example.com",
+            password = "password123",
+            name = "Test User",
+            biography = "A test user for demonstration purposes",
+            role = "Editor",
+            createdAt = LocalDate(2025, 1, 1)
+        )
+        val exception = assertFailsWith<NotImplementedError> {
             service.createUser(user)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
 
     @Test
-    fun `test updateUser throws NotImplementedError`() = runBlocking {
-        var user = ExposedUser("", 0)
-        var exception = assertFailsWith<NotImplementedError> {
-            service.updateUser(1, user)
+    fun `updateUser should throw NotImplementedError`() = runBlocking {
+        val id = UUID.randomUUID()
+        val user = User(
+            id = id,
+            nickname = "updatedUser",
+            email = "update@example.com",
+            password = "newPassword",
+            name = "Updated User",
+            biography = "Updated biography for user",
+            role = "Moderator",
+            createdAt = LocalDate(2025, 1, 1)
+        )
+        val exception = assertFailsWith<NotImplementedError> {
+            service.updateUser(id, user)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
 
     @Test
-    fun `test deleteUser throws NotImplementedError`() = runBlocking {
-        var exception = assertFailsWith<NotImplementedError> {
-            service.deleteUser(1)
+    fun `deleteUser should throw NotImplementedError`() = runBlocking {
+        val id = UUID.randomUUID()
+        val exception = assertFailsWith<NotImplementedError> {
+            service.deleteUser(id)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
 
     @Test
-    fun `test getAllUsers throws NotImplementedError`() = runBlocking {
-        var exception = assertFailsWith<NotImplementedError> {
+    fun `getAllUsers should throw NotImplementedError`() = runBlocking {
+        val exception = assertFailsWith<NotImplementedError> {
             service.getAllUsers()
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }
 
     @Test
-    fun `test getUserById throws NotImplementedError`() = runBlocking {
-        var exception = assertFailsWith<NotImplementedError> {
-            service.getUserById(1)
+    fun `getUserById should throw NotImplementedError`() = runBlocking {
+        val id = UUID.randomUUID()
+        val exception = assertFailsWith<NotImplementedError> {
+            service.getUserById(id)
         }
         assertEquals(EXCEPTION_MESSAGE, exception.message)
     }

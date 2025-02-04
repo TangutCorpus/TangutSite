@@ -8,6 +8,7 @@ import com.example.config.configureSecurity
 import com.example.config.configureSerialization
 import com.example.model.Text
 import com.example.model.TextFragment
+import com.example.model.User
 import com.example.service.SearchService
 import com.example.service.TextFragmentService
 import com.example.service.TextService
@@ -23,21 +24,21 @@ fun getH2Database(): Database {
     return Database.connect("jdbc:h2:mem:test;DB_CLOSE_DELAY=-1;", driver = "org.h2.Driver")
 }
 
-fun ApplicationTestBuilder.setupApp(defaultText: Text? = null, defaultTextFragment: TextFragment? = null) {
+fun ApplicationTestBuilder.setupApp(defaultText: Text? = null, defaultTextFragment: TextFragment? = null, defaultUser: User? = null) {
     environment {
         config = ApplicationConfig("application-test.conf")
     }
     application {
-        testModule(defaultText, defaultTextFragment)
+        testModule(defaultText, defaultTextFragment, defaultUser)
     }
 }
 
-fun Application.testModule(defaultText: Text?, defaultTextFragment: TextFragment?) {
+fun Application.testModule(defaultText: Text?, defaultTextFragment: TextFragment?, defaultUser: User?) {
     val mockTextService = createMockTextService(defaultText)
     val mockFragmentService = createMockTextFragmentService(defaultTextFragment)
-    val mockUserService = createMockUserService()
+    val mockUserService = createMockUserService(defaultUser)
     val mockSearchService = createMockSearchService(defaultText)
-    
+
     configureRouting(mockUserService, mockTextService, mockSearchService, mockFragmentService)
     configureExceptionHandling()
     configureSerialization()
@@ -58,9 +59,9 @@ private fun createMockTextService(defaultText: Text?) = mockk<TextService>(relax
     if (defaultText != null) {
         coEvery { addText(any()) } returns Unit
         coEvery { getTextById(any()) } returns null
-        coEvery { getTextById(1) } returns defaultText
+        coEvery { getTextById(DefaultParams.textID) } returns defaultText
         coEvery { getAllTexts() } returns listOf(defaultText)
-        coEvery { deleteTextById(1) } returns true
+        coEvery { deleteTextById(DefaultParams.textID) } returns true
         coEvery { updateText(any()) } returns false
         coEvery { updateText(defaultText) } returns true
     }
@@ -71,12 +72,12 @@ private fun createMockTextFragmentService(defaultTextFragment: TextFragment?) =
         if (defaultTextFragment != null) {
             coEvery { addTextFragment(any()) } returns Unit
             coEvery { getTextFragmentById(any()) } returns null
-            coEvery { getTextFragmentById(1) } returns defaultTextFragment
+            coEvery { getTextFragmentById(DefaultParams.textFragmentId) } returns defaultTextFragment
             coEvery { getAllTextFragments() } returns listOf(defaultTextFragment)
-            coEvery { deleteTextFragmentById(1) } returns true
+            coEvery { deleteTextFragmentById(DefaultParams.textFragmentId) } returns true
             coEvery { updateTextFragment(any()) } returns false
             coEvery { updateTextFragment(defaultTextFragment) } returns true
         }
     }
 
-private fun createMockUserService() = mockk<UserService>(relaxed = true)
+private fun createMockUserService(defaultUser: User?) = mockk<UserService>(relaxed = true)

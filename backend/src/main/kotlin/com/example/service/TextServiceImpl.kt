@@ -4,12 +4,11 @@ import com.example.model.Text
 import com.example.repository.TextRepository
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.atStartOfDayIn
+import java.util.UUID
 
 class TextServiceImpl(private val textRepository: TextRepository) : TextService {
-
-    override suspend fun getTextById(id: Int?): Text? {
+    override suspend fun getTextById(id: UUID?): Text? {
         require(id != null) { "ID cannot be empty" }
-        require(id >= 0) { "ID cannot be negative" }
         return textRepository.getTextById(id) ?: throw NoSuchElementException("No text found with id $id")
     }
 
@@ -25,14 +24,12 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
         return textRepository.updateText(text) != 0
     }
 
-    override suspend fun deleteTextById(id: Int?): Boolean {
+    override suspend fun deleteTextById(id: UUID?): Boolean {
         require(id != null) { "ID cannot be empty" }
-        require(id >= 0) { "ID cannot be negative" }
         return textRepository.deleteTextById(id) != 0
     }
 
     override suspend fun getAllTexts(): List<Text> = textRepository.getAllTexts()
-
 }
 
 fun Text.canBeParsedToLocalDateTime(): Boolean {

@@ -1,5 +1,6 @@
 package com.example.services
 
+import com.example.helpers.DefaultParams
 import com.example.model.TextFragment
 import com.example.repository.TextFragmentRepository
 import com.example.service.TextFragmentService
@@ -17,31 +18,32 @@ class TextFragmentServiceTest {
     private lateinit var service: TextFragmentService
     private val repository = mockk<TextFragmentRepository>(relaxed = true)
 
-    private val validFragment = TextFragment(1, 1, 1, "Text", "Text", null)
-    private val invalidFragment = TextFragment(1, -1, 1, "", "", null)
+    private val validFragment =
+        TextFragment(DefaultParams.textFragmentId, DefaultParams.textID, 1, "Text", "Text", null)
+    private val invalidFragment = TextFragment(DefaultParams.textFragmentId, DefaultParams.invalidId, 1, "", "", null)
 
     @BeforeTest
     fun setup() {
         service = TextFragmentServiceImpl(repository)
 
-        coEvery { repository.getTextFragmentById(1) } returns validFragment
-        coEvery { repository.getTextFragmentById(2) } returns null
-        coEvery { repository.addTextFragment(validFragment) } returns 1
+        coEvery { repository.getTextFragmentById(DefaultParams.textFragmentId) } returns validFragment
+        coEvery { repository.getTextFragmentById(DefaultParams.invalidId) } returns null
+        coEvery { repository.addTextFragment(validFragment) } returns DefaultParams.textFragmentId
         coEvery { repository.updateTextFragment(validFragment) } returns 1
-        coEvery { repository.deleteTextFragmentById(1) } returns 1
+        coEvery { repository.deleteTextFragmentById(DefaultParams.textFragmentId) } returns 1
         coEvery { repository.getAllTextFragments() } returns listOf(validFragment)
     }
 
     @Test
     fun `get text fragment by valid id returns text fragment`() = runBlocking {
-        val result = service.getTextFragmentById(1)
+        val result = service.getTextFragmentById(DefaultParams.textFragmentId)
         assertEquals(validFragment, result)
     }
 
     @Test
     fun `get text fragment by invalid id throws exception`() = runBlocking {
         val exception = assertFailsWith<NoSuchElementException> {
-            service.getTextFragmentById(2)
+            service.getTextFragmentById(DefaultParams.invalidId)
         }
         assertEquals("No fragment found with id 2", exception.message)
     }
@@ -75,13 +77,13 @@ class TextFragmentServiceTest {
 
     @Test
     fun `delete text fragment by valid id`() = runBlocking {
-        assertTrue(service.deleteTextFragmentById(1))
+        assertTrue(service.deleteTextFragmentById(DefaultParams.textFragmentId))
     }
 
     @Test
     fun `delete text fragment by invalid id throws exception`() = runBlocking {
         val exception = assertFailsWith<IllegalArgumentException> {
-            service.deleteTextFragmentById(-1)
+            service.deleteTextFragmentById(DefaultParams.invalidId)
         }
         assertEquals("ID cannot be negative", exception.message)
     }

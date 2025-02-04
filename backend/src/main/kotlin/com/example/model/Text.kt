@@ -1,23 +1,25 @@
 package com.example.model
 
 import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 /**
  * Represents a Tangut text to facilitate search operations.
  *
- * @property id
+ * @property id Unique identifier for the text. UUID format was chosen to prevent hidden join errors.
  * @property comment An XML representation containing essential information, such as the title ot the text author.
  * @property lineIds A list of IDs for the text lines, including formatted Tangut lines with supplementary information.
  * @property pureText The raw text without XML tags, utilised for search purposes.
- * @property createdAt? The time of the table creation/
+ * @property createdAt? The time of the table creation.
  */
 
 @Serializable
 data class Text(
-    val id: Int?,
-    val comment: String,
-    val lineIds: List<Int>,
-    val pureText: String,
+    @Contextual val id: UUID = UUID.randomUUID(),
+    val lineIds: List<@Contextual UUID>,
+    val comment: String = "",
+    val pureText: String = "",
     val createdAt: LocalDate?,
 )

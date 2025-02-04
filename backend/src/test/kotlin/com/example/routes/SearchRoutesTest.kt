@@ -1,5 +1,6 @@
 package com.example.routes
 
+import com.example.helpers.DefaultParams
 import com.example.helpers.setupApp
 import com.example.model.Text
 import io.ktor.client.request.*
@@ -13,12 +14,7 @@ import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SearchRoutesTest {
-    private val text = Text(1, "Sample Comment", listOf(0, 1, 2), "Sample Text", null)
-
-    private fun HttpRequestBuilder.jsonRequest(text: Text) {
-        contentType(ContentType.Application.Json)
-        setBody(Json.encodeToString(text))
-    }
+    private val text = Text(DefaultParams.textID, listOf(DefaultParams.textFragmentId), "Sample Comment", "Sample Text", null)
 
     @Test
     fun `test GET search with non-matching query`() = testApplication {
