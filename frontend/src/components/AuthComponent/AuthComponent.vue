@@ -112,12 +112,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
 const emit = defineEmits(['close'])
 
-const handleClose = () => {
-  emit('close')
-}
+const handleClose = () => emit('close')
 
 const mode = ref<'login' | 'register'>('login')
 const step = ref(1)
@@ -129,16 +129,57 @@ const name = ref('')
 const biography = ref('')
 const agreeTerms = ref(false)
 
-function handleSubmit() {
+async function handleSubmit() {
   if (mode.value === 'login') {
-    emit('close')
+    try {
+      const response = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.value, password: password.value })
+      })
+
+      if (!response.ok) throw new Error('Ошибка авторизации')
+
+      const data = await response.json()
+      localStorage.setItem('accessToken', data.accessToken)
+
+      const userResponse = await fetch('/users/me', {
+        headers: { Authorization: `Bearer ${data.accessToken}` }
+      })
+      const userData = await userResponse.json()
+      router.push(`/user/${userData.id}`)
+
+    } catch (error) {
+      console.error(error)
+    }
   } else if (mode.value === 'register') {
     if (step.value === 1) {
-      if (email.value && nickname.value && password.value) {
-        step.value = 2
-      }
-    } else if (step.value === 2) {
-      emit('close')
+      step.value = 2
+      return
+    }
+
+    try {
+      const response = await fetch('/auth/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: email.value,
+          nickname: nickname.value,
+          password: password.value,
+          name: name.value,
+          biography: biography.value
+        })
+      })
+
+      if (!response.ok) throw new Error('Ошибка регистрации')
+
+      const data = await response.json()
+      localStorage.setItem('accessToken', data.token)
+
+      router.push(`/user/${data.userId}`)
+
+    } catch (error) {
+      console.error(error)
     }
   }
 }
