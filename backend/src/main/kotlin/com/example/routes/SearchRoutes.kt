@@ -15,4 +15,3 @@ fun Route.searchRoutes(searchService: SearchService) {
         }
     }
 }
-
