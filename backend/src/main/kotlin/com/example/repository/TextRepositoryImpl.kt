@@ -2,28 +2,17 @@ package com.example.repository
 
 import com.example.model.Text
 import com.example.model.Texts
-
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.Op
-import org.jetbrains.exposed.sql.Query
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.andWhere
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.or
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.jetbrains.exposed.sql.update
-import java.time.LocalDateTime
 import java.util.UUID
 
 
@@ -68,9 +57,10 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
 }
 
 private fun ResultRow.toText(): Text {
-    return Text(id = this[Texts.id],
+    return Text(
+        id = this[Texts.id],
         title = this[Texts.title],
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
-     )
+    )
 }
