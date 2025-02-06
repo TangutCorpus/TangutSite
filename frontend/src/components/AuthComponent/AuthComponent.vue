@@ -39,7 +39,7 @@
             </div>
             <div class="mb-4">
               <label class="block text-gray-700 text-sm font-bold mb-2" for="nickname">Никнейм</label>
-              <input id="nickname" v-model="nickname"
+              <input id="nickname" v-model="username"
                      class="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                      required
                      type="text" />
@@ -113,6 +113,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import api from '@/helpers/http/http'
 
 const router = useRouter()
 const emit = defineEmits(['close'])
@@ -123,7 +124,7 @@ const mode = ref<'login' | 'register'>('login')
 const step = ref(1)
 
 const email = ref('')
-const nickname = ref('')
+const username = ref('')
 const password = ref('')
 const name = ref('')
 const biography = ref('')
@@ -132,22 +133,21 @@ const agreeTerms = ref(false)
 async function handleSubmit() {
   if (mode.value === 'login') {
     try {
-      const response = await fetch('/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email.value, password: password.value })
-      })
+      const response = await api.post('/auth/login',
+        JSON.stringify({ email: email.value, password: password.value })
+      )
 
-      if (!response.ok) throw new Error('Ошибка авторизации')
+      if (response.status != 200) throw new Error('Ошибка авторизации')
 
       const data = await response.json()
       localStorage.setItem('accessToken', data.accessToken)
 
-      const userResponse = await fetch('/users/me', {
+      const userResponse = await api.post('/users/me', {
         headers: { Authorization: `Bearer ${data.accessToken}` }
       })
+
       const userData = await userResponse.json()
-      router.push(`/user/${userData.id}`)
+      await router.push(`/user/${userData.id}`)
 
     } catch (error) {
       console.error(error)
@@ -159,25 +159,25 @@ async function handleSubmit() {
     }
 
     try {
-      const response = await fetch('/auth/signup', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
+      const response = await api.post('/auth/signup', JSON.stringify({
           email: email.value,
-          nickname: nickname.value,
+          username: username.value,
           password: password.value,
-          name: name.value,
+          avatarUrl: '',
+          displayName: name.value,
           biography: biography.value
         })
-      })
+      )
 
-      if (!response.ok) throw new Error('Ошибка регистрации')
+      if (response.status != 200) throw new Error('Ошибка регистрации')
 
-      const data = await response.json()
+      const data = response.data
+
       localStorage.setItem('accessToken', data.token)
+      localStorage.setItem('userId', data.userId)
 
-      router.push(`/user/${data.userId}`)
-
+      handleClose()
+      await router.push(`/user/${data.userId}`)
     } catch (error) {
       console.error(error)
     }
