@@ -11,17 +11,20 @@ services:
       POSTGRES_DB: ${DB_NAME}
     env_file:
       - ./.env
-    restart: unless-stopped
+
 
   ktor:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - DOCKER_BUILDKIT=1
     ports:
       - "8080:8080"
     depends_on:
       - db
     env_file:
       - ./.env
-    restart: unless-stopped
 
 volumes:
   pgdata:
