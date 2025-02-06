@@ -1,6 +1,5 @@
 package com.example.model
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -17,7 +16,6 @@ import java.util.UUID
  * @property displayName Full name, which can be in any supported language, useful in academic and professional contexts.
  * @property biography Descriptive text outlining the user's achievements and providing links to external resources.
  * @property role The role of the registered user, which determines access and permissions. Possible values include "Editor", "Moderator", and "Administrator".
- * @property createdAt The time of the table creation.
  */
 
 @Serializable
@@ -30,8 +28,6 @@ data class User(
     val displayName: String = username,
     val biography: String = "",
     val role: UserRoles = UserRoles.EDITOR,
-    val createdAt: LocalDate =
-        LocalDate.parse(System.currentTimeMillis().toString()),
 )
 
 fun User.updateFromExposedUser(exposedUser: ExposedUser): User {

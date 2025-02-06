@@ -2,11 +2,9 @@ package com.example.repository
 
 import com.example.model.User
 import com.example.model.Users
-import kotlinx.datetime.LocalDate
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
-import java.time.LocalDateTime
 import java.util.UUID
 
 
@@ -26,7 +24,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
             it[password] = user.password
             it[biography] = user.biography
             it[username] = user.username
-            it[createdAt] = user.createdAt.let { LocalDateTime.parse(it.toString()) }
+            it[role] = user.role
         } get Users.id
     }
 
@@ -38,6 +36,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
             it[password] = user.password
             it[biography] = user.biography
             it[username] = user.username
+            it[role] = user.role
         }
     }
 
@@ -45,7 +44,7 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
         Users.deleteWhere { Users.id eq id }
     }
 
-    override suspend fun getAllUsers(): List<User> = transaction(db){
+    override suspend fun getAllUsers(): List<User> = transaction(db) {
         Users.selectAll().map { it.toUser() }
     }
 
@@ -63,13 +62,14 @@ class UserRepositoryImpl(private val db: Database) : UserRepository {
 }
 
 private fun ResultRow.toUser(): User {
-    return User(id = this[Users.id],
+    return User(
+        id = this[Users.id],
         displayName = this[Users.displayName],
         avatarUrl = this[Users.avatarUrl],
         email = this[Users.email],
         biography = this[Users.biography],
         username = this[Users.username],
         password = this[Users.password],
-        role = this[Users.role],
-        createdAt = this[Users.createdAt].let { LocalDate.parse(it.toString()) })
+        role = this[Users.role]
+    )
 }
