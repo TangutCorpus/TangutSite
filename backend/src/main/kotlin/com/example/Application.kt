@@ -3,14 +3,16 @@ package com.example
 import com.example.config.configureExceptionHandling
 import com.example.config.configureHTTP
 import com.example.config.configureMonitoring
+import com.example.config.configureRouting
 import com.example.config.configureSecurity
 import com.example.config.configureSerialization
 import com.example.config.initDatabase
-import com.example.repository.TextRepositoryImpl
-import com.example.repository.UserRepositoryImpl
-import com.example.config.configureRouting
+import com.example.repository.ImageRepositoryImpl
 import com.example.repository.RefreshTokenRepositoryImpl
 import com.example.repository.TextPageRepositoryImpl
+import com.example.repository.TextRepositoryImpl
+import com.example.repository.UserRepositoryImpl
+import com.example.service.ImageServiceImpl
 import com.example.service.SearchServiceImpl
 import com.example.service.SecurityServiceImpl
 import com.example.service.TextPageServiceImpl
@@ -39,7 +41,10 @@ fun Application.module() {
     var refreshTokenRepository = RefreshTokenRepositoryImpl(database)
     var securityService = SecurityServiceImpl(userRepository, refreshTokenRepository, config)
 
-    configureRouting(userService, textService, searchService, textPageService, securityService)
+    var imageRepository = ImageRepositoryImpl()
+    var imageService = ImageServiceImpl(imageRepository)
+
+    configureRouting(userService, textService, searchService, textPageService, securityService, imageService)
     configureExceptionHandling()
     configureSerialization()
     configureMonitoring()
