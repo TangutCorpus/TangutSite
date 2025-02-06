@@ -22,20 +22,27 @@ const errorMessage = ref('')
 
 const fetchResults = async () => {
   try {
-    const query = (route.query.query ?? []).toString();
-    const response = await api.get(`/search?query=pureText=in=${encodeURIComponent(query)}`)
+    const query = (route.query.query ?? []).toString()
+    let searchUrl = '/search?query=' + query ? `pureText=in=${encodeURIComponent(query)}` : ""
+    const response = await api.get(searchUrl)
 
-    if (!response.ok) {
+    if (response.status !== 200) {
       throw new Error(`Server error: ${response.status} ${response.statusText}`)
     }
 
-    const contentType = response.headers.get('content-type')
+    const contentType = response.headers['content-type']
     if (!contentType || !contentType.includes('application/json')) {
-      const text = await response.text() // Get response as text for debugging
+      const text = await response.data
       throw new Error(`Unexpected response format: ${text}`)
     }
 
-    results.value = await response.json()
+    const jsonData = response.data
+
+    if (!jsonData || !Array.isArray(jsonData)) {
+      throw new Error('Invalid or empty JSON data returned')
+    }
+
+    results.value = jsonData
   } catch (error) {
     console.error('Error fetching search results:', error.message)
     errorMessage.value = `Failed to load search results: ${error.message}`

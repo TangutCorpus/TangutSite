@@ -86,9 +86,6 @@ const showTangutPopup = ref(false)
 const tangutIcon = 'Выборать компоненты'
 const router = useRouter()
 
-
-
-
 const radicals = computed(() => {
   const start = 0x18800
   const end = 0x18AFF
@@ -116,7 +113,7 @@ watch(() => props.query, (newQuery) => {
 })
 
 const handleSearch = () => {
-  if (userQuery.value && searchMode.value == 'text') {
+  if (searchMode.value == 'text') {
     showHistory.value = false
     emit('update:query', userQuery.value)
     router.push({ path: '/search', query: { query: userQuery.value } })

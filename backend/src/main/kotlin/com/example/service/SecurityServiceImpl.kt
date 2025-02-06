@@ -27,12 +27,12 @@ class SecurityServiceImpl(
     val refreshTokenRepository: RefreshTokenRepository,
     val config: ApplicationConfig
 ) : SecurityService {
-    override val realm = getConfigProperty("jwt.realm")
-    private val secret = getConfigProperty("jwt.secret")
-    private val issuer = getConfigProperty("jwt.issuer")
-    private val audience = getConfigProperty("jwt.audience")
-    private val accessTokenDuration = getConfigProperty("jwt.accessToken.duration").toLong()
-    private val refreshTokenDuration = getConfigProperty("jwt.refreshToken.duration").toLong()
+    override val realm = getConfigProperty("ktor.jwt.realm")
+    private val secret = getConfigProperty("ktor.jwt.secret")
+    private val issuer = getConfigProperty("ktor.jwt.issuer")
+    private val audience = getConfigProperty("ktor.jwt.audience")
+    private val accessTokenDuration = getConfigProperty("ktor.jwt.accessToken.duration").toLong()
+    private val refreshTokenDuration = getConfigProperty("ktor.jwt.refreshToken.duration").toLong()
 
     override suspend fun getValidator(credential: JWTCredential): JWTPrincipal? {
         val email: String = credential.getCredentialClaim("email")
