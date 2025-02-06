@@ -1,6 +1,7 @@
 package com.example.model
 
 import kotlinx.serialization.Serializable
+import java.util.UUID
 
 /**
  * Represents a minimal response containing user details.
@@ -13,7 +14,6 @@ import kotlinx.serialization.Serializable
  * @property displayName Full name, which can be in any supported language, useful in academic and professional contexts.
  * @property biography Descriptive text outlining the user's achievements and providing links to external resources.
  */
-
 @Serializable
 data class ExposedUser(
     val username: String,
@@ -29,10 +29,12 @@ data class ExposedUser(
  * @param password User's password. It's passes separately for the security's sake.
  */
 fun ExposedUser.toUser(password: String) = User(
+    id = UUID.randomUUID(),
     username = this.username,
     email = this.email,
     password = password,
     avatarUrl = this.avatarUrl,
-    displayName = if (this.displayName.isNotBlank()) this.displayName else this.username, // Compute if empty
+    displayName = if (this.displayName.isNotBlank()) this.displayName else this.username,
     biography = this.biography,
+    role = UserRoles.EDITOR,
 )

@@ -2,8 +2,6 @@ package com.example.service
 
 import com.example.model.User
 import com.example.repository.UserRepository
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import java.util.UUID
 
 class UserServiceImpl(private val userRepository: UserRepository) : UserService {
@@ -26,7 +24,6 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
 
     override suspend fun createUser(user: User?): UUID {
         requireNotNull(user) { "User format is incorrect" }
-        require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
         return userRepository.createUser(user)
     }
 
@@ -34,7 +31,6 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         requireNotNull(user) { "User format is incorrect" }
         require(user.username.length <= 255) { "User nickname cannot be longer than 255." }
         require(user.displayName.length <= 255) { "User name cannot be longer than 255." }
-        require(user.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${user.createdAt}' cannot be parsed to LocalDateTime" }
         return userRepository.updateUser(user) != 0
     }
 
@@ -43,13 +39,3 @@ class UserServiceImpl(private val userRepository: UserRepository) : UserService 
         return userRepository.deleteUserById(id) != 0
     }
 }
-
-fun User.canBeParsedToLocalDateTime(): Boolean {
-    return try {
-        createdAt?.atStartOfDayIn(TimeZone.currentSystemDefault())
-        true
-    } catch (_: Exception) {
-        false
-    }
-}
-

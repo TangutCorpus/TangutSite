@@ -2,7 +2,6 @@ package com.example.model
 
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.charLength
-import org.jetbrains.exposed.sql.javatime.datetime
 
 object Users : Table() {
     val id = uuid("id")
@@ -13,6 +12,5 @@ object Users : Table() {
     val displayName = text("displayName").check { it.charLength() less 255 }
     val biography = text("biography")
     val role = enumeration<UserRoles>("role")
-    val createdAt = datetime("createdAt")
     override val primaryKey = PrimaryKey(id)
 }
