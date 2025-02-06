@@ -20,6 +20,9 @@ const routes = [
   { path: '/text/edit', component: TextEditPage },
   { path: '/page', component: TextFragmentPage },
   { path: '/page/edit', component: TextFragmentEditPage },
+
+  { path: '/user/:id', component: UserPage },
+  { path: '/user/:id/edit', component: UserEditPage },
   { path: '/library', component: LibraryPage },
   { path: '/about', component: AboutPage },
   { path: '/:pathMatch(.*)*', component: NotFoundPage }
