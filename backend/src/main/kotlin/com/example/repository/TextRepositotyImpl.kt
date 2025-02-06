@@ -2,14 +2,7 @@ package com.example.repository
 
 import com.example.model.Text
 import com.example.model.Texts
-import com.example.utils.toUUIDOrNull
-import cz.jirutka.rsql.parser.RSQLParser
-import cz.jirutka.rsql.parser.ast.AndNode
-import cz.jirutka.rsql.parser.ast.ComparisonNode
-import cz.jirutka.rsql.parser.ast.ComparisonOperator
-import cz.jirutka.rsql.parser.ast.NoArgRSQLVisitorAdapter
-import cz.jirutka.rsql.parser.ast.Node
-import cz.jirutka.rsql.parser.ast.OrNode
+
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -54,8 +47,6 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[title] = text.title
             it[lineIds] = Json.encodeToString(text.lineIds)
-            it[pureText] = text.pureText
-            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
         } get Texts.id
     }
 
@@ -64,8 +55,6 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
             it[comment] = text.comment
             it[title] = text.title
             it[lineIds] = Json.encodeToString(text.lineIds)
-            it[pureText] = text.pureText
-            it[createdAt] = text.createdAt?.let { LocalDateTime.parse(it.toString()) }
         }
     }
 
@@ -83,57 +72,5 @@ private fun ResultRow.toText(): Text {
         title = this[Texts.title],
         comment = this[Texts.comment],
         lineIds = Json.decodeFromString(this[Texts.lineIds]),
-        pureText = this[Texts.pureText],
-        createdAt = this[Texts.createdAt]?.let { LocalDate.parse(it.toString()) })
-}
-
-fun Query.search(query: String): Query = transaction {
-    val rootNode: Node = RSQLParser().parse(query)
-    val queryExpression = rootNode.accept(ExposedRSQLVisitor())
-    andWhere { queryExpression }
-}
-
-private class ExposedRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
-    override fun visit(node: AndNode): Op<Boolean> {
-        val expressions = node.children.map { it.accept(this) }
-        return expressions.reduce { acc, op -> acc and op }
-    }
-
-    override fun visit(node: OrNode): Op<Boolean> {
-        val expressions = node.children.map { it.accept(this) }
-        return expressions.reduce { acc, op -> acc or op }
-    }
-
-    override fun visit(node: ComparisonNode): Op<Boolean> {
-        val selector = node.selector
-        val operator = node.operator
-        val argument = node.arguments[0]
-
-        return when (selector) {
-            "id" -> applyUUIDComparison(Texts.id, operator, argument)
-            "comment" -> applyTextComparison(Texts.comment, operator, argument)
-            "pureText" -> applyTextComparison(Texts.pureText, operator, argument)
-            else -> throw IllegalArgumentException("Unknown field: $selector")
-        }
-    }
-
-    private fun applyUUIDComparison(column: Column<UUID>, operator: ComparisonOperator, argument: String): Op<Boolean> {
-        val intValue = argument.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid UUID: $argument")
-        return when (operator.symbol) {
-            "==" -> column eq intValue
-            "!=" -> column neq intValue
-            else -> throw IllegalArgumentException("Unsupported operator: ${operator.symbol}")
-        }
-    }
-
-    private fun applyTextComparison(
-        column: Column<String>, operator: ComparisonOperator, argument: String
-    ): Op<Boolean> {
-        return when (operator.symbol) {
-            "==" -> column eq argument
-            "!=" -> column neq argument
-            "=in=" -> column like "%$argument%"
-            else -> throw IllegalArgumentException("Unsupported operator: ${operator.symbol}")
-        }
-    }
+     )
 }
