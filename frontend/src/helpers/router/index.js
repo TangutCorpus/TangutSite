@@ -14,17 +14,24 @@ import TextFragmentEditPage from '@/pages/TextFragmentEditPage/TextFragmentEditP
 const routes = [
   { path: '/', component: HomePage },
   { path: '/search', component: SearchResultPage },
-  { path: '/user', component: UserPage },
-  { path: '/user/edit', component: UserEditPage },
-  { path: '/text', component: TextPage },
-  { path: '/text/edit', component: TextEditPage },
-  { path: '/page', component: TextFragmentPage },
-  { path: '/page/edit', component: TextFragmentEditPage },
+
+  { path: '/user/:id', component: UserPage },
+  { path: '/user/:id/edit', component: UserEditPage },
+
+  { path: '/text/add', component: TextEditPage },
+  { path: '/text/:id', component: TextPage },
+  { path: '/text/:id/edit', component: TextEditPage },
+
+  { path: '/page/add', component: TextFragmentEditPage },
+  { path: '/page/:id', component: TextFragmentPage },
+  { path: '/page/:id/edit', component: TextFragmentEditPage },
+
 
   { path: '/user/:id', component: UserPage },
   { path: '/user/:id/edit', component: UserEditPage },
   { path: '/library', component: LibraryPage },
   { path: '/about', component: AboutPage },
+
   { path: '/:pathMatch(.*)*', component: NotFoundPage }
 ]
 
