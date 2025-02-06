@@ -35,8 +35,8 @@ class SecurityServiceImpl(
     private val refreshTokenDuration = getConfigProperty("ktor.jwt.refreshToken.duration").toLong()
 
     override suspend fun getValidator(credential: JWTCredential): JWTPrincipal? {
-        val email: String = credential.getCredentialClaim("email")
-            ?: throw AuthenticationException("Invalid or missing email claim")
+        val email: String =
+            credential.getCredentialClaim("email") ?: throw AuthenticationException("Invalid or missing email claim")
         val user: User? = userRepository.getUserByEmail(email)
         return user?.let {
             if (checkAudienceCorrectness(credential)) {
@@ -55,7 +55,8 @@ class SecurityServiceImpl(
 
     override suspend fun authenticate(loginRequest: UserLoginRequest): AuthResponse? {
         val user = userRepository.getUserByEmail(loginRequest.email) ?: return null
-        return if (BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password).verified) {            val accessToken = createAccessToken(user.email, user.role)
+        return if (BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password).verified) {
+            val accessToken = createAccessToken(user.email, user.role)
             val refreshToken = createRefreshToken(user.email, user.role)
             refreshTokenRepository.save(RefreshToken(user.id, refreshToken))
             AuthResponse(accessToken, refreshToken)
@@ -92,11 +93,9 @@ class SecurityServiceImpl(
 
     private fun DecodedJWT.isExpired(): Boolean = expiresAt.before(Date())
 
-    override fun createAccessToken(email: String, role: UserRoles) =
-        generateJWTToken(email, role, accessTokenDuration)
+    override fun createAccessToken(email: String, role: UserRoles) = generateJWTToken(email, role, accessTokenDuration)
 
-    override fun createRefreshToken(email: String, role: UserRoles) =
-        generateJWTToken(email, role, refreshTokenDuration)
+    override fun createRefreshToken(email: String, role: UserRoles) = generateJWTToken(email, role, refreshTokenDuration)
 
     private fun generateJWTToken(userEmail: String, userRole: UserRoles, expireIn: Long): String =
         JWT.create()
@@ -107,13 +106,10 @@ class SecurityServiceImpl(
             .withExpiresAt(Date(System.currentTimeMillis() + expireIn))
             .sign(Algorithm.HMAC256(secret))
 
-    private fun getConfigProperty(name: String): String =
-        config.property(name).getString()
+    private fun getConfigProperty(name: String): String = config.property(name).getString()
 
-    private fun JWTCredential.getCredentialClaim(name: String): String? =
-        payload.getClaim(name).asString()
+    private fun JWTCredential.getCredentialClaim(name: String): String? = payload.getClaim(name).asString()
 
     private fun checkAudienceCorrectness(credential: JWTCredential): Boolean =
         credential.payload.audience.contains(audience)
-
 }
