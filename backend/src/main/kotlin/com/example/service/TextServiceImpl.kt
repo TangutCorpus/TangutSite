@@ -2,8 +2,6 @@ package com.example.service
 
 import com.example.model.Text
 import com.example.repository.TextRepository
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.atStartOfDayIn
 import java.util.UUID
 
 class TextServiceImpl(private val textRepository: TextRepository) : TextService {
@@ -13,14 +11,12 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
     }
 
     override suspend fun addText(text: Text) {
-        require(text.pureText.isNotBlank() && text.lineIds.isNotEmpty()) { "Text cannot be empty" }
-        require(text.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${text.createdAt}' cannot be parsed to LocalDateTime" }
+        require(text.title.isNotBlank() && text.lineIds.isNotEmpty()) { "Title cannot be empty" }
         textRepository.addText(text)
     }
 
     override suspend fun updateText(text: Text): Boolean {
-        require(text.pureText.isNotBlank() && text.lineIds.isNotEmpty()) { "Text cannot be empty" }
-        require(text.canBeParsedToLocalDateTime()) { "Field 'createdAt': '${text.createdAt}' cannot be parsed to LocalDateTime" }
+        require(text.title.isNotBlank() && text.lineIds.isNotEmpty()) { "Title cannot be empty" }
         return textRepository.updateText(text) != 0
     }
 
@@ -30,13 +26,4 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
     }
 
     override suspend fun getAllTexts(): List<Text> = textRepository.getAllTexts()
-}
-
-fun Text.canBeParsedToLocalDateTime(): Boolean {
-    return try {
-        createdAt?.atStartOfDayIn(TimeZone.currentSystemDefault())
-        true
-    } catch (_: Exception) {
-        false
-    }
 }
