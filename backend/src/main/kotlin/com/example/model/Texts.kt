@@ -8,7 +8,5 @@ object Texts : Table() {
     val title = text("title")
     val comment = text("comment")
     val lineIds = text("line_ids")
-    val pureText = text("pure_text")
-    val createdAt = datetime("created_at").nullable()
     override val primaryKey = PrimaryKey(id)
 }

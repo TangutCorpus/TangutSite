@@ -12,8 +12,6 @@ import java.util.UUID
  * @property title Title of the text.
  * @property comment An XML representation containing essential information, such as the text author, etc.
  * @property lineIds A list of IDs for the text lines, including formatted Tangut lines with supplementary information.
- * @property pureText The raw text without XML tags, utilised for search purposes.
- * @property createdAt? The time of the table creation.
  */
 
 @Serializable
@@ -22,6 +20,4 @@ data class Text(
     val lineIds: List<@Contextual UUID>,
     val title: String,
     val comment: String = "",
-    val pureText: String = "",
-    val createdAt: LocalDate?,
 )

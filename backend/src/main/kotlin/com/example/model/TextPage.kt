@@ -1,6 +1,5 @@
 package com.example.model
 
-import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
 import java.util.UUID
@@ -11,17 +10,18 @@ import java.util.UUID
  * @property id Unique identifier for the text fragment. UUID format was chosen to prevent hidden join errors.
  * @property textId ID of the parent text. UUID format was chosen to prevent hidden join errors.
  * @property pageNumber The serial number of the page in a text.
- * @property contentXML Actual XML representation of the fragment.
- * @property commentXML XML representation containing essential information, such as a gloss or a reconstruction.
- * @property createdAt? The time of the table creation.
+ * @property pureText The raw text without XML tags, utilised for search purposes.
+ * @property glossedTextXML Actual XML representation of the fragment.
+ * @property translationsXML XML representation containing essential information, such as a gloss or a reconstruction.
  */
 
 @Serializable
 data class TextPage(
     @Contextual val id: UUID = UUID.randomUUID(),
     @Contextual val textId: UUID,
+    val imagesIDs: List<UUID> = emptyList(),
     val pageNumber: Int = 0,
-    val contentXML: String = "",
-    val commentXML: String = "",
-    val createdAt: LocalDate?,
+    val pureText: String = "",
+    val glossedTextXML: String = "",
+    val translationsXML: String = "",
 )
