@@ -4,12 +4,19 @@ import com.example.model.RefreshToken
 import com.example.model.RefreshTokens
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
 
 class RefreshTokenRepositoryImpl(private val db: Database) : RefreshTokenRepository {
+    init {
+        transaction(db) {
+            SchemaUtils.create(RefreshTokens)
+        }
+    }
+
     override fun save(refreshToken: RefreshToken) = transaction(db) {
         RefreshTokens.insert {
             it[id] = refreshToken.id
