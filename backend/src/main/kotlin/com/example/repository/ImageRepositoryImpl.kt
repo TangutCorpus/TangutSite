@@ -4,12 +4,23 @@ import java.io.File
 import java.util.UUID
 
 class ImageRepositoryImpl : ImageRepository {
-    override fun store(extension: String, image: ByteArray): Unit {
-        val uploadDir = File("uploads")
+    private val uploadDir = File("uploads")
+
+    init {
         if (!uploadDir.exists()) {
             uploadDir.mkdirs()
         }
-        val file = File(uploadDir, UUID.randomUUID().toString() + '.' + extension)
+    }
+
+    override fun store(extension: String, image: ByteArray): UUID {
+        val id = UUID.randomUUID()
+        val file = File(uploadDir, "$id.$extension")
         file.writeBytes(image)
+        return id
+    }
+
+    override fun get(id: UUID): File {
+        return uploadDir.listFiles()?.find { it.nameWithoutExtension == id.toString() }
+            ?: throw NoSuchElementException("Image not found")
     }
 }

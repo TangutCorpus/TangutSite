@@ -7,10 +7,12 @@ import io.ktor.utils.io.readRemaining
 import kotlinx.io.readByteArray
 import java.awt.image.BufferedImage
 import java.io.ByteArrayInputStream
+import java.io.File
+import java.util.UUID
 import javax.imageio.ImageIO
 
-class ImageServiceImpl(val imageRepository: ImageRepository) : ImageService {
-    override suspend fun store(file: PartData.FileItem) {
+class ImageServiceImpl(private val imageRepository: ImageRepository) : ImageService {
+    override suspend fun store(file: PartData.FileItem): UUID {
         val fileName = file.originalFileName ?: throw BadRequestException("File name is null")
         val fileBytes = file.provider().readRemaining().readByteArray()
 
@@ -22,7 +24,11 @@ class ImageServiceImpl(val imageRepository: ImageRepository) : ImageService {
 
         if (!isImage(fileBytes)) throw BadRequestException("File content is not a valid image.")
 
-        imageRepository.store(extension, fileBytes)
+        return imageRepository.store(extension, fileBytes)
+    }
+
+    override fun getImage(id: UUID): File {
+        return imageRepository.get(id)
     }
 
     private fun isImage(fileBytes: ByteArray): Boolean {
