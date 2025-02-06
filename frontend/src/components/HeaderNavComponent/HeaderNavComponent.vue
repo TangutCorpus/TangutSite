@@ -17,17 +17,16 @@
 
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'
-import { defineEmits } from 'vue'
+import { defineEmits, onMounted, ref, watch } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const emit = defineEmits(['toggleAuthForm'])
-
-const menuItems = [
-  { name: 'Библиотека', route: '/library' },
+const currentUserId = ref(localStorage.getItem('userId'))
+const menuItems = ref([
   { name: 'О нас', route: '/about' },
-  { name: 'Вход', route: '/auth' }
-]
+  { name: 'Библиотека', route: '/library' }
+])
 
 const handleMenuItemClick = (path: string) => {
   if (path === '/auth') {
@@ -44,4 +43,22 @@ const navigateTo = (path: string) => {
 const isActive = (path: string) => {
   return route.path === path
 }
+
+const updateMenuItems = () => {
+  if (!currentUserId.value) {
+    menuItems.value.push({ name: 'Вход', route: '/auth' })
+  } else {
+    menuItems.value.push(
+      { name: 'Добавить текст', route: '/text/add' },
+      { name: 'Профиль', route: `/user/${currentUserId.value}` }
+    )
+  }
+}
+
+onMounted(() => {
+  currentUserId.value = localStorage.getItem('userId')
+  updateMenuItems()
+})
+
+watch(currentUserId, updateMenuItems)
 </script>

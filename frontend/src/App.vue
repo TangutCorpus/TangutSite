@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import HeaderNav from '@/components/HeadernavComponent/HeaderNavComponent.vue'
+import HeaderNav from '@/components/HeaderNavComponent/HeaderNavComponent.vue'
 import MainContent from '@/components/MainContentComponent/MainContentComponent.vue'
 import AuthComponent from '@/components/AuthComponent/AuthComponent.vue'
 
