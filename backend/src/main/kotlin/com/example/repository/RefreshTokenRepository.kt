@@ -8,4 +8,5 @@ interface RefreshTokenRepository {
     fun findTokenById(id: UUID): String?
     fun findIdByToken(token: String): UUID?
     fun getAll(): List<RefreshToken>
+    fun deleteTokenById(id: UUID)
 }
