@@ -16,7 +16,7 @@ import java.util.UUID
 
 fun Route.imageRoutes(imageService: ImageService) {
     post("/image/upload") {
-        val multipart = call.receiveMultipart()
+        val multipart = call.receiveMultipart(formFieldLimit = 20971520)
         var imageId: UUID? = null
 
         coroutineScope {
