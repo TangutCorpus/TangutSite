@@ -135,14 +135,14 @@ async function handleSubmit() {
 
       if (response.status != 200) throw new Error('Ошибка авторизации')
 
-      const data = await response.json()
+      const data = await response.data
       localStorage.setItem('accessToken', data.accessToken)
 
       const userResponse = await api.post('/users/me', {
         headers: { Authorization: `Bearer ${data.accessToken}` }
       })
 
-      const userData = await userResponse.json()
+      const userData = await userResponse.data
       await router.push(`/user/${userData.id}`)
 
     } catch (error) {
@@ -171,7 +171,7 @@ async function handleSubmit() {
 
       localStorage.setItem('accessToken', data.token)
       localStorage.setItem('userId', data.userId)
-
+      window.dispatchEvent(new Event('storage'))
       handleClose()
       await router.push(`/user/${data.userId}`)
     } catch (error) {

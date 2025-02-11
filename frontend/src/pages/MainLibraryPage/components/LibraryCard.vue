@@ -12,7 +12,7 @@
           :to="`/page/${chapter}`"
           class="px-3 py-1 mt-2 bg-blue-200 text-blue-700 rounded text-sm hover:bg-blue-300 transition"
         >
-          {{ chapter }}
+          {{ ++index }}
         </router-link>
       </div>
     </div>
@@ -32,8 +32,8 @@ const props = defineProps({
 
 const chunkedChapters = computed(() => {
   const result = []
-  for (let i = 0; i < props.text.lineIds.length; i += props.maxPerRow) {
-    result.push(props.text.lineIds.slice(i, i + props.maxPerRow))
+  for (let i = 0; i < props.text.pageIds.length; i += props.maxPerRow) {
+    result.push(props.text.pageIds.slice(i, i + props.maxPerRow))
   }
   return result
 })

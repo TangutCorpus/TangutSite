@@ -15,15 +15,16 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import LibraryCard from '@/pages/MainLibraryPage/components/LibraryCard.vue'
+import api from '@/helpers/http/http'
 
 const router = useRouter()
 const texts = ref([])
 
 const fetchTexts = async () => {
   try {
-    const response = await fetch('/api/texts')
-    if (!response.ok) throw new Error('Ошибка загрузки текстов')
-    texts.value = await response.json()
+    const response = await api.get('/texts')
+    if (response.status != 200) throw new Error('Ошибка загрузки текстов')
+    texts.value = await response.data
   } catch (error) {
     console.error('Ошибка:', error)
   }
