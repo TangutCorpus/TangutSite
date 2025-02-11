@@ -1,6 +1,7 @@
 package com.example.routes
 
 import com.example.model.TextPage
+import com.example.model.TextPageRequest
 import com.example.service.TextPageService
 import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
@@ -11,12 +12,22 @@ import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
+import java.util.UUID
 
 fun Route.textPageRoutes(textPageService: TextPageService) {
     post("/pages") {
-        val page = call.receive<TextPage>()
-        textPageService.addTextPage(page)
-        call.respondText("Page added successfully", status = HttpStatusCode.Created)
+        val pageRequest = call.receive<TextPageRequest>()
+        val page = TextPage(
+            id = UUID.randomUUID(),
+            textId = pageRequest.textId,
+            imagesIDs = pageRequest.imagesIDs,
+            pageNumber = pageRequest.pageNumber,
+            pureText = pageRequest.pureText,
+            glossedTextXML = pageRequest.glossedTextXML,
+            translationsXML = pageRequest.translationsXML,
+        )
+        val id = textPageService.addTextPage(page)
+        call.respondText(id.toString(), status = HttpStatusCode.Created)
     }
 
     get("/pages") {

@@ -10,9 +10,9 @@ class TextPageServiceImpl(private val pageRepository: TextPageRepository) : Text
         return pageRepository.getTextPageById(id) ?: throw NoSuchElementException("No page found with id $id")
     }
 
-    override suspend fun addTextPage(textPage: TextPage) {
+    override suspend fun addTextPage(textPage: TextPage): UUID {
         require(textPage.pureText.isNotBlank()) { "Page cannot be empty" }
-        pageRepository.addTextPage(textPage)
+        return pageRepository.addTextPage(textPage)
     }
 
     override suspend fun updateTextPage(textPage: TextPage): Boolean {
