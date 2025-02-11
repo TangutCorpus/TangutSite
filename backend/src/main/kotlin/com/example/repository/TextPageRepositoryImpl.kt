@@ -10,8 +10,6 @@ import cz.jirutka.rsql.parser.ast.ComparisonOperator
 import cz.jirutka.rsql.parser.ast.NoArgRSQLVisitorAdapter
 import cz.jirutka.rsql.parser.ast.Node
 import cz.jirutka.rsql.parser.ast.OrNode
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.Op
@@ -44,10 +42,11 @@ class TextPageRepositoryImpl(private val db: Database) : TextPageRepository {
 
     override suspend fun addTextPage(textPage: TextPage) = transaction(db) {
         TextPages.insert {
+            it[id] = textPage.id
             it[textId] = textPage.textId
             it[pageNumber] = textPage.pageNumber
             it[pureText] = textPage.pureText
-            it[imagesIDs] = Json.encodeToString(textPage.imagesIDs)
+            it[imagesIDs] = textPage.imagesIDs
             it[glossedTextXML] = textPage.glossedTextXML
             it[translationsXML] = textPage.translationsXML
         } get TextPages.id
@@ -55,10 +54,11 @@ class TextPageRepositoryImpl(private val db: Database) : TextPageRepository {
 
     override suspend fun updateTextPage(textPage: TextPage) = transaction(db) {
         TextPages.update({ TextPages.id eq textPage.id }) {
+            it[id] = textPage.id
             it[textId] = textPage.textId
             it[pageNumber] = textPage.pageNumber
             it[pureText] = textPage.pureText
-            it[imagesIDs] = Json.encodeToString(textPage.imagesIDs)
+            it[imagesIDs] = textPage.imagesIDs
             it[glossedTextXML] = textPage.glossedTextXML
             it[translationsXML] = textPage.translationsXML
         }
@@ -77,7 +77,7 @@ private fun ResultRow.toTextPage(): TextPage {
     return TextPage(
         id = this[TextPages.id],
         textId = this[TextPages.textId],
-        imagesIDs = Json.decodeFromString(this[TextPages.imagesIDs]),
+        imagesIDs = this[TextPages.imagesIDs],
         pageNumber = this[TextPages.pageNumber],
         pureText = this[TextPages.pureText],
         glossedTextXML = this[TextPages.glossedTextXML],
