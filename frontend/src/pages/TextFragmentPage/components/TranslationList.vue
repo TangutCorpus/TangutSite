@@ -1,44 +1,51 @@
 <template>
-  <div>
-    <div v-if="texts.length > 0">
-      <div v-for="(text, index) in texts" :key="index" class="bg-gray-100 p-6 rounded-lg mb-6 border-l-4 border-blue-500">
-        <h2 class="text-lg font-semibold text-gray-900">Страница {{ text.pageNumber }}</h2>
-        <blockquote class="italic text-gray-800 mt-2">{{ text.pureText }}</blockquote>
-        <hr class="my-4 border-gray-300" />
+  <div v-if="filteredTranslations.length">
+    <blockquote class="italic text-gray-800 mt-2">{{ pureText }}</blockquote>
+    <hr class="my-4 border-gray-300" />
 
-        <h2 class="text-lg font-semibold flex items-center cursor-pointer text-blue-600"
-            @click="toggleTranslation(index)">
-          Переводы
-          <span class="ml-2">{{ text.showTranslation ? '▴' : '▿' }}</span>
-        </h2>
+    <h2 class="text-lg font-semibold flex items-center cursor-pointer text-blue-600" @click="toggleAll">
+      Переводы
+      <span class="ml-2">{{ showAll ? '▴' : '▿' }}</span>
+    </h2>
 
-        <div v-if="text.showTranslation" class="mt-4">
-          <div v-for="(translation, lang) in text.translations" :key="lang" class="mt-2">
-            <h3 class="font-bold text-gray-700">{{ getLanguageName(lang).toUpperCase() }}</h3>
-            <p class="text-gray-600">{{ translation }}</p>
-          </div>
-        </div>
+    <div v-if="showAll" class="mt-4">
+      <div v-for="(translation, index) in filteredTranslations" :key="translation.lang" class="mt-2">
+        <h3 class="font-bold text-gray-700 cursor-pointer flex items-center" @click="toggleTranslation(index)">
+          {{ getLanguageName(translation.lang).toUpperCase() }}
+          <span class="ml-2">{{ shownTranslations[index] ? '▴' : '▿' }}</span>
+        </h3>
+        <p v-if="shownTranslations[index]" class="text-gray-600">{{ translation.text }}</p>
       </div>
     </div>
-    <div v-else class="bg-red-100 p-6 rounded-lg border-l-4 border-red-500 text-center">
-      <h2 class="text-lg font-bold text-red-600">Ошибка</h2>
-      <p class="w-full p-4 border rounded bg-white">Нет связанных страниц с этим текстом...</p>
-    </div>
+  </div>
+  <div v-else class="bg-red-100 p-6 rounded-lg border-l-4 border-red-500 text-center">
+    <h2 class="text-lg font-bold text-red-600">Ошибка</h2>
+    <p class="w-full p-4 border rounded bg-white">Нет доступных переводов...</p>
   </div>
 </template>
 
 <script setup>
-import { defineProps, computed } from 'vue'
-import { parseTranslationsXML } from '@/helpers/xml/xmlParser'
+import { defineProps, ref, computed } from 'vue'
 
-const props = defineProps({ translations: Array })
-const texts = computed(() => props.translations.map(page => ({
-  pageNumber: page.pageNumber,
-  pureText: page.pureText,
-  translations: parseTranslationsXML(page.translationsXML),
-  showTranslation: false
-})))
+const props = defineProps({
+  translations: Array,
+  pureText: String
+})
 
-const toggleTranslation = index => texts.value[index].showTranslation = !texts.value[index].showTranslation
+const filteredTranslations = computed(() =>
+  props.translations.filter(t => t.text.trim() !== "")
+)
+
+const showAll = ref(false)
+const shownTranslations = ref(filteredTranslations.value.map(() => false))
+
+const toggleAll = () => {
+  showAll.value = !showAll.value
+}
+
+const toggleTranslation = index => {
+  shownTranslations.value[index] = !shownTranslations.value[index]
+}
+
 const getLanguageName = lang => ({ ru: 'Русский', en: 'English' }[lang] || lang)
 </script>
