@@ -13,7 +13,7 @@
       <UserBiographyEdit v-model:biography="user.biography" class="mt-6 w-full" />
     </div>
   </div>
-  <not-found-page v-else-if="isLoading===false"></not-found-page>
+  <not-found-page v-else-if="!isLoading"></not-found-page>
 </template>
 
 <script setup>

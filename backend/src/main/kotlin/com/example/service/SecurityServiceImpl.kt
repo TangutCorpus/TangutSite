@@ -80,6 +80,7 @@ class SecurityServiceImpl(
     }
 
     override fun saveRefreshToken(id: UUID, token: String) {
+        refreshTokenRepository.deleteTokenById(id)
         refreshTokenRepository.save(RefreshToken(id, token))
     }
 

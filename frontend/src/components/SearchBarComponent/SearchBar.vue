@@ -116,6 +116,7 @@ const handleSearch = () => {
   if (searchMode.value == 'text') {
     showHistory.value = false
     emit('update:query', userQuery.value)
+
     router.push({ path: '/search', query: { query: userQuery.value } })
   }
 }

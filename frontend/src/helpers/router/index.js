@@ -22,13 +22,9 @@ const routes = [
   { path: '/text/:id', component: TextPage },
   { path: '/text/:id/edit', component: TextEditPage },
 
-  { path: '/page/add', component: TextFragmentEditPage },
   { path: '/page/:id', component: TextFragmentPage },
   { path: '/page/:id/edit', component: TextFragmentEditPage },
 
-
-  { path: '/user/:id', component: UserPage },
-  { path: '/user/:id/edit', component: UserEditPage },
   { path: '/library', component: LibraryPage },
   { path: '/about', component: AboutPage },
 

@@ -19,7 +19,7 @@ import java.util.UUID
 data class TextPage(
     @Contextual val id: UUID = UUID.randomUUID(),
     @Contextual val textId: UUID,
-    val imagesIDs: List<UUID> = emptyList(),
+    val imagesIDs: List<@Contextual UUID> = emptyList(),
     val pageNumber: Int = 0,
     val pureText: String = "",
     val glossedTextXML: String = "",

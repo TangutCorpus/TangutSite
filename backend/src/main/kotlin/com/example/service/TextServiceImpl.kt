@@ -10,13 +10,13 @@ class TextServiceImpl(private val textRepository: TextRepository) : TextService 
         return textRepository.getTextById(id) ?: throw NoSuchElementException("No text found with id $id")
     }
 
-    override suspend fun addText(text: Text) {
-        require(text.title.isNotBlank() && text.lineIds.isNotEmpty()) { "Title cannot be empty" }
-        textRepository.addText(text)
+    override suspend fun addText(text: Text): UUID {
+        require(text.title.isNotBlank()) { "Title cannot be empty" }
+        return textRepository.addText(text)
     }
 
     override suspend fun updateText(text: Text): Boolean {
-        require(text.title.isNotBlank() && text.lineIds.isNotEmpty()) { "Title cannot be empty" }
+        require(text.title.isNotBlank()) { "Title cannot be empty" }
         return textRepository.updateText(text) != 0
     }
 

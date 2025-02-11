@@ -17,16 +17,17 @@
 
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'
-import { defineEmits, onMounted, ref, watch } from 'vue'
+import { defineEmits, ref, watchEffect } from 'vue'
 
 const route = useRoute()
 const router = useRouter()
 const emit = defineEmits(['toggleAuthForm'])
 const currentUserId = ref(localStorage.getItem('userId'))
-const menuItems = ref([
+const standardMenuItems = [
   { name: 'О нас', route: '/about' },
   { name: 'Библиотека', route: '/library' }
-])
+]
+const menuItems = ref(standardMenuItems)
 
 const handleMenuItemClick = (path: string) => {
   if (path === '/auth') {
@@ -45,6 +46,8 @@ const isActive = (path: string) => {
 }
 
 const updateMenuItems = () => {
+  menuItems.value = []
+  menuItems.value.push(...standardMenuItems)
   if (!currentUserId.value) {
     menuItems.value.push({ name: 'Вход', route: '/auth' })
   } else {
@@ -55,10 +58,10 @@ const updateMenuItems = () => {
   }
 }
 
-onMounted(() => {
+watchEffect(() => {
   currentUserId.value = localStorage.getItem('userId')
   updateMenuItems()
 })
 
-watch(currentUserId, updateMenuItems)
+updateMenuItems()
 </script>

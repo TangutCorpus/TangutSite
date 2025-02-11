@@ -5,9 +5,11 @@ import com.example.model.RefreshTokens
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import java.util.UUID
 
 class RefreshTokenRepositoryImpl(private val db: Database) : RefreshTokenRepository {
@@ -37,6 +39,10 @@ class RefreshTokenRepositoryImpl(private val db: Database) : RefreshTokenReposit
 
     override fun getAll(): List<RefreshToken> = transaction(db) {
         RefreshTokens.selectAll().map { it.toRefreshToken() }
+    }
+
+    override fun deleteTokenById(id: UUID) {
+        RefreshTokens.deleteWhere { RefreshTokens.id eq id}
     }
 }
 

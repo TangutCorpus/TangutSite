@@ -2,8 +2,6 @@ package com.example.repository
 
 import com.example.model.Text
 import com.example.model.Texts
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.SchemaUtils
@@ -33,17 +31,19 @@ class TextRepositoryImpl(private val db: Database) : TextRepository {
 
     override suspend fun addText(text: Text) = transaction(db) {
         Texts.insert {
-            it[comment] = text.comment
+            it[id] = text.id
+            it[metadata] = text.metadata
             it[title] = text.title
-            it[lineIds] = Json.encodeToString(text.lineIds)
+            it[pageIds] = text.pageIds
         } get Texts.id
     }
 
     override suspend fun updateText(text: Text) = transaction(db) {
         Texts.update({ Texts.id eq text.id }) {
-            it[comment] = text.comment
+            it[id] = text.id
+            it[metadata] = text.metadata
             it[title] = text.title
-            it[lineIds] = Json.encodeToString(text.lineIds)
+            it[pageIds] = text.pageIds
         }
     }
 
@@ -60,7 +60,7 @@ private fun ResultRow.toText(): Text {
     return Text(
         id = this[Texts.id],
         title = this[Texts.title],
-        comment = this[Texts.comment],
-        lineIds = Json.decodeFromString(this[Texts.lineIds]),
+        metadata = this[Texts.metadata],
+        pageIds = this[Texts.pageIds],
     )
 }

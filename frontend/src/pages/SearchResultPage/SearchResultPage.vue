@@ -21,9 +21,11 @@ const results = ref([])
 const errorMessage = ref('')
 
 const fetchResults = async () => {
+  console.log(searchQuery)
   try {
     const query = (route.query.query ?? []).toString()
-    let searchUrl = '/search?query=' + query ? `pureText=in=${encodeURIComponent(query)}` : ""
+    let searchUrl = '/search?query=' + (query ? `pureText=in=${encodeURIComponent(query)}` : "")
+    console.log(query)
     const response = await api.get(searchUrl)
 
     if (response.status !== 200) {
@@ -50,9 +52,8 @@ const fetchResults = async () => {
 }
 
 onMounted(() => {
-  if (searchQuery.value) {
     fetchResults(searchQuery.value)
-  }
+
 })
 
 watch(() => route.query.query, (newQuery) => {

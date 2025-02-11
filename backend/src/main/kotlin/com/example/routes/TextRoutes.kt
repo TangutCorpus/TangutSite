@@ -1,18 +1,21 @@
 package com.example.routes
 
 import com.example.model.Text
+import com.example.model.TextRequest
 import com.example.service.TextService
 import com.example.utils.toUUIDOrNull
 import io.ktor.http.HttpStatusCode
 import io.ktor.server.request.receive
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
+import java.util.UUID
 
 fun Route.textRoutes(textService: TextService) {
     post("/texts") {
-        val text = call.receive<Text>()
-        textService.addText(text)
-        call.respondText("Text added successfully", status = HttpStatusCode.Created)
+        val textRequest = call.receive<TextRequest>()
+        val text = Text(id = UUID.randomUUID(), title = textRequest.title, metadata = textRequest.metadata, pageIds = textRequest.pageIds)
+        val id = textService.addText(text)
+        call.respondText(id.toString(), status = HttpStatusCode.Created)
     }
 
     get("/texts") {

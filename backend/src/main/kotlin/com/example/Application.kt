@@ -25,6 +25,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
     val config = environment.config
+    val maxFileSize = config.property("ktor.http.request.maxFileSize").getString().toInt()
     var database = initDatabase(config)
 
     var userRepository = UserRepositoryImpl(database)
@@ -46,7 +47,7 @@ fun Application.module() {
 
     configureRouting(userService, textService, searchService, textPageService, securityService, imageService)
     configureExceptionHandling()
-    configureSerialization()
+    configureSerialization(maxFileSize)
     configureMonitoring()
     configureHTTP()
     configureSecurity(securityService)
