@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@vueuse/integrations": "^12.5.0",
-    "axios": "^1.7.9",
+    "axios": "^1.12.1",
     "jwt-decode": "^4.0.0",
     "sortablejs": "^1.15.6",
     "vite-plugin-vue-devtools": "^7.7.0",
