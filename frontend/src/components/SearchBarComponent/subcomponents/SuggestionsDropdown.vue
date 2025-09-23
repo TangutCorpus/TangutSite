@@ -7,7 +7,7 @@
     <div
       v-for="(suggestion, index) in suggestions"
       :key="'suggestion-' + index"
-      class="w-full px-4 py-3 border-b border-gray-200 last:border-b-0 hover:bg-gray-100 cursor-pointer block text-black"
+      class="dropdown-item"
       @click="$emit('select', suggestion)"
     >
       {{ suggestion.title }}, {{ suggestion.author }}
@@ -15,7 +15,7 @@
     <div
       v-for="(history, index) in history"
       :key="'history-' + index"
-      class="w-full px-4 py-3 border-b border-gray-200 last:border-b-0 hover:bg-gray-100 cursor-pointer block text-black"
+      class="dropdown-item"
       @click="$emit('select-history', history)"
     >
       {{ history }}
@@ -24,8 +24,6 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue'
-
 const props = defineProps<{
   history: string[];
   suggestions: { title: string; author: string; id: number }[];

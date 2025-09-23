@@ -1,0 +1,161 @@
+@layer components {
+    .compact-padding {
+        @apply px-4 py-2;
+    }
+
+    .standard-flex-container {
+        @apply flex flex-col items-center;
+    }
+
+    .page-flex-container {
+        @apply standard-flex-container w-full mt-[15%];
+    }
+
+    .search-container {
+        @apply standard-flex-container relative w-full;
+    }
+
+    .popup-container {
+        @apply absolute left-0 top-full mt-2 p-4 bg-white border rounded shadow-lg z-20;
+    }
+
+    .card-container {
+        @apply bg-white shadow rounded-lg p-6;
+    }
+
+    .narrow-container {
+        @apply container mx-auto p-6 max-w-4xl;
+    }
+
+    .modal-container {
+        @apply flex bg-white rounded-md shadow-lg relative w-[50vw] h-[55vh] max-h-[90vh];
+    }
+
+    .search-input {
+        @apply flex-1 compact-padding border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .form-input {
+        @apply shadow border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .radical-item {
+        @apply cursor-pointer text-xl hover:bg-gray-200 p-1 text-center;
+    }
+
+    .dropdown-item {
+        @apply w-full compact-padding border-b border-gray-300 last:border-b-0 hover:bg-gray-200 cursor-pointer block text-black
+    }
+
+    .modal-backdrop {
+        @apply fixed inset-0 bg-black bg-opacity-50 flexbox-center p-4;
+    }
+
+    .modal-left {
+        @apply rounded-l w-2/5 p-8 text-white bg-black flex flex-col justify-center;
+    }
+
+    .modal-right {
+        @apply rounded-md w-3/5 p-8 pr-8 relative overflow-y-auto max-h-[90vh];
+    }
+
+    .modal-close {
+        @apply absolute top-2 right-2 text-gray-500 hover:text-gray-700;
+    }
+
+    .button-search {
+        @apply bg-black text-white hover:bg-gray-700 compact-padding font-medium rounded-r focus:outline-none focus:ring-2 focus:ring-blue-500;
+    }
+
+    .button-mode {
+        @apply compact-padding border rounded focus:outline-none;
+    }
+
+    .button-primary {
+        @apply bg-indigo-600 text-white hover:bg-indigo-700 compact-padding font-medium rounded-md;
+    }
+
+    .button-secondary {
+        @apply bg-gray-200 text-black hover:bg-gray-200 compact-padding font-medium rounded-md;
+    }
+
+    .button-submit {
+        @apply bg-black text-white hover:bg-gray-700 compact-padding font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full;
+    }
+
+    .button-light {
+        @apply bg-white text-black font-medium rounded-md;
+    }
+
+    .button-helper {
+        @apply bg-gray-700 text-white compact-padding font-medium rounded-md;
+    }
+
+    .button-toggle {
+        @apply compact-padding rounded;
+    }
+
+    .button-popup-close {
+        @apply absolute text-gray-700 focus:outline-none top-1 right-1 text-sm;
+    }
+
+    .form-group {
+        @apply mb-4;
+    }
+
+    .form-textarea {
+        @apply shadow border rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none h-32;
+    }
+
+    .profile-picture {
+        @apply w-32 h-32 rounded-full shadow;
+    }
+
+    .header-md-text {
+        @apply text-2xl font-bold;
+    }
+
+    .header-semibold-text {
+        @apply text-lg font-semibold mb-2;
+    }
+
+    .header-first-level {
+        @apply text-6xl font-bold mb-4;
+    }
+
+    .header-error-text {
+        @apply text-bold text-red-600;
+    }
+
+    .text-label {
+        @apply block text-gray-700 text-sm font-bold mb-2;
+    }
+
+    .text-bold {
+        @apply text-lg font-bold;
+    }
+
+    .text-error {
+        @apply w-full p-4 border rounded bg-white;
+    }
+
+    .left-border-card {
+        @apply bg-gray-200 border-l-4 rounded-lg border-blue-500 p-4;
+    }
+
+    .dialog-card {
+        @apply bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto;
+    }
+
+    .error-card {
+        @apply bg-red-100 p-6 rounded-lg border-l-4 border-red-500 text-center
+    }
+
+    .flexbox-center {
+        @apply flex items-center justify-center;
+    }
+
+    .center-y {
+        @apply top-1/2 transform -translate-y-1/2;
+    }
+}

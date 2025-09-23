@@ -1,6 +1,6 @@
 <template>
-  <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-screen-lg w-full">
+  <div class="modal-backdrop">
+    <div class="dialog-card w-full">
       <TextFragmentEdit v-model:fragment="tempFragment" />
       <BaseButton class="mt-4 w-full" @click="saveTempFragment">Сохранить</BaseButton>
       <BaseButton class="mt-4 w-full" @click="$emit('close')">Закрыть</BaseButton>

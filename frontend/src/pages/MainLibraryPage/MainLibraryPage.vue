@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div class="narrow-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <LibraryCard
       v-for="text in texts"
       :key="text.id"

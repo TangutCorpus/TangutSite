@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-lg font-semibold mb-2">Выберите редактируемое свойство</h2>
+    <h2 class="header-semibold-text">Выберите редактируемое свойство</h2>
     <div class="mb-4">
       <select
         v-model="selectedProperty"
@@ -21,17 +21,14 @@
 
     <div v-for="(property, index) in propertiesChosen" :key="index" class="mb-4">
       <label class="block mb-2">{{ availableProperties[property] }}</label>
-      <textarea
-        v-model="metadataProxy[property]"
-        class="w-full p-2 border rounded mb-4"
-      ></textarea>
+      <textarea v-model="metadataProxy[property]"  class="form-textarea" />
       <button class="text-red-500" @click="removeProperty(property)">Удалить свойство</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   metadata: Object

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="text-lg font-semibold mb-2">Изображения</h2>
+    <h2 class="header-semibold-text">Изображения</h2>
     <BaseButton class="mt-2 w-full" @click="triggerFileInput">Выбрать изображения</BaseButton>
     <input ref="fileInput" accept="image/*" class="hidden" multiple type="file" @change="handleFileUpload">
     <div ref="imageContainer" class="grid grid-cols-3 gap-2 mt-4">
@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps, nextTick, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 
 const props = defineProps({ images: Array })

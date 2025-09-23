@@ -1,8 +1,8 @@
 <template>
   <div>
-    <component :is="tag" class="font-semibold flex items-center">
+    <component :is="tag" class="font-semibold flexbox-center">
       <span>{{ title }}</span>
-      <button class="ml-2 text-gray-500" @click="isOpen = !isOpen">▿</button>
+      <button class="ml-2 text-gray-700" @click="isOpen = !isOpen">▿</button>
     </component>
     <div v-if="isOpen" class="mt-2">
       <slot></slot>
@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { defineProps, ref } from 'vue'
+import { ref } from 'vue'
 
 const props = defineProps({
   title: String,

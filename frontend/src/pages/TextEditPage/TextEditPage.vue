@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto p-6 max-w-4xl">
-    <div class="bg-white shadow rounded-lg p-6 relative">
-      <label class="text-lg font-semibold mb-2">Название текста</label>
-      <input required v-model="text.title" class="w-full p-2 border rounded mb-4" type="text">
+  <div class="narrow-container">
+    <div class="card-container relative">
+      <label class="header-semibold-text">Название текста</label>
+      <input required v-model="text.title" class="form-input" type="text">
       <TextMetadataEdit :metadata="text.metadata"></TextMetadataEdit>
       <div v-for="page in pages" :key="page.pageNumber">
         <TextFragmentPreview :fragment="page" class="mt-6" @edit="openFragmentEdit" />

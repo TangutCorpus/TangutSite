@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-100 shadow rounded-lg p-6">
-    <router-link :to="`/text/${text.id}`" class="text-xl font-bold text-blue-600 hover:underline">
+  <div class="card-container">
+    <router-link :to="`/text/${text.id}`" class="text-xl font-bold text-blue-700 hover:underline">
       {{ text.title }}
     </router-link>
 
@@ -10,7 +10,7 @@
           v-for="chapter in chunk"
           :key="chapter"
           :to="`/page/${chapter}`"
-          class="px-3 py-1 mt-2 bg-blue-200 text-blue-700 rounded text-sm hover:bg-blue-300 transition"
+          class="compact-padding mt-2 bg-gray-700 text-blue-700 rounded text-sm hover:bg-gray-700 transition"
         >
           {{ ++index }}
         </router-link>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup>
-import { computed, defineProps } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps({
   text: Object,

@@ -1,15 +1,14 @@
 <template>
-  <div class="container mx-auto p-6 grid grid-cols-4 gap-6">
+  <div class="narrow-container grid grid-cols-4 gap-6">
     <div class="col-span-4 text-center mb-4 relative">
-      <h1 class="text-3xl font-bold inline-block">Текст: {{ text.title }}</h1>
-      <button class="absolute right-0 top-0 mt-2 mr-4 bg-blue-500 text-white px-4 py-2 rounded" @click="editTextPage">
+      <button class="absolute right-0 top-0 mt-2 mr-4 button-helper" @click="editTextPage">
         Редактировать
       </button>
     </div>
 
-    <div class="col-span-1 bg-white shadow rounded-lg p-6 self-start">
-      <h1 class="text-center"><b>Информация</b></h1>
-      <div v-for="(fields, section) in text.metadata" :key="section" class="text-gray-600">
+    <div class="col-span-1 card-container self-start">
+      <h1 class="text-center text-bold">Информация</h1>
+      <div v-for="(fields, section) in text.metadata" :key="section" class="text-gray-700">
         {{ section }}: {{ fields }}
       </div>
     </div>

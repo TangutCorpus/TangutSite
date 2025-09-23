@@ -1,14 +1,14 @@
 <template>
-  <div v-if="isSliderOpen" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center"
+  <div v-if="isSliderOpen" class="fixed inset-0 bg-black bg-opacity-80 flexbox-center"
        tabindex="0" @keydown.esc="$emit('close-slider')" @keydown.left="prevImage" @keydown.right="nextImage">
-    <div class="relative bg-white p-8 rounded-lg shadow-lg max-w-4xl mx-auto">
-      <button class="absolute top-4 right-4 bg-white text-black p-2 rounded" @click="$emit('close-slider')">✖</button>
-      <button class="absolute top-4 right-16 bg-white text-black p-2 rounded" @click="openOriginalImage">🔗</button>
-      <button class="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white text-black p-2 rounded"
+    <div class="relative dialog-card">
+      <button class="absolute top-4 right-4 button-light p-2" @click="$emit('close-slider')">✖</button>
+      <button class="absolute top-4 right-16 button-light p-2" @click="openOriginalImage">🔗</button>
+      <button class="absolute left-4 center-y button-light p-2"
               @click="prevImage">◀
       </button>
       <img :src="images[currentImage]" class="max-w-full max-h-full object-contain rounded-lg" @dblclick="toggleZoom">
-      <button class="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white text-black p-2 rounded"
+      <button class="absolute right-4 center-y button-light p-2"
               @click="nextImage">▶
       </button>
     </div>
@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import { defineProps, onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 
 const props = defineProps({ images: Array, isSliderOpen: Boolean })
 const currentImage = ref(0)

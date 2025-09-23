@@ -1,5 +1,4 @@
 <template>
-  <div class="bg-white min-h-screen flex flex-col">
     <HeaderNav @toggle-auth-form="toggleAuthForm" />
     <MainContent
       :currentPage="currentPage"
@@ -7,7 +6,6 @@
       @toggle-auth-modal="toggleAuthForm"
     />
     <AuthComponent v-if="showAuth" @close="toggleAuthForm" />
-  </div>
 </template>
 
 <script lang="ts" setup>

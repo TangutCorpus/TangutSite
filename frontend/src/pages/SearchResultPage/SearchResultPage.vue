@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-6">
+  <div class="narrow-container">
     <SearchBar v-model:mode="searchMode" v-model:query="searchQuery" class="mb-6" />
     <div class="grid grid-cols-1 gap-6">
       <SearchResultCard v-for="result in results" :key="result.id" :result="result" />

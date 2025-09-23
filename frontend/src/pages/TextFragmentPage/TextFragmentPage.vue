@@ -1,8 +1,8 @@
 <template>
-  <div class="container mx-auto p-6 grid grid-cols-1 gap-6">
+  <div class="narrow-container grid grid-cols-1 gap-6">
     <div class="col-span-4 text-center mb-4 relative">
-      <h1 class="text-3xl font-bold inline-block">Текст: {{ textTitle }}. Страница #{{ page.pageNumber }}</h1>
-      <button @click="editTextFragment" class="absolute right-0 top-0 mt-2 mr-4 bg-blue-500 text-white px-4 py-2 rounded">Редактировать</button>
+      <h1 class="header-md-text inline-block">Текст: {{ textTitle }}. Страница #{{ page.pageNumber }}</h1>
+      <button @click="editTextFragment" class="absolute right-0 top-0 mt-2 mr-4 button-helper">Редактировать</button>
     </div>
 
     <div>

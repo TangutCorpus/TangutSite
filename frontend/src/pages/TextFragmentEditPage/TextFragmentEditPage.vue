@@ -1,6 +1,6 @@
 <template>
-  <div class="container mx-auto p-6 max-w-4xl">
-    <div class="bg-white shadow rounded-lg p-6">
+  <div class="narrow-container">
+    <div class="card-container">
       <TextFragmentEdit v-model:fragment="fragment" />
       <BaseButton class="mt-6 w-full" primary @click="saveFragment">Сохранить</BaseButton>
     </div>

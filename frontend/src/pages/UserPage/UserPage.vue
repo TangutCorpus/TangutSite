@@ -1,18 +1,17 @@
 <template>
-  <div v-if="hasCorrectId" class="container mx-auto p-6 max-w-4xl">
-    <div class="bg-white shadow rounded-lg p-6 flex flex-col items-center relative">
+  <div v-if="true" class="narrow-container">
+    <div class="card-container standard-flex-container relative">
       <BaseButton
         v-if="isOwner"
-        class="absolute top-4 right-4"
         @click="editProfile"
       >
         Редактировать
       </BaseButton>
 
       <UserAvatar :src="user.avatarUrl || DefaultAvatar" />
-      <div class="flex items-center gap-2 mt-4">
-        <h1 class="text-2xl font-bold">@{{ user.username }}</h1>
-        <span class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm">{{ user.role }}</span>
+      <div class="flexbox-center gap-2 mt-4">
+        <h1 class="header-md-text">@{{ user.username }}</h1>
+        <span class="compact-padding bg-gray-700 text-blue-700 text-sm rounded">{{ user.role }}</span>
       </div>
 
       <UserContact :displayName="user.displayName" :email="user.email" class="mt-6 w-full" />
@@ -28,7 +27,6 @@ import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { getRoleFromToken } from '@/helpers/jwt/jwt'
 import api from '@/helpers/http/http'
-
 
 import UserAvatar from '@/pages/UserPage/components/UserAvatar.vue'
 import UserContact from '@/pages/UserPage/components/UserContact.vue'

@@ -17,7 +17,7 @@
 
 <script lang="ts" setup>
 import { useRoute, useRouter } from 'vue-router'
-import { defineEmits, ref, watchEffect } from 'vue'
+import { ref, watchEffect } from 'vue'
 
 const route = useRoute()
 const router = useRouter()

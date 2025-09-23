@@ -1,13 +1,13 @@
 <template>
-  <div class="flex flex-col items-center">
-    <img :src="avatarPreview" alt="User Avatar" class="w-32 h-32 rounded-full shadow mb-2">
+  <div class="standard-flex-container">
+    <img :src="avatarPreview" alt="User Avatar" class="profile-picture">
     <input ref="fileInput" accept="image/*" class="hidden" type="file" @change="handleFileUpload">
     <BaseButton @click="triggerFileInput">Изменить аватар</BaseButton>
   </div>
 </template>
 
 <script setup>
-import { defineEmits, defineProps, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 
 const props = defineProps({ modelValue: String })

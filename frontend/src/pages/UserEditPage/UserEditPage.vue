@@ -1,11 +1,11 @@
 <template>
-  <div v-if="isOwner" class="container mx-auto p-6 max-w-4xl">
-    <div class="bg-white shadow rounded-lg p-6 relative">
+  <div v-if="isOwner" class="narrow-container">
+    <div class="card-container relative">
       <BaseButton class="absolute top-4 right-4" @click="saveChanges">Сохранить</BaseButton>
       <UserAvatarUpload v-model="user.avatarUrl" />
 
-      <div class="flex items-center gap-2 mt-4">
-        <h1 class="text-2xl font-bold">@{{ user.username }}</h1>
+      <div class="flexbox-center gap-2 mt-4">
+        <h1 class="header-md-text">@{{ user.username }}</h1>
       </div>
 
       <UserContactEdit v-model:display-name="user.displayName" v-model:email="user.email" class="mt-6 w-full" />
