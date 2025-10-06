@@ -3,7 +3,7 @@
     <BlockquoteComponent :text="pureText" />
     <hr class="my-4 border-gray-300" />
     <h2 class="header-semibold-text flexbox-center cursor-pointer text-blue-700" @click="toggleAll">
-      Переводы
+      {{$t('TranslationList.translations')}}
       <span class="ml-2">{{ showAll ? '▴' : '▿' }}</span>
     </h2>
 
@@ -18,14 +18,17 @@
     </div>
   </div>
   <div v-else class="error-card">
-    <h2 class="header-error-text">Ошибка</h2>
-    <p class="text-error">Нет доступных переводов...</p>
+    <h2 class="header-error-text">{{$t('TranslationList.error')}}</h2>
+    <p class="text-error">{{$t('TranslationList.noTranslations')}}</p>
   </div>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue'
 import BlockquoteComponent from "@/components/BlockquoteComponent/BlockquoteComponent.vue";
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
 
 const props = defineProps({
   translations: Array,
@@ -47,5 +50,5 @@ const toggleTranslation = index => {
   shownTranslations.value[index] = !shownTranslations.value[index]
 }
 
-const getLanguageName = lang => ({ ru: 'Русский', en: 'English' }[lang] || lang)
+const getLanguageName = lang => ({ ru: t('TranslationList.russian'), en: t('TranslationList.english') }[lang] || lang)
 </script>

@@ -2,8 +2,8 @@
   <div class="not-found-page">
     <div class="not-found-text">
       <h1 class="error-code">404</h1>
-      <p class="error-message">Страница не найдена</p>
-      <router-link class="home-link" to="/">Вернуться на главную</router-link>
+      <p class="error-message">{{$t('NotFoundPage.notFound')}}</p>
+      <router-link class="home-link" to="/">{{$t('NotFoundPage.goBackToHomePage')}}</router-link>
     </div>
     <img :src="notFoundImage" alt="404 Not Found" class="not-found-image"/>
   </div>

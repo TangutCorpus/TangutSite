@@ -1,18 +1,18 @@
 <template>
   <div>
-    <label class="block header-semibold-text">Редактировать переводы</label>
+    <label class="block header-semibold-text">{{$t('TranslationListEdit.editTranslations')}}</label>
 
     <div class="rounded-lg mb-6 left-border-card">
-      <textarea v-model="originalText" class="form-textarea" placeholder="Оригинальный текст" />
+      <textarea v-model="originalText" class="form-textarea" placeholder="{{$t('TranslationListEdit.originalText')}}" />
 
-      <button class="button-primary" @click="addTranslation">Добавить перевод</button>
+      <button class="button-primary" @click="addTranslation">{{$t('TranslationListEdit.addTranslation')}}</button>
 
       <div v-for="(translation, tIndex) in translations" :key="tIndex" class="mt-2 flexbox-center">
         <select v-model="translation.lang" class="p-2 border rounded mr-2">
-          <option value="ru">Русский</option>
-          <option value="en">English</option>
+          <option value="ru">{{$t('TranslationListEdit.russian')}}</option>
+          <option value="en">{{$t('TranslationListEdit.english')}}</option>
         </select>
-        <textarea v-model="translation.text" class="form-textarea" placeholder="Введите перевод" />
+        <textarea v-model="translation.text" class="form-textarea" placeholder="{{$t('TranslationListEdit.enterTranslation')}}" />
         <button class="ml-2 text-red-500" @click="removeTranslation(index, tIndex)">✖</button>
       </div>
     </div>
@@ -26,7 +26,6 @@ const props = defineProps({
   originalText: String,
   translations: Array
 })
-const isTranslationPanelVisible = ref(false)
 const emit = defineEmits(['update:translations', 'update:originalText'])
 
 const translations = computed({

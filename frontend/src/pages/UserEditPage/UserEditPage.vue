@@ -1,7 +1,7 @@
 <template>
   <div v-if="isOwner" class="narrow-container">
     <div class="card-container relative">
-      <BaseButton class="absolute top-4 right-4" @click="saveChanges">Сохранить</BaseButton>
+      <BaseButton class="absolute top-4 right-4" @click="saveChanges">{{$t('UserEditPage.save')}}</BaseButton>
       <UserAvatarUpload v-model="user.avatarUrl" />
 
       <div class="flexbox-center gap-2 mt-4">
@@ -80,10 +80,10 @@ const saveChanges = async () => {
     if (response.status === 200) {
       await router.push(`/user/${userId}`)
     } else {
-      throw new Error(`Ошибка обновления: ${response.status} ${response.statusText}`)
+      throw new Error(`Updating error: ${response.status} ${response.statusText}`)
     }
   } catch (error) {
-    console.error('Ошибка сохранения изменений:', error.message)
+    console.error('Change saving error:', error.message)
   }
 }
 onMounted(fetchUser)

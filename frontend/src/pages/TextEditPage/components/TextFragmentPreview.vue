@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="!isUnavailable" class="mb-6 left-border-card shadow">
-      <h2 class="header-semibold-text text-gray-700">Страница #{{ fragment.pageNumber }}</h2>
+      <h2 class="header-semibold-text text-gray-700">{{ $t('TextFragmentPreview.page') }} #{{ fragment.pageNumber }}</h2>
       <BlockquoteComponent :text="fragment.pureText" />
       <hr class="my-4 border-gray-300" />
 
@@ -19,11 +19,11 @@
         </div>
       </div>
 
-      <BaseButton class="mt-2 w-full" @click="$emit('edit', fragment)">Редактировать</BaseButton>
+      <BaseButton class="mt-2 w-full" @click="$emit('edit', fragment)">{{ $t('TextFragmentPreview.edit') }}</BaseButton>
     </div>
     <div v-else class="error-card">
-      <h2 class="header-error-text">Ошибка</h2>
-      <p class="text-error">Страница недоступна...</p>
+      <h2 class="header-error-text">{{ $t('TextFragmentPreview.error') }}</h2>
+      <p class="text-error">{{ $t('TextFragmentPreview.notAccessible') }}</p>
     </div>
   </div>
 </template>
@@ -32,6 +32,8 @@
 import { ref } from 'vue'
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 import BlockquoteComponent from "@/components/BlockquoteComponent/BlockquoteComponent.vue";
+import {useI18n} from "vue-i18n";
+const { t } = useI18n()
 
 const props = defineProps({
   fragment: Object
@@ -41,5 +43,5 @@ const showTranslation = ref(false)
 const toggleTranslation = () => showTranslation.value = !showTranslation.value
 
 const isUnavailable = ref(false)
-const getLanguageName = lang => ({ ru: 'Русский', en: 'English' }[lang] || lang)
+const getLanguageName = lang => ({ ru: t('russian'), en: t('english') }[lang] || lang)
 </script>

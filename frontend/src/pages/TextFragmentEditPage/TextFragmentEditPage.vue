@@ -2,7 +2,7 @@
   <div class="narrow-container">
     <div class="card-container">
       <TextFragmentEdit v-model:fragment="fragment" />
-      <BaseButton class="mt-6 w-full" primary @click="saveFragment">Сохранить</BaseButton>
+      <BaseButton class="mt-6 w-full" primary @click="saveFragment">{{$t('TextFragmentEditPage.save')}}</BaseButton>
     </div>
   </div>
 </template>

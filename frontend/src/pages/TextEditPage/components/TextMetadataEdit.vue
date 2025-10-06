@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2 class="header-semibold-text">Выберите редактируемое свойство</h2>
+    <h2 class="header-semibold-text">{{ $t('TextMetadataEdit.choosePropertyToDelete') }}</h2>
     <div class="mb-4">
       <select
         v-model="selectedProperty"
         class="w-full p-2 border rounded mb-4"
         @change="addProperty"
       >
-        <option disabled value="">Метаданные текста</option>
+        <option disabled value="">{{ $t('TextMetadataEdit.textMetadata') }}</option>
         <option
           v-for="(value, key) in availableProperties"
           :key="key"
@@ -22,13 +22,16 @@
     <div v-for="(property, index) in propertiesChosen" :key="index" class="mb-4">
       <label class="block mb-2">{{ availableProperties[property] }}</label>
       <textarea v-model="metadataProxy[property]"  class="form-textarea" />
-      <button class="text-red-500" @click="removeProperty(property)">Удалить свойство</button>
+      <button class="text-red-500" @click="removeProperty(property)">{{ $t('TextMetadataEdit.deleteProperty') }}</button>
     </div>
   </div>
 </template>
 
 <script setup>
 import { computed, ref, watch } from 'vue'
+import {useI18n} from "vue-i18n";
+
+const { t } = useI18n()
 
 const props = defineProps({
   metadata: Object
@@ -37,11 +40,11 @@ const props = defineProps({
 const emit = defineEmits(['update:metadata'])
 
 const availableProperties = {
-  'author': 'Автор',
-  'date': 'Дата создания',
-  'description': 'Описание',
-  'material': 'Материал',
-  'storage': 'Хранение'
+  'author': t('TextMetadataEdit.author'),
+  'date': t('TextMetadataEdit.date'),
+  'description': t('TextMetadataEdit.description'),
+  'material': t('TextMetadataEdit.material'),
+  'storage': t('TextMetadataEdit.storage')
 }
 
 const propertiesChosen = ref([])

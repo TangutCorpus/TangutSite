@@ -1,13 +1,13 @@
 <template>
   <div class="narrow-container">
     <div class="card-container relative">
-      <label class="header-semibold-text">Название текста</label>
+      <label class="header-semibold-text">{{ $t('TextEditPage.textName') }}</label>
       <input required v-model="text.title" class="form-input" type="text">
       <TextMetadataEdit :metadata="text.metadata"></TextMetadataEdit>
       <div v-for="page in pages" :key="page.pageNumber">
         <TextFragmentPreview :fragment="page" class="mt-6" @edit="openFragmentEdit" />
       </div>
-      <BaseButton class="mt-6 w-full" @click="openFragmentEdit(null)">Добавить фрагмент</BaseButton>
+      <BaseButton class="mt-6 w-full" @click="openFragmentEdit(null)">{{ $t('TextEditPage.addFragment') }}</BaseButton>
       <BaseButton class="mt-6 w-full" :disabled="isSaving" primary @click="saveText">{{ saveButtonText }}</BaseButton>
       <TextFragmentEditPopup v-if="isPageEditOpen" :fragment="editingPage" @close="closePageEdit"
                              @saved="saveFragment"
@@ -24,14 +24,16 @@ import TextFragmentEditPopup from '@/pages/TextEditPage/components/TextFragmentE
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 import { useRoute } from 'vue-router'
 import TextMetadataEdit from '@/pages/TextEditPage/components/TextMetadataEdit.vue'
+import {useI18n} from "vue-i18n";
 
 const route = useRoute()
+const { t } = useI18n()
 const currentPageTextId = route.params.id || '[[editing]'
 const text = ref({ pageIds: [], title: "", metadata: {} })
 const pages = ref([])
 const isPageEditOpen = ref(false)
 const editingPage = ref(null)
-const saveButtonText = ref('Сохранить')
+const saveButtonText = ref(t('TextEditPage.toSave'))
 const isSaving = ref(false)
 let pageNumber = 1
 
@@ -51,7 +53,7 @@ const fetchTextData = async () => {
         pageNumber++
       }
     } catch (error) {
-      console.error("Ошибка загрузки текста", error)
+      console.error("Text loading error", error)
     }
   }
 }
@@ -118,10 +120,10 @@ const saveText = async () => {
   }
   textRequest.pageIds.push(...pageIds)
   await api.put(`/texts/${textId}`, textRequest)
-  saveButtonText.value = 'Сохранено'
+  saveButtonText.value = t('TextEditPage.saved')
 
   setTimeout(() => {
-    saveButtonText.value = 'Сохранить'
+    saveButtonText.value = t('TextEditPage.toSave')
     isSaving.value = false
   }, 1000)
 
@@ -139,7 +141,7 @@ const uploadImages = async (images) => {
       })
       uploadedImageIds.push(response.data.id)
     } catch (error) {
-      console.error("Ошибка загрузки изображения", error)
+      console.error("Image loading error", error)
     }
   }
   return uploadedImageIds

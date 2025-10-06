@@ -5,7 +5,7 @@
           ref="searchInput"
           v-model="userQuery"
           class="search-input"
-          placeholder="Введите запрос..."
+          :placeholder="$t('SearchBar.placeholder')"
           type="text"
           @focus="showHistory = true"
           @keydown.enter="handleSearch"
@@ -24,20 +24,20 @@
 
     <div class="flexbox-center gap-4 relative">
       <BaseButtonComponent @click="toggleTangutPopup">
-        {{ tangutIcon }}
+        {{ t('SearchBar.chooseRadicals') }}
       </BaseButtonComponent>
-      <h2>Область поиска</h2>
+      <h2>{{ $t('SearchBar.searchArea') }}</h2>
       <BaseButtonComponent
           :primary="searchMode === 'text'"
           @click="setSearchMode('text')"
       >
-        Тексты
+        {{ $t('SearchBar.textMode') }}
       </BaseButtonComponent>
       <BaseButtonComponent
           :primary="searchMode === 'article'"
           @click="setSearchMode('article')"
       >
-        Словарь
+        {{ $t('SearchBar.dictionaryMode') }}
       </BaseButtonComponent>
       <div v-if="showTangutPopup" class="popup-container">
         <button class="button-popup-close" @click="toggleTangutPopup">X</button>
@@ -57,6 +57,7 @@
 import {computed, ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComponent.vue";
+import {useI18n} from "vue-i18n";
 
 const props = defineProps<{ query?: string; mode?: string }>()
 const emit = defineEmits(['update:query', 'update:mode'])
@@ -67,7 +68,7 @@ const userQuery = ref(props.query || '')
 const searchMode = ref<'text' | 'article'>('text')
 const showHistory = ref(false)
 const showTangutPopup = ref(false)
-const tangutIcon = 'Выборать компоненты'
+const { t } = useI18n()
 const router = useRouter()
 
 const radicals = computed(() => {

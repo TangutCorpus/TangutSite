@@ -1,10 +1,10 @@
 <template>
   <div>
-    <h2 class="header-semibold-text">Контактные данные</h2>
-    <label class="block text-gray-700">Email:</label>
+    <h2 class="header-semibold-text">{{$t('UserContactEdit.contactInfo')}}</h2>
+    <label class="block text-gray-700">{{$t('UserContactEdit.email')}}:</label>
     <input v-model="emailProxy" class="form-input" type="email">
 
-    <label class="block text-gray-700 mt-2">Ф.И.О.:</label>
+    <label class="block text-gray-700 mt-2">{{$t('UserContactEdit.realName')}}:</label>
     <input v-model="displayNameProxy" class="form-input" type="text">
   </div>
 </template>

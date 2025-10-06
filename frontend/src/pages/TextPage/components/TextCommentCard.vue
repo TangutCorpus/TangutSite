@@ -1,6 +1,6 @@
 <template>
   <div class="mx-auto p-6 bg-white drop-shadow-lg rounded-lg">
-    <h2 class="text-center header-md-text mb-4">Комментарии</h2>
+    <h2 class="text-center header-md-text mb-4">{{$t('TextCommentCard.comments')}}</h2>
 
     <div v-for="(comment, index) in comments" :key="index" class="mb-4">
       <div class="flexbox-center gap-2">

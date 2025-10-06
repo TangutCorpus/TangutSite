@@ -1,7 +1,7 @@
 <template>
   <div>
-    <h2 class="header-semibold-text">Изображения</h2>
-    <BaseButton class="mt-2 w-full" @click="triggerFileInput">Выбрать изображения</BaseButton>
+    <h2 class="header-semibold-text">{{$t('ImageUpload.images')}}</h2>
+    <BaseButton class="mt-2 w-full" @click="triggerFileInput">{{$t('ImageUpload.pickImage')}}</BaseButton>
     <input ref="fileInput" accept="image/*" class="hidden" multiple type="file" @change="handleFileUpload">
     <div ref="imageContainer" class="grid grid-cols-3 gap-2 mt-4">
       <div

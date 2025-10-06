@@ -1,8 +1,8 @@
 <template>
   <div class="narrow-container grid grid-cols-1 gap-6">
     <div class="col-span-4 text-center mb-4 relative">
-      <h1 class="header-md-text inline-block">Текст: {{ textTitle }}. Страница #{{ page.pageNumber }}</h1>
-      <button @click="editTextFragment" class="absolute right-0 top-0 mt-2 mr-4 button-helper">Редактировать</button>
+      <h1 class="header-md-text inline-block">{{$t('TextFragmentPage.text')}}: {{ textTitle }}. {{$t('TextFragmentPage.page')}} #{{ page.pageNumber }}</h1>
+      <button @click="editTextFragment" class="absolute right-0 top-0 mt-2 mr-4 button-helper">{{$t('TextFragmentPage.edit')}}</button>
     </div>
 
     <div>
@@ -62,7 +62,7 @@ onMounted(async () => {
     }
     console.log(images.value)
   } catch (error) {
-    console.error('Ошибка загрузки данных:', error);
+    console.error('Data loading error:', error);
     images.value = [defaultImage];
   }
 });

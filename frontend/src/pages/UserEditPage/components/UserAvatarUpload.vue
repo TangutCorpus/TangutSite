@@ -1,8 +1,8 @@
 <template>
   <div class="standard-flex-container">
-    <img :src="avatarPreview" alt="User Avatar" class="profile-picture">
+    <img :src="avatarPreview" class="profile-picture">
     <input ref="fileInput" accept="image/*" class="hidden" type="file" @change="handleFileUpload">
-    <BaseButton @click="triggerFileInput">Изменить аватар</BaseButton>
+    <BaseButton @click="triggerFileInput">{{$t('UserAvatarUpload.changeAvatar')}}</BaseButton>
   </div>
 </template>
 

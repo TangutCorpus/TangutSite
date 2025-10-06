@@ -2,12 +2,12 @@
   <div class="narrow-container grid grid-cols-4 gap-6">
     <div class="col-span-4 text-center mb-4 relative">
       <button class="absolute right-0 top-0 mt-2 mr-4 button-helper" @click="editTextPage">
-        Редактировать
+        {{$t('TextPage.edit')}}
       </button>
     </div>
 
     <div class="col-span-1 card-container self-start">
-      <h1 class="text-center text-bold">Информация</h1>
+      <h1 class="text-center text-bold">{{$t('TextPage.information')}}</h1>
       <div v-for="(fields, section) in text.metadata" :key="section" class="text-gray-700">
         {{ section }}: {{ fields }}
       </div>

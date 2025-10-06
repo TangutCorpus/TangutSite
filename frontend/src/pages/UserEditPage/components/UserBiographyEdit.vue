@@ -1,6 +1,6 @@
 <template>
   <div class="left-border-card">
-    <h2 class="header-semibold-text">О пользователе</h2>
+    <h2 class="header-semibold-text">{{$t('UserBiographyEdit.biography')}}</h2>
     <textarea v-model="biographyProxy" class="form-textarea" />
   </div>
 </template>

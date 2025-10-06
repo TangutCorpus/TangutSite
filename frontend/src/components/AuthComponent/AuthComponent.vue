@@ -3,7 +3,7 @@
     <div class="modal-container">
       <div class="modal-left">
         <h1 class="header-first-level">𗼇𗟲</h1>
-        <p class="mb-4">Зарегистрируйтесь или войдите, чтобы получить полный доступ...</p>
+        <p class="mb-4"> {{ $t('AuthComponent.authDescription') }}</p>
       </div>
 
       <div class="modal-right">
@@ -14,54 +14,54 @@
         </BaseButtonComponent>
 
         <h1 class="header-first-level">
-          {{ mode === 'register' ? 'Регистрация' : 'Вход' }}
+          {{ mode === 'register' ? $t('AuthComponent.registrationHeader') : $t('AuthComponent.signInHeader') }}
         </h1>
 
-        <ToggleButtons :mode="mode" :step="step" @change="handleToggle" />
+        <ToggleButtons :mode="mode" :step="step" @change="handleToggle"/>
 
         <form class="space-y-4" @submit.prevent="handleSubmit">
           <div v-if="mode === 'register' && step === 1">
             <div class="form-group">
-              <label class="text-label" for="email">Email</label>
+              <label class="text-label" for="email">{{ $t('AuthComponent.email') }}</label>
               <input id="email" v-model="email" class="form-input" required type="email"/>
             </div>
             <div class="form-group">
-              <label class="text-label" for="nickname">Никнейм</label>
+              <label class="text-label" for="nickname">{{ $t('AuthComponent.nickname') }}</label>
               <input id="nickname" v-model="username" class="form-input" required type="text"/>
             </div>
             <div class="form-group">
-              <label class="text-label" for="password">Пароль</label>
+              <label class="text-label" for="password">{{ $t('AuthComponent.password') }}</label>
               <input id="password" v-model="password" class="form-input" required type="password"/>
             </div>
-            <button class="button-submit" type="submit">Дальше</button>
+            <button class="button-submit" type="submit">{{ $t('AuthComponent.next') }}</button>
           </div>
 
           <div v-if="mode === 'register' && step === 2">
             <div class="form-group">
-              <label class="text-label" for="name">Ф.И.О.</label>
+              <label class="text-label" for="name">{{ $t('AuthComponent.realName') }}</label>
               <input id="name" v-model="name" class="form-input" required type="text"/>
             </div>
             <div class="mb-6">
-              <label class="text-label" for="biography">О себе</label>
-              <textarea id="biography" v-model="biography" class="form-textarea" required />
+              <label class="text-label" for="biography">{{ $t('AuthComponent.biography') }}</label>
+              <textarea id="biography" v-model="biography" class="form-textarea" required/>
             </div>
             <div class="mb-4 flexbox-center">
               <input v-model="agreeTerms" class="mr-2" required type="checkbox"/>
-              <span class="text-sm">Я согласен с условиями</span>
+              <span class="text-sm">{{ $t('AuthComponent.agreeWithTerms') }}</span>
             </div>
-            <button class="button-submit" type="submit">Завершить регистрацию</button>
+            <button class="button-submit" type="submit">{{ $t('AuthComponent.completeRegistration') }}</button>
           </div>
 
           <div v-if="mode === 'login'">
             <div class="form-group">
-              <label class="text-label" for="email">Email</label>
+              <label class="text-label" for="email">{{ $t('AuthComponent.email') }}</label>
               <input id="email" v-model="email" class="form-input" required type="email"/>
             </div>
             <div class="form-group">
-              <label class="text-label" for="password">Пароль</label>
+              <label class="text-label" for="password">{{ $t('AuthComponent.password') }}</label>
               <input id="password" v-model="password" class="form-input" required type="password"/>
             </div>
-            <button class="button-submit" type="submit">Войти</button>
+            <button class="button-submit" type="submit">{{ $t('AuthComponent.signIn') }}</button>
           </div>
         </form>
       </div>
@@ -84,7 +84,7 @@ const handleClose = () => emit('close')
 const mode = ref<'login' | 'register'>('login')
 const step = ref(1)
 
-function handleToggle({ mode: newMode, step: newStep }) {
+function handleToggle({mode: newMode, step: newStep}) {
   mode.value = newMode
   step.value = newStep
 }
