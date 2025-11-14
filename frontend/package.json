@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@rushstack/eslint-patch": "^1.15.0",
     "@vueuse/integrations": "^12.5.0",
     "axios": "^1.7.9",
     "jwt-decode": "^4.0.0",

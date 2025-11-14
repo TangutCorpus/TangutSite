@@ -1,14 +1,14 @@
 <template>
   <div class="left-border-card">
-    <h2 class="header-semibold-text">{{$t('UserBiographyEdit.biography')}}</h2>
-    <textarea v-model="biographyProxy" class="form-textarea" />
+    <h2 class="header-semibold-text">{{ $t('UserBiographyEdit.biography') }}</h2>
+    <textarea v-model="biographyProxy" class="form-textarea"/>
   </div>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import {computed} from 'vue'
 
-const props = defineProps({ biography: String })
+const props = defineProps({biography: String})
 const emit = defineEmits(['update:biography'])
 
 const biographyProxy = computed({

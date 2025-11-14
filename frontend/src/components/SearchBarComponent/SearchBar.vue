@@ -4,8 +4,8 @@
       <input
           ref="searchInput"
           v-model="userQuery"
-          class="search-input"
           :placeholder="$t('SearchBar.placeholder')"
+          class="search-input"
           type="text"
           @focus="showHistory = true"
           @keydown.enter="handleSearch"
@@ -28,14 +28,14 @@
       </BaseButtonComponent>
       <h2>{{ $t('SearchBar.searchArea') }}</h2>
       <BaseButtonComponent
-          :primary="searchMode === 'text'"
-          @click="setSearchMode('text')"
+          :primary="searchMode === 'texts'"
+          @click="setSearchMode('texts')"
       >
         {{ $t('SearchBar.textMode') }}
       </BaseButtonComponent>
       <BaseButtonComponent
-          :primary="searchMode === 'article'"
-          @click="setSearchMode('article')"
+          :primary="searchMode === 'dict'"
+          @click="setSearchMode('dict')"
       >
         {{ $t('SearchBar.dictionaryMode') }}
       </BaseButtonComponent>
@@ -54,10 +54,10 @@
 
 
 <script lang="ts" setup>
-import {computed, ref, watch} from 'vue'
 import {useRouter} from 'vue-router'
 import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComponent.vue";
 import {useI18n} from "vue-i18n";
+import {computed, ref, watch} from "vue";
 
 const props = defineProps<{ query?: string; mode?: string }>()
 const emit = defineEmits(['update:query', 'update:mode'])
@@ -65,10 +65,10 @@ const searchInput = ref<HTMLInputElement | null>(null)
 const searchButton = ref<HTMLButtonElement | null>(null)
 const searchContainer = ref<HTMLDivElement | null>(null)
 const userQuery = ref(props.query || '')
-const searchMode = ref<'text' | 'article'>('text')
+const searchMode = ref<'texts' | 'dict'>('texts')
 const showHistory = ref(false)
 const showTangutPopup = ref(false)
-const { t } = useI18n()
+const {t} = useI18n()
 const router = useRouter()
 
 const radicals = computed(() => {
@@ -89,7 +89,7 @@ const selectRadical = (radical: string) => {
   userQuery.value += radical
 }
 
-const setSearchMode = (mode: 'text' | 'article') => {
+const setSearchMode = (mode: 'texts' | 'dict') => {
   searchMode.value = mode
 }
 
@@ -98,10 +98,14 @@ watch(() => props.query, (newQuery) => {
 })
 
 const handleSearch = () => {
-  if (searchMode.value == 'text') {
-    showHistory.value = false
-    emit('update:query', userQuery.value)
-    router.push({path: '/search', query: {query: userQuery.value}})
-  }
+  showHistory.value = false
+  emit('update:query', userQuery.value)
+  router.push({
+    path: '/search',
+    query: {
+      query: userQuery.value,
+      mode: searchMode.value
+    }
+  })
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
   <div v-if="filteredTranslations.length">
-    <BlockquoteComponent :text="pureText" />
-    <hr class="my-4 border-gray-300" />
+    <BlockquoteComponent :text="pureText"/>
+    <hr class="my-4 border-gray-300"/>
     <h2 class="header-semibold-text flexbox-center cursor-pointer text-blue-700" @click="toggleAll">
-      {{$t('TranslationList.translations')}}
+      {{ $t('TranslationList.translations') }}
       <span class="ml-2">{{ showAll ? '▴' : '▿' }}</span>
     </h2>
 
@@ -18,25 +18,26 @@
     </div>
   </div>
   <div v-else class="error-card">
-    <h2 class="header-error-text">{{$t('TranslationList.error')}}</h2>
-    <p class="text-error">{{$t('TranslationList.noTranslations')}}</p>
+    <h2 class="header-error-text">{{ $t('TranslationList.error') }}</h2>
+    <p class="text-error">{{ $t('TranslationList.noTranslations') }}</p>
   </div>
 </template>
 
-<script setup>
-import { ref, computed } from 'vue'
+<script setup lang="ts">
+import {computed, ref, watch} from 'vue'
 import BlockquoteComponent from "@/components/BlockquoteComponent/BlockquoteComponent.vue";
 import {useI18n} from "vue-i18n";
+import {parseTranslationsXML} from "@/helpers/xml/xmlParser.js";
 
-const { t } = useI18n()
+const {t} = useI18n()
 
 const props = defineProps({
-  translations: Array,
-  pureText: String
+  translations: String,
+  pureText: String,
 })
 
 const filteredTranslations = computed(() =>
-  props.translations.filter(t => t.text.trim() !== "")
+    parseTranslationsXML(JSON.parse(props.translations)).filter(t => t.text.trim() !== "")
 )
 
 const showAll = ref(false)
@@ -50,5 +51,5 @@ const toggleTranslation = index => {
   shownTranslations.value[index] = !shownTranslations.value[index]
 }
 
-const getLanguageName = lang => ({ ru: t('TranslationList.russian'), en: t('TranslationList.english') }[lang] || lang)
+const getLanguageName = lang => ({ru: t('TranslationList.russian'), en: t('TranslationList.english')}[lang] || lang)
 </script>

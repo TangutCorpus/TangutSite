@@ -56,7 +56,7 @@ const ru = {
         choosePropertyToDelete: "Выберите редактируемое свойство",
         author: "Автор",
         date: "Дата создания",
-        description:"Описание",
+        description: "Описание",
         material: "Материал",
         storage: "Хранение"
     }, TextEditPage: {
@@ -110,7 +110,8 @@ const ru = {
     }, UserContact: {
         contactInfo: "Контактные данные",
         email: "Email",
-        realName: "ФИО"
+        realName: "ФИО",
+        role: "Права"
     }
 }
 

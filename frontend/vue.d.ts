@@ -1,6 +1,6 @@
 /// <reference types="vue" />
 
-import { I18n } from 'vue-i18n'
+import {I18n} from 'vue-i18n'
 
 declare module '@vue/runtime-core' {
     interface ComponentCustomProperties {
@@ -10,7 +10,7 @@ declare module '@vue/runtime-core' {
 }
 
 declare module '*.vue' {
-    import { DefineComponent } from 'vue'
+    import {DefineComponent} from 'vue'
     const component: DefineComponent<{}, {}, any>
     export default component
 }

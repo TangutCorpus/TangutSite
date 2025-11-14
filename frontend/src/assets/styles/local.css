@@ -24,7 +24,7 @@
     }
 
     .narrow-container {
-        @apply container mx-auto p-6 max-w-4xl;
+        @apply container mx-auto p-6 max-w-6xl;
     }
 
     .modal-container {

@@ -4,13 +4,13 @@
         :class="['button-toggle', isRegisterActive ? 'bg-black text-white' : 'bg-gray-200']"
         @click="$emit('change', { mode: 'register', step: 1 })"
     >
-      {{ $t('ToggleButtons.registration')}}
+      {{ $t('ToggleButtons.registration') }}
     </button>
     <button
         :class="['button-toggle', isLoginActive ? 'bg-black text-white' : 'bg-gray-200']"
         @click="$emit('change', { mode: 'login', step: 1 })"
     >
-      {{ $t('ToggleButtons.signIn')}}
+      {{ $t('ToggleButtons.signIn') }}
     </button>
   </div>
 </template>

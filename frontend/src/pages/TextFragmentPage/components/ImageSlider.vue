@@ -16,9 +16,9 @@
 </template>
 
 <script setup>
-import { onMounted, onUnmounted, ref } from 'vue'
+import {onMounted, onUnmounted, ref} from 'vue'
 
-const props = defineProps({ images: Array, isSliderOpen: Boolean })
+const props = defineProps({images: Array, isSliderOpen: Boolean})
 const currentImage = ref(0)
 const zoomed = ref(false)
 const prevImage = () => currentImage.value = (currentImage.value - 1 + props.images.length) % props.images.length

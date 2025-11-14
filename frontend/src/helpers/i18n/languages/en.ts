@@ -110,7 +110,8 @@ const en = {
     }, UserContact: {
         contactInfo: "Contact information",
         email: "Email",
-        realName: "Full name"
+        realName: "Full name",
+        role: "Role"
     }
 }
 

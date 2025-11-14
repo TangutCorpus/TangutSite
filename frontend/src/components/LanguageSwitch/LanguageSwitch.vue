@@ -1,12 +1,12 @@
 <template>
-  <select class="language-switcher" v-model="currentLocale">
+  <select v-model="currentLocale" class="language-switcher">
     <option v-for="locale in supportedLocales">
       {{ locale }}
     </option>
   </select>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 import {ref, watch} from "vue";
 import i18n from "@/helpers/i18n/i18n.js"
 

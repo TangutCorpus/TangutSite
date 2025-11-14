@@ -72,9 +72,9 @@
 <script lang="ts" setup>
 import {ref} from 'vue'
 import {useRouter} from 'vue-router'
-import api from '@/helpers/http/http'
 import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComponent.vue";
 import ToggleButtons from "@/components/ToggleButtons/ToggleButtons.vue";
+import {login, signup} from "@/helpers/http/sessions";
 
 const router = useRouter()
 const emit = defineEmits(['close'])
@@ -98,55 +98,29 @@ const agreeTerms = ref(false)
 
 async function handleSubmit() {
   if (mode.value === 'login') {
-    try {
-      const response = await api.post('/auth/login',
-          JSON.stringify({email: email.value, password: password.value})
-      )
-
-      if (response.status != 200) throw new Error('Ошибка авторизации')
-
-      const data = await response.data
-      localStorage.setItem('accessToken', data.accessToken)
-
-      const userResponse = await api.post('/users/me', {
-        headers: {Authorization: `Bearer ${data.accessToken}`}
-      })
-
-      const userData = await userResponse.data
-      await router.push(`/user/${userData.id}`)
-
-    } catch (error) {
-      console.error(error)
+    const userId = await login({
+      email: email.value,
+      password: password.value,
+    })
+    if (userId) {
+      await router.push(`/user/${userId}`)
+      handleClose()
     }
   } else if (mode.value === 'register') {
     if (step.value === 1) {
       step.value = 2
       return
     }
-
-    try {
-      const response = await api.post('/auth/signup', JSON.stringify({
-            email: email.value,
-            username: username.value,
-            password: password.value,
-            avatarUrl: '',
-            displayName: name.value,
-            biography: biography.value
-          })
-      )
-
-      if (response.status != 200) throw new Error('Ошибка регистрации')
-
-      const data = response.data
-
-      localStorage.setItem('accessToken', data.token)
-      localStorage.setItem('userId', data.userId)
-      window.dispatchEvent(new Event('storage'))
-      handleClose()
-      await router.push(`/user/${data.userId}`)
-    } catch (error) {
-      console.error(error)
-    }
+    const userId = await signup({
+      email: email.value,
+      username: username.value,
+      password: password.value,
+      avatarUrl: '',
+      displayName: name.value,
+      biography: biography.value,
+    })
+    await router.push(`/user/${userId}`)
+    handleClose()
   }
 }
 </script>

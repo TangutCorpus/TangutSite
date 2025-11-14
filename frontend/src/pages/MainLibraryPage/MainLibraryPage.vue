@@ -3,8 +3,8 @@
     <LibraryCard
         v-for="text in texts"
         :key="text.id"
-        :text="text"
         :maxPerRow="10"
+        :text="text"
         @select="goToText"
     />
   </div>
@@ -17,22 +17,14 @@
 import {onMounted, ref} from 'vue'
 import {useRouter} from 'vue-router'
 import LibraryCard from '@/pages/MainLibraryPage/components/LibraryCard.vue'
-import api from '@/helpers/http/http'
+import {getAllTexts} from "@/helpers/http/sessions.js";
 
 const router = useRouter()
 const texts = ref([])
 
-const fetchTexts = async () => {
-  try {
-    const response = await api.get('/texts')
-    if (response.status != 200) throw new Error('Text loading error')
-    texts.value = await response.data
-  } catch (error) {
-    console.error('Error:', error)
-  }
-}
-
-onMounted(fetchTexts)
+onMounted(async () => {
+  texts.value = await getAllTexts()
+})
 
 const goToText = (id) => {
   router.push(`/text/${id}`)

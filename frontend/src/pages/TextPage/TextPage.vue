@@ -1,35 +1,44 @@
 <template>
-  <div class="narrow-container grid grid-cols-4 gap-6">
-    <div class="col-span-4 text-center mb-4 relative">
-      <button class="absolute right-0 top-0 mt-2 mr-4 button-helper" @click="editTextPage">
-        {{$t('TextPage.edit')}}
-      </button>
+  <div v-if="text" class="narrow-container grid grid-cols-6 gap-6">
+    <div class="col-span-6 text-center mb-4 relative">
+      <div class="flexbox-center gap-2 mt-4">
+        <h1 class="header-md-text">{{ text.title }}</h1>
+        <BaseButton  @click="editTextPage">
+          {{ $t('TextPage.edit') }}
+        </BaseButton>
+      </div>
     </div>
 
-    <div class="col-span-1 card-container self-start">
-      <h1 class="text-center text-bold">{{$t('TextPage.information')}}</h1>
-      <div v-for="(fields, section) in text.metadata" :key="section" class="text-gray-700">
+    <div class="col-span-2 card-container self-start">
+      <h1 class="text-center text-bold">{{ $t('TextPage.information') }}</h1>
+      <div v-for="(fields, section) in JSON.parse(text.metadata)" :key="section" class="text-gray-700">
         {{ section }}: {{ fields }}
       </div>
     </div>
 
-    <div class="col-span-3">
-      <GlossedText :textPages="textPages" />
+    <div class="col-span-4">
+      <GlossedText :textPages="textPages"/>
     </div>
+  </div>
+  <div v-else>
+    <NotFoundPage />
   </div>
 </template>
 
-<script setup>
-import { onMounted, ref } from 'vue'
+<script setup lang="ts">
+import {onMounted, Ref, ref} from 'vue'
 import GlossedText from '@/pages/TextPage/components/GlossedText.vue'
-import api from '@/helpers/http/http'
-import { parseXmlComment } from '@/helpers/xml/xmlParser'
-import { useRoute, useRouter } from 'vue-router'
+import {parseXmlComment} from '@/helpers/xml/xmlParser'
+import {useRoute, useRouter} from 'vue-router'
+import {TextPage} from "@/helpers/http/interfaces";
+import {getTextById, getTextPageById} from "@/helpers/http/sessions";
+import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage.vue";
+import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 
 const router = useRouter()
 const route = useRoute()
-const text = ref({ title: '', metadata: '', pageIds: [] })
-const textPages = ref([])
+const text: Ref<Text> = ref(null)
+const textPages: Ref<TextPage[]> = ref([])
 const parsedComment = ref({})
 const currentTextId = route.params.id
 
@@ -38,18 +47,12 @@ const editTextPage = () => {
 }
 
 onMounted(async () => {
-  const { data } = await api.get(`/texts/${currentTextId}`)
-  text.value = data
-  text.value.metadata = JSON.parse(data.metadata)
-  parsedComment.value = parseXmlComment(data.comment)
+  text.value = await getTextById(currentTextId)
+  parsedComment.value = parseXmlComment(text.value.comment)
 
-  for (const pageId of data.pageIds) {
-    try {
-      const response = await api.get(`/pages/${pageId}`)
-      textPages.value.push(response.data)
-    } catch (error) {
-      console.error(`Error fetching page ${pageId}:`, error)
-    }
+  for (const pageId of text.value.pageIds) {
+    const page = await getTextPageById(pageId)
+    textPages.value.push(page)
   }
 })
 </script>

@@ -2,6 +2,6 @@
   <blockquote class="italic text-gray-700 mt-2">{{ props.text }}</blockquote>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 const props = defineProps({text: String})
 </script>

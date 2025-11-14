@@ -4,7 +4,7 @@
       <div v-for="page in textPages" :key="page.id"
            class="rounded-lg mb-6 left-border-card">
         <h2 class="text-bold">
-          <a :href="`/page/${page.id}`">{{$t('GlossedText.page')}} #{{ page.pageNumber }}</a>
+          <a :href="`/page/${page.id}`">{{ $t('GlossedText.page') }} #{{ page.pageNumber }}</a>
         </h2>
 
         <pre class="p-4 bg-white border rounded">{{ page.pureText }}</pre>
@@ -14,12 +14,12 @@
     </div>
 
     <div v-else class="error-card">
-      <h2 class="header-error-text">{{$t('GlossedText.error')}}</h2>
-      <p class="text-error">{{$t('GlossedText.noConnectedPages')}}</p>
+      <h2 class="header-error-text">{{ $t('GlossedText.error') }}</h2>
+      <p class="text-error">{{ $t('GlossedText.noConnectedPages') }}</p>
     </div>
   </div>
 </template>
 
 <script setup>
-const props = defineProps({ textPages: Array });
+const props = defineProps({textPages: Array});
 </script>

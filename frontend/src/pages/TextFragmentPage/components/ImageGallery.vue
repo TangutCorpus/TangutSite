@@ -12,9 +12,9 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import {ref} from 'vue'
 
-const props = defineProps({ images: Array })
+const props = defineProps({images: Array})
 const currentImage = ref(0)
 const prevImage = () => currentImage.value = (currentImage.value - 1 + props.images.length) % props.images.length
 const nextImage = () => currentImage.value = (currentImage.value + 1) % props.images.length
