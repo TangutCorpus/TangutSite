@@ -2,8 +2,7 @@ package com.example.model
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.UUID
-
+import java.util.*
 
 /**
  * Represents an User.
@@ -37,5 +36,6 @@ fun User.updateFromExposedUser(exposedUser: ExposedUser): User {
         avatarUrl = exposedUser.avatarUrl,
         displayName = exposedUser.displayName,
         biography = exposedUser.biography,
+        role = exposedUser.role,
     )
 }

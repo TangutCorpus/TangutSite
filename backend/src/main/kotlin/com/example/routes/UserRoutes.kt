@@ -4,8 +4,8 @@ import com.example.model.ExposedUser
 import com.example.model.updateFromExposedUser
 import com.example.service.UserService
 import com.example.utils.toUUIDOrNull
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
+import io.ktor.http.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
@@ -19,7 +19,7 @@ fun Route.userRoutes(userService: UserService) {
     put("/users/{id}") {
         val id = call.parameters["id"]?.toUUIDOrNull()
         val receivedUser = call.receive<ExposedUser>()
-        var user = userService.getUserById(id)?.updateFromExposedUser(receivedUser)
+        val user = userService.getUserById(id)?.updateFromExposedUser(receivedUser)
         if (userService.updateUser(user)) {
             call.respondText("User updated successfully", status = HttpStatusCode.OK)
         } else {

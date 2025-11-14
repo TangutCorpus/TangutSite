@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
  * @property password The password associated with the account.
  */
 @Serializable
-data class UserLoginRequest(
+data class LoginRequest(
     val email: String,
-    val password: String
+    val password: String,
 )

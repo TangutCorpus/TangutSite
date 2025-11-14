@@ -9,5 +9,5 @@ data class SignupRequest(
     val password: String,
     val avatarUrl: String = "",
     val displayName: String = "",
-    val biography: String = ""
+    val biography: String = "",
 )

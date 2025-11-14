@@ -9,7 +9,5 @@ package com.example.model
  */
 
 enum class UserRoles {
-    EDITOR,
-    MODERATOR,
-    ADMIN,
+    EDITOR, MODERATOR, ADMIN,
 }

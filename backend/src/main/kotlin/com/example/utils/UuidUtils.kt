@@ -1,6 +1,6 @@
 package com.example.utils
 
-import java.util.UUID
+import java.util.*
 
 fun String.toUUIDOrNull(): UUID? {
     return try {
