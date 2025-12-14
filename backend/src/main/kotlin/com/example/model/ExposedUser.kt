@@ -1,7 +1,7 @@
 package com.example.model
 
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import java.util.*
 
 /**
  * Represents a minimal response containing user details.
@@ -21,6 +21,7 @@ data class ExposedUser(
     val avatarUrl: String = "",
     val displayName: String = "",
     val biography: String = "",
+    val role: UserRoles = UserRoles.EDITOR,
 )
 
 /**
@@ -34,7 +35,7 @@ fun ExposedUser.toUser(password: String) = User(
     email = this.email,
     password = password,
     avatarUrl = this.avatarUrl,
-    displayName = if (this.displayName.isNotBlank()) this.displayName else this.username,
+    displayName = this.displayName.ifBlank { this.username },
     biography = this.biography,
-    role = UserRoles.EDITOR,
+    role = this.role,
 )

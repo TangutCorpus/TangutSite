@@ -1,23 +1,8 @@
 package com.example
 
-import com.example.config.configureExceptionHandling
-import com.example.config.configureHTTP
-import com.example.config.configureMonitoring
-import com.example.config.configureRouting
-import com.example.config.configureSecurity
-import com.example.config.configureSerialization
-import com.example.config.initDatabase
-import com.example.repository.ImageRepositoryImpl
-import com.example.repository.RefreshTokenRepositoryImpl
-import com.example.repository.TextPageRepositoryImpl
-import com.example.repository.TextRepositoryImpl
-import com.example.repository.UserRepositoryImpl
-import com.example.service.ImageServiceImpl
-import com.example.service.SearchServiceImpl
-import com.example.service.SecurityServiceImpl
-import com.example.service.TextPageServiceImpl
-import com.example.service.TextServiceImpl
-import com.example.service.UserServiceImpl
+import com.example.config.*
+import com.example.repository.*
+import com.example.service.*
 import io.ktor.server.application.*
 import io.ktor.server.netty.*
 
@@ -25,30 +10,39 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 
 fun Application.module() {
     val config = environment.config
+
+    val isProduction = config.property("ktor.deployment.mode").getString() == "production"
+    val deploymentHosts = config.property("ktor.deployment.hosts").getString()
+    val dbUrl = config.property("ktor.db.url").getString()
+    val dbUser = config.property("ktor.db.user").getString()
+    val dbPassword = config.property("ktor.db.password").getString()
+    val dbDriver = config.property("ktor.db.driver").getString()
     val maxFileSize = config.property("ktor.http.request.maxFileSize").getString().toInt()
-    var database = initDatabase(config)
+    val maxAge = config.property("ktor.security.maxAge").getString().toLong()
 
-    var userRepository = UserRepositoryImpl(database)
-    var userService = UserServiceImpl(userRepository)
+    val database = initDatabase(dbUrl, dbUser, dbPassword, dbDriver)
 
-    var textRepository = TextRepositoryImpl(database)
-    var textService = TextServiceImpl(textRepository)
+    val userRepository = UserRepository(database)
+    val userService = UserService(userRepository)
 
-    var textPageRepository = TextPageRepositoryImpl(database)
-    var textPageService = TextPageServiceImpl(textPageRepository)
+    val sessionRepository = SessionRepository(database)
+    val securityService = SecurityService(userRepository, sessionRepository)
 
-    var searchService = SearchServiceImpl(textRepository)
+    val textRepository = TextRepository(database)
+    val textService = TextService(textRepository)
 
-    var refreshTokenRepository = RefreshTokenRepositoryImpl(database)
-    var securityService = SecurityServiceImpl(userRepository, refreshTokenRepository, config)
+    val textPageRepository = TextPageRepository(database)
+    val textPageService = TextPageService(textPageRepository)
 
-    var imageRepository = ImageRepositoryImpl()
-    var imageService = ImageServiceImpl(imageRepository)
+    val searchService = SearchService(textRepository, textPageRepository)
 
-    configureRouting(userService, textService, searchService, textPageService, securityService, imageService)
-    configureExceptionHandling()
+    val imageRepository = ImageRepository()
+    val imageService = ImageService(imageRepository)
+
+    configureSecurity(isProduction, securityService, maxAge)
     configureSerialization(maxFileSize)
+    configureExceptionHandling()
     configureMonitoring()
-    configureHTTP()
-    configureSecurity(securityService)
+    configureHTTP(isProduction, deploymentHosts)
+    configureRouting(userService, textService, searchService, textPageService, securityService, imageService)
 }

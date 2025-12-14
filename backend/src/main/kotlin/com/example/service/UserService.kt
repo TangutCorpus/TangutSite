@@ -1,14 +1,41 @@
 package com.example.service
 
 import com.example.model.User
-import java.util.UUID
+import com.example.repository.UserRepository
+import java.util.*
 
-interface UserService {
-    suspend fun getAllUsers(): List<User>
-    suspend fun getUserById(id: UUID?): User?
-    suspend fun getUserByUsername(username: String?): User?
-    suspend fun getUserByEmail(email: String?): User?
-    suspend fun createUser(user: User?): UUID
-    suspend fun updateUser(user: User?): Boolean
-    suspend fun deleteUserById(id: UUID?): Boolean
+class UserService(private val userRepository: UserRepository) {
+    fun getAllUsers(): List<User> = userRepository.getAllUsers()
+
+    fun getUserById(id: UUID?): User? {
+        require(id != null) { "ID cannot be empty" }
+        return userRepository.getUserById(id)
+    }
+
+    fun getUserByUsername(nickname: String?): User? {
+        require(!nickname.isNullOrBlank()) { "ID cannot be empty" }
+        return userRepository.getUserByUsername(nickname)
+    }
+
+    fun getUserByEmail(email: String?): User? {
+        require(!email.isNullOrBlank()) { "Email cannot be empty" }
+        return userRepository.getUserByEmail(email)
+    }
+
+    fun createUser(user: User?): UUID {
+        requireNotNull(user) { "User format is incorrect" }
+        return userRepository.createUser(user)
+    }
+
+    fun updateUser(user: User?): Boolean {
+        requireNotNull(user) { "User format is incorrect" }
+        require(user.username.length <= 255) { "User nickname cannot be longer than 255." }
+        require(user.displayName.length <= 255) { "User name cannot be longer than 255." }
+        return userRepository.updateUser(user) != 0
+    }
+
+    fun deleteUserById(id: UUID?): Boolean {
+        require(id != null) { "ID cannot be empty" }
+        return userRepository.deleteUserById(id) != 0
+    }
 }

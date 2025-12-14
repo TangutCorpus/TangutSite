@@ -7,11 +7,12 @@ import kotlinx.serialization.builtins.ListSerializer
 import org.jetbrains.exposed.sql.ReferenceOption
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.json.jsonb
-import java.util.UUID
+import java.util.*
 
 object TextPages : Table() {
     val id = uuid("id")
     val textId = uuid("textId").references(Texts.id, onDelete = ReferenceOption.CASCADE)
+
     @OptIn(ExperimentalSerializationApi::class)
     val imagesIDs = jsonb<List<UUID>>("image_ids", jsonConfig, ListSerializer(UUIDSerializer))
     val pageNumber = integer("pageNumber")

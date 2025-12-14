@@ -2,7 +2,7 @@ package com.example.model
 
 import kotlinx.serialization.Contextual
 import kotlinx.serialization.Serializable
-import java.util.UUID
+import java.util.*
 
 @Serializable
 data class TextRequest(

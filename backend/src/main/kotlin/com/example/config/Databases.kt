@@ -1,20 +1,9 @@
 package com.example.config
 
-import io.ktor.server.config.ApplicationConfig
-import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.Database
 
-fun initDatabase(config: ApplicationConfig): Database {
-    val dbUrl = config.property("ktor.db.url").getString()
-    val dbUser = config.property("ktor.db.user").getString()
-    val dbPassword = config.property("ktor.db.password").getString()
-    val driver = config.property("ktor.db.driver").getString()
-
-    var database = Database.connect(
-        url = dbUrl,
-        driver = driver,
-        user = dbUser,
-        password = dbPassword
-    )
+fun initDatabase(url: String, user: String, password: String, driver: String): Database {
+    val database = Database.connect(url, driver, user, password)
 
     return database
 }

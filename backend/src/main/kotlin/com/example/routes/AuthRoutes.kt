@@ -1,39 +1,26 @@
 package com.example.routes
 
 import at.favre.lib.crypto.bcrypt.BCrypt
-import com.example.model.AuthResponse
-import com.example.model.ExposedUser
-import com.example.model.RefreshTokenRequest
-import com.example.model.SignupRequest
-import com.example.model.UserLoginRequest
-import com.example.model.toUser
+import com.example.model.*
 import com.example.service.SecurityService
 import com.example.service.UserService
-import com.example.utils.toUUIDOrNull
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.auth.UserIdPrincipal
-import io.ktor.server.auth.principal
-import io.ktor.server.request.receiveText
-import io.ktor.server.response.respond
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
+import com.example.utils.json
+import io.ktor.http.*
+import io.ktor.server.auth.*
+import io.ktor.server.request.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
+import io.ktor.server.sessions.*
 import kotlinx.serialization.json.Json
 
 fun Route.authRoutes(securityService: SecurityService, userService: UserService) {
     post("/auth/login") {
         val text = call.receiveText()
-        val loginRequest = Json.decodeFromString<UserLoginRequest>(text)
-        val user = userService.getUserByEmail(loginRequest.email)
-
-        if (user != null && BCrypt.verifyer()
-                .verify(loginRequest.password.toCharArray(), user.password.toCharArray()).verified
-        ) {
-            val accessToken = securityService.createAccessToken(user.email, user.role)
-            val refreshToken = securityService.createRefreshToken(user.email, user.role)
-            securityService.saveRefreshToken(user.id, refreshToken)
-
-            call.respond(AuthResponse(accessToken, refreshToken))
+        val loginRequest = json.decodeFromString<LoginRequest>(text)
+        val session = securityService.authenticate(loginRequest)
+        if (session != null) {
+            call.sessions.set(session)
+            call.respond(HttpStatusCode.OK, session.userId)
         } else {
             call.respond(HttpStatusCode.Unauthorized, "Invalid credentials")
         }
@@ -41,45 +28,45 @@ fun Route.authRoutes(securityService: SecurityService, userService: UserService)
 
     post("/auth/signup") {
         val text = call.receiveText()
-        val request = Json.decodeFromString<SignupRequest>(text)
+        val request = json.decodeFromString<SignupRequest>(text)
         val hashedPassword = BCrypt.withDefaults().hashToString(12, request.password.toCharArray())
         val user = ExposedUser(
             username = request.username,
             email = request.email,
             avatarUrl = request.avatarUrl,
             displayName = request.displayName.ifBlank { request.username },
-            biography = request.biography
+            biography = request.biography,
+            role = UserRoles.EDITOR,
         ).toUser(hashedPassword)
 
         userService.createUser(user)
-        val token = securityService.createAccessToken(user.email, user.role)
-
-        call.respond(mapOf("token" to token, "userId" to user.id.toString()))
+        val session = securityService.createSession(user)
+        call.sessions.set(session)
+        call.respond(HttpStatusCode.Created, session.userId)
     }
 
-    post("/auth/refresh") {
-        val text = call.receiveText()
-        val request = Json.decodeFromString<RefreshTokenRequest>(text)
-        val newToken = securityService.refreshToken(request)
-
-        if (newToken != null) {
-            call.respond(HttpStatusCode.OK, newToken)
-        } else {
-            call.respond(HttpStatusCode.Unauthorized, "Invalid or expired refresh token")
-        }
+    post("/auth/logout") {
+        val session = call.sessions.get<UserSession>() ?: return@post call.respond(
+            HttpStatusCode.NoContent, "No credentials found"
+        )
+        securityService.logout(session)
+        call.sessions.clear<UserSession>()
+        call.respond(HttpStatusCode.OK, "Logged out successfully")
     }
 
-    get("/users/me") {
-        val userId = call.principal<UserIdPrincipal>()?.name
-        if (userId != null) {
-            val user = userService.getUserById(userId.toUUIDOrNull())
-            if (user != null) {
-                call.respond(user)
+    authenticate("user_session") {
+        get("/users/me") {
+            val session = call.sessions.get<UserSession>()
+            if (session != null) {
+                val user = userService.getUserById(session.userId)
+                if (user != null) {
+                    call.respond(user)
+                } else {
+                    call.respond(HttpStatusCode.NotFound, "User not found")
+                }
             } else {
-                call.respond(HttpStatusCode.NotFound, "User not found")
+                call.respond(HttpStatusCode.Unauthorized, "User not authenticated")
             }
-        } else {
-            call.respond(HttpStatusCode.Unauthorized, "User not authenticated")
         }
     }
 }

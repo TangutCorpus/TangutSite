@@ -1,18 +1,18 @@
 <template>
   <div>
-    <h2 class="text-lg font-semibold mb-2">Изображения</h2>
-    <BaseButton class="mt-2 w-full" @click="triggerFileInput">Выбрать изображения</BaseButton>
+    <h2 class="header-semibold-text">{{ $t('ImageUpload.images') }}</h2>
+    <BaseButton class="mt-2 w-full" @click="triggerFileInput">{{ $t('ImageUpload.pickImage') }}</BaseButton>
     <input ref="fileInput" accept="image/*" class="hidden" multiple type="file" @change="handleFileUpload">
     <div ref="imageContainer" class="grid grid-cols-3 gap-2 mt-4">
       <div
-        v-for="(img, index) in imagesProxy"
-        :key="img"
-        :data-index="index"
-        class="relative cursor-move"
-        draggable="true"
-        @dragstart="handleDragStart(index)"
-        @drop="handleDrop(index)"
-        @dragover.prevent
+          v-for="(img, index) in imagesProxy"
+          :key="img"
+          :data-index="index"
+          class="relative cursor-move"
+          draggable="true"
+          @dragstart="handleDragStart(index)"
+          @drop="handleDrop(index)"
+          @dragover.prevent
       >
         <img :src="img" class="w-full h-auto rounded shadow">
         <button class="absolute top-0 right-0 bg-red-500 text-white p-1 rounded" @click="removeImage(index)">✖</button>
@@ -22,10 +22,10 @@
 </template>
 
 <script setup>
-import { computed, defineEmits, defineProps, nextTick, ref } from 'vue'
+import {computed, nextTick, ref} from 'vue'
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 
-const props = defineProps({ images: Array })
+const props = defineProps({images: Array})
 const emit = defineEmits(['update:images'])
 
 const imagesProxy = computed({

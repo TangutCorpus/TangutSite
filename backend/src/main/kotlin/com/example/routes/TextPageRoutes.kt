@@ -4,15 +4,11 @@ import com.example.model.TextPage
 import com.example.model.TextPageRequest
 import com.example.service.TextPageService
 import com.example.utils.toUUIDOrNull
-import io.ktor.http.HttpStatusCode
-import io.ktor.server.request.receive
+import io.ktor.http.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.Route
-import io.ktor.server.routing.delete
-import io.ktor.server.routing.get
-import io.ktor.server.routing.post
-import io.ktor.server.routing.put
-import java.util.UUID
+import io.ktor.server.routing.*
+import java.util.*
 
 fun Route.textPageRoutes(textPageService: TextPageService) {
     post("/pages") {

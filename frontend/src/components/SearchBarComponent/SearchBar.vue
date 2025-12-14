@@ -1,66 +1,49 @@
 <template>
-  <div ref="searchContainer" class="relative w-full flex flex-col items-center">
+  <div ref="searchContainer" class="search-container">
     <div class="flex w-1/2 mb-5 mx-auto mt-4">
       <input
-        ref="searchInput"
-        v-model="userQuery"
-        class="flex-1 px-4 py-2 border rounded-l focus:outline-none focus:ring-2 focus:ring-blue-500"
-        placeholder="Введите запрос..."
-        type="text"
-        @focus="showHistory = true"
-        @keydown.enter="handleSearch"
+          ref="searchInput"
+          v-model="userQuery"
+          :placeholder="$t('SearchBar.placeholder')"
+          class="search-input"
+          type="text"
+          @focus="showHistory = true"
+          @keydown.enter="handleSearch"
       />
       <button
-        ref="searchButton"
-        class="bg-black text-white px-4 py-2 rounded-r hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        @click="handleSearch"
+          ref="searchButton"
+          class="button-search"
+          @click="handleSearch"
       >
-        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round"
-                stroke-width="2" />
+                stroke-width="2"/>
         </svg>
       </button>
     </div>
 
-    <div class="flex items-center gap-4 relative">
-      <button
-        class="px-4 py-2 border rounded hover:bg-gray-100 focus:outline-none"
-        @click="toggleTangutPopup"
+    <div class="flexbox-center gap-4 relative">
+      <BaseButtonComponent @click="toggleTangutPopup">
+        {{ t('SearchBar.chooseRadicals') }}
+      </BaseButtonComponent>
+      <h2>{{ $t('SearchBar.searchArea') }}</h2>
+      <BaseButtonComponent
+          :primary="searchMode === 'texts'"
+          @click="setSearchMode('texts')"
       >
-        {{ tangutIcon }}
-      </button>
-      <h2>Область поиска</h2>
-      <button
-        :class="{ 'bg-blue-500 text-white': searchMode === 'text', 'bg-gray-200': searchMode !== 'text' }"
-        class="px-4 py-2 border rounded focus:outline-none"
-        @click="setSearchMode('text')"
+        {{ $t('SearchBar.textMode') }}
+      </BaseButtonComponent>
+      <BaseButtonComponent
+          :primary="searchMode === 'dict'"
+          @click="setSearchMode('dict')"
       >
-        Тексты
-      </button>
-      <button
-        :class="{ 'bg-blue-500 text-white': searchMode === 'article', 'bg-gray-200': searchMode !== 'article' }"
-        class="px-4 py-2 border rounded focus:outline-none"
-        @click="setSearchMode('article')"
-      >
-        Словарь
-      </button>
-      <div
-        v-if="showTangutPopup"
-        class="absolute left-0 top-full mt-1 p-4 bg-white border rounded shadow-lg z-20"
-      >
-        <button
-          class="absolute top-1 right-1 text-sm text-gray-500 hover:text-gray-700 focus:outline-none"
-          @click="toggleTangutPopup"
-        >
-          X
-        </button>
+        {{ $t('SearchBar.dictionaryMode') }}
+      </BaseButtonComponent>
+      <div v-if="showTangutPopup" class="popup-container">
+        <button class="button-popup-close" @click="toggleTangutPopup">X</button>
         <div class="grid grid-cols-8 gap-2 max-h-64 overflow-y-auto">
-          <div
-            v-for="(radical, index) in radicals"
-            :key="index"
-            class="cursor-pointer text-xl hover:bg-gray-200 p-1 text-center"
-            @click="selectRadical(radical)"
-          >
+          <div v-for="(radical, index) in radicals" :key="index" class="radical-item"
+               @click="selectRadical(radical)">
             {{ radical }}
           </div>
         </div>
@@ -71,19 +54,21 @@
 
 
 <script lang="ts" setup>
-import { computed, defineProps, ref, watch } from 'vue'
-import { useRouter } from 'vue-router'
+import {useRouter} from 'vue-router'
+import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComponent.vue";
+import {useI18n} from "vue-i18n";
+import {computed, ref, watch} from "vue";
 
-const props = defineProps<{ query: string; mode: string }>()
+const props = defineProps<{ query?: string; mode?: string }>()
 const emit = defineEmits(['update:query', 'update:mode'])
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchButton = ref<HTMLButtonElement | null>(null)
 const searchContainer = ref<HTMLDivElement | null>(null)
 const userQuery = ref(props.query || '')
-const searchMode = ref<'text' | 'article'>('text')
+const searchMode = ref<'texts' | 'dict'>('texts')
 const showHistory = ref(false)
 const showTangutPopup = ref(false)
-const tangutIcon = 'Выборать компоненты'
+const {t} = useI18n()
 const router = useRouter()
 
 const radicals = computed(() => {
@@ -104,7 +89,7 @@ const selectRadical = (radical: string) => {
   userQuery.value += radical
 }
 
-const setSearchMode = (mode: 'text' | 'article') => {
+const setSearchMode = (mode: 'texts' | 'dict') => {
   searchMode.value = mode
 }
 
@@ -113,10 +98,14 @@ watch(() => props.query, (newQuery) => {
 })
 
 const handleSearch = () => {
-  if (searchMode.value == 'text') {
-    showHistory.value = false
-    emit('update:query', userQuery.value)
-    router.push({ path: '/search', query: { query: userQuery.value } })
-  }
+  showHistory.value = false
+  emit('update:query', userQuery.value)
+  router.push({
+    path: '/search',
+    query: {
+      query: userQuery.value,
+      mode: searchMode.value
+    }
+  })
 }
 </script>

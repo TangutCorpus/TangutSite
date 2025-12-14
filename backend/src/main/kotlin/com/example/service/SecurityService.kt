@@ -1,22 +1,43 @@
 package com.example.service
 
-import com.auth0.jwt.JWTVerifier
-import com.example.model.AuthResponse
-import com.example.model.RefreshTokenRequest
-import com.example.model.RefreshTokenResponse
-import com.example.model.UserLoginRequest
-import com.example.model.UserRoles
-import io.ktor.server.auth.jwt.JWTCredential
-import io.ktor.server.auth.jwt.JWTPrincipal
-import java.util.UUID
+import at.favre.lib.crypto.bcrypt.BCrypt
+import com.example.model.LoginRequest
+import com.example.model.User
+import com.example.model.UserSession
+import com.example.repository.SessionRepository
+import com.example.repository.UserRepository
+import java.time.Instant
+import java.util.*
 
-interface SecurityService {
-    suspend fun getValidator(credential: JWTCredential): JWTPrincipal?
-    fun createAccessToken(userEmail: String, role: UserRoles): String
-    fun createRefreshToken(userEmail: String, role: UserRoles): String
-    fun getDefaultJWTVerifier(): JWTVerifier
-    suspend fun authenticate(loginRequest: UserLoginRequest): AuthResponse?
-    suspend fun refreshToken(refreshTokenRequest: RefreshTokenRequest): RefreshTokenResponse?
-    fun saveRefreshToken(id: UUID, token: String)
-    val realm: String
+class SecurityService(private val userRepository: UserRepository, private val sessionRepository: SessionRepository) {
+    fun getValidator(session: UserSession, maxAge: Long): UserSession? {
+        val currentSession = sessionRepository.getSessionById(session.sessionId)
+        val now = Instant.now().toEpochMilli()
+        return if (currentSession == null || currentSession.date + (maxAge * 1000) < now) {
+            null
+        } else {
+            currentSession
+        }
+    }
+
+    fun createSession(user: User): UserSession {
+        val session = UserSession(UUID.randomUUID(), user.id, user.role)
+        sessionRepository.addSession(session)
+        return session
+    }
+
+    fun authenticate(loginRequest: LoginRequest): UserSession? {
+        val user = userRepository.getUserByEmail(loginRequest.email) ?: return null
+
+        val verified = BCrypt.verifyer().verify(loginRequest.password.toCharArray(), user.password)
+        if (!verified.verified) return null
+
+        val session = UserSession(UUID.randomUUID(), user.id, user.role)
+        sessionRepository.addSession(session)
+        return session
+    }
+
+    fun logout(session: UserSession) {
+        sessionRepository.deleteSessionById(session.sessionId)
+    }
 }
