@@ -10,7 +10,7 @@
   "dependencies": {
     "@rushstack/eslint-patch": "^1.15.0",
     "@vueuse/integrations": "^12.5.0",
-    "axios": "^1.7.9",
+    "axios": "^1.13.5",
     "jwt-decode": "^4.0.0",
     "sortablejs": "^1.15.6",
     "vue": "^3.5.22",
