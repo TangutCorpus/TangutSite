@@ -50,12 +50,23 @@ const props = defineProps({
 const emit = defineEmits(['update:metadata'])
 
 const availableProperties = computed(() => ({
-  'author': t('TextMetadataEdit.author'),
-  'date': t('TextMetadataEdit.date'),
-  'description': t('TextMetadataEdit.description'),
-  'material': t('TextMetadataEdit.material'),
-  'storage': t('TextMetadataEdit.storage')
+  author: t('TextMetadataEdit.author'),
+  date: t('TextMetadataEdit.date'),
+  description: t('TextMetadataEdit.description'),
+  material: t('TextMetadataEdit.material'),
+  storage: t('TextMetadataEdit.storage'),
+  catalog: t('TextMetadataEdit.catalog'),
+  repository: t('TextMetadataEdit.repository'),
+  form: t('TextMetadataEdit.form'),
+  height: t('TextMetadataEdit.height'),
+  width: t('TextMetadataEdit.width'),
+  frameType: t('TextMetadataEdit.frameType'),
+  frameHeight: t('TextMetadataEdit.frameHeight'),
+  pages: t('TextMetadataEdit.pages'),
+  linesPerPage: t('TextMetadataEdit.linesPerPage'),
+  charactersPerLine: t('TextMetadataEdit.charactersPerLine')
 }))
+
 
 const propertiesChosen = ref([])
 const selectedProperty = ref('')

@@ -1,4 +1,95 @@
 const ru = {
+    common: {
+        loading: "Загрузка...",
+        save: "Сохранить",
+        saving: "Сохранение...",
+        cancel: "Отмена",
+        hide: "Скрыть",
+        delete: "Удалить"
+    },
+    DictionaryArticlePage: {
+        title: "Словарная статья",
+        edit: "Редактировать",
+        loading: "Загрузка статьи..."
+    },
+    CharacterCard: {
+        key: "Ключ",
+        strokes: "черт",
+        components: "Компоненты",
+        seaOfWriting: "Анализ «Моря письмен»",
+        seaOfWritingHint: "Анализ структуры иероглифа согласно древнему словарю «Море письмен» (Вэньхай).",
+        roles: {
+            semantic: "Семантик",
+            phonetic: "Фонетик",
+            chinesePhonetic: "Кит. фонетик",
+            other: "Другое"
+        }
+    },
+    RawDataCard: {
+        tabs: {
+            main: "Основное",
+            correspondences: "Соответствия"
+        },
+        strokeCountTotal: "Общее кол-во черт",
+        initials: "Инициали",
+        tone: "Тон",
+        rhymes: "Рифмы",
+        rhymeLabel: "Рифма {number}",
+        fanqie: "Фаньце",
+        chineseCharacters: "Кит. эквиваленты",
+        tibetanSyllables: "Тибетские слоги",
+        sanskritSyllables: "Санскритские слоги"
+    },
+    ReconstructionsCard: {
+        title: "Реконструкции",
+        deprecated: "устар.",
+        hideDeprecated: "Скрыть устаревшие",
+        showDeprecated: "Показать устаревшие ({count})"
+    },
+    DictionaryReferencesCard: {
+        title: "Ссылки на словари",
+        remove: "Удалить ссылку",
+        add: "Добавить ссылку",
+        selectDict: "Выберите словарь",
+        pageOrNumber: "Стр. / Номер",
+        save: "Добавить"
+    },
+    CharacterImagesCard: {
+        title: "Формы иероглифа в текстах"
+    },
+    CompoundWordsCard: {
+        title: "Составные слова"
+    },
+    RelatedWordsCard: {
+        title: "Родственные слова (Гьялронгские)"
+    },
+    CorpusExamplesCard: {
+        title: "Примеры из корпуса"
+    },
+    DictionaryEdit: {
+        createTitle: "Создание словарной статьи",
+        editTitle: "Редактирование статьи",
+        sections: {
+            basic: "Основная информация",
+            components: "Разбиение на элементы",
+            phonology: "Фонетика и структура",
+            compoundWords: "Составные слова"
+        },
+        character: "Иероглиф",
+        unicodeCode: "Код Юникода",
+        unicodeKey: "Ключ Юникода",
+        strokeCountUnicode: "Черт (Unicode)",
+        strokeCountTotal: "Черт (Общее)",
+        tone: "Тон",
+        seaOfWriting: "Море письмен (4 знака)",
+        linkedArticleId: "ID связанной статьи",
+        addComponent: "Добавить элемент",
+        compoundText: "Слово",
+        compoundMeaning: "Значение",
+        enterMeaning: "Введите перевод слова",
+        addCompoundWord: "Добавить составное слово",
+        note: "Примечание"
+    },
     AuthComponent: {
         email: 'Email',
         nickname: 'Никнейм',
@@ -58,7 +149,17 @@ const ru = {
         date: "Дата создания",
         description: "Описание",
         material: "Материал",
-        storage: "Хранение"
+        storage: "Хранение",
+        catalog: "Каталогизация",
+        repository: "Место хранения",
+        form: "Форма",
+        height: "Высота",
+        width: "Ширина",
+        frameType: "Тип рамки",
+        frameHeight: "Высота рамки",
+        pages: "Количество страниц",
+        linesPerPage: "Строк на странице",
+        charactersPerLine: "Иероглифов в строке"
     }, TextEditPage: {
         addFragment: "Добавить фрагмент",
         textName: "Название текста",

@@ -63,3 +63,147 @@ export enum UserRoles {
     MODERATOR,
     ADMIN,
 }
+
+export type ComponentRole =
+    | 'semantic'
+    | 'phonetic'
+    | 'chinesePhonetic'
+    | 'other'
+
+export interface CharacterComponent {
+    id: string
+    character: string
+    role: ComponentRole
+    articleId: string
+}
+
+export interface Reconstruction {
+    id: string
+    author: string
+    year: number
+    value: string
+    deprecated: boolean
+}
+
+export interface DictionaryInfo {
+    id: string
+    name: string
+    year: number
+}
+
+export interface DictionaryReference {
+    dictionaryId: string
+    dictionaryName: string
+    pageOrNumber: string
+}
+
+export interface TangutDictionarySource {
+    sourceId: string
+    sourceName: string
+}
+
+export interface TangutInitial {
+    character: string
+    romanization: string
+    sources: TangutDictionarySource[]
+}
+
+export interface TangutRhyme {
+    number: string
+    chapter?: string
+    sources: TangutDictionarySource[]
+}
+
+export interface Fanqie {
+    characters: string[]
+    romanizedResult: string
+    sources: TangutDictionarySource[]
+}
+
+export interface ChineseCharacterEntry {
+    character: string
+    textId?: string
+    textTitle?: string
+}
+
+export interface TibetanSyllable {
+    syllable: string
+    textId?: string
+}
+
+export interface SanskritSyllable {
+    syllable: string
+    language: string
+}
+
+export interface CharacterImageEntry {
+    imageId: string
+    url: string
+    thumbnail?: string
+}
+
+export interface CharacterImageGroup {
+    textId: string
+    textName: string
+    previewImages: CharacterImageEntry[]
+    collapsedImages: CharacterImageEntry[]
+}
+
+export interface CompoundWord {
+    id: string
+    characters: string
+    translation: string
+    searchCharPosition: number
+    secondCharStrokes?: number
+}
+
+export interface RelatedWord {
+    language: string
+    form: string
+    meaning?: string
+}
+
+export interface CorpusExample {
+    textId: string
+    textTitle: string
+    pageNumber?: number
+    segments: Array<{ text: string; highlighted: boolean }>
+}
+
+export interface DictionaryArticle {
+    id: string
+    character: string
+    unicodeCode: string
+    unicodeKey: string
+    strokeCountUnicode: number
+    strokeCountTotal: number
+
+    components: CharacterComponent[]
+    seaOfWritingAnalysis: string
+
+    reconstructions: Reconstruction[]
+    dictionaryReferences: DictionaryReference[]
+
+    initials: TangutInitial[]
+    tone: string
+    rhymes: TangutRhyme[]
+    fanqie: Fanqie[]
+
+    chineseCharacters: ChineseCharacterEntry[]
+    tibetanSyllables: TibetanSyllable[]
+    sanskritSyllables: SanskritSyllable[]
+
+    imageGroups: CharacterImageGroup[]
+
+    compoundWords: CompoundWord[]
+    relatedWords: RelatedWord[]
+    corpusExamples: CorpusExample[]
+}
+
+export interface DictionarySearchResult {
+    id: string
+    character: string
+    translation: string
+    strokeCount: number
+    searchCharPosition: number
+}

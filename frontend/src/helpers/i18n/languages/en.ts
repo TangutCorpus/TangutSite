@@ -1,4 +1,95 @@
 const en = {
+    common: {
+        loading: "Loading...",
+        save: "Save",
+        saving: "Saving...",
+        cancel: "Cancel",
+        hide: "Hide",
+        delete: "Delete"
+    },
+    DictionaryArticlePage: {
+        title: "Dictionary Entry",
+        edit: "Edit",
+        loading: "Loading article..."
+    },
+    CharacterCard: {
+        key: "Key",
+        strokes: "strokes",
+        components: "Components",
+        seaOfWriting: "Sea of Writing Analysis",
+        seaOfWritingHint: "Structural analysis of the character according to the ancient 'Sea of Writing' (Wenhai) dictionary.",
+        roles: {
+            semantic: "Semantic",
+            phonetic: "Phonetic",
+            chinesePhonetic: "Ch. Phonetic",
+            other: "Other"
+        }
+    },
+    RawDataCard: {
+        tabs: {
+            main: "Main",
+            correspondences: "Correspondences"
+        },
+        strokeCountTotal: "Total stroke count",
+        initials: "Initials",
+        tone: "Tone",
+        rhymes: "Rhymes",
+        rhymeLabel: "Rhyme {number}",
+        fanqie: "Fanqie",
+        chineseCharacters: "Chinese Equiv.",
+        tibetanSyllables: "Tibetan Syllables",
+        sanskritSyllables: "Sanskrit Syllables"
+    },
+    ReconstructionsCard: {
+        title: "Reconstructions",
+        deprecated: "depr.",
+        hideDeprecated: "Hide deprecated",
+        showDeprecated: "Show deprecated ({count})"
+    },
+    DictionaryReferencesCard: {
+        title: "Dictionary References",
+        remove: "Remove reference",
+        add: "Add reference",
+        selectDict: "Select dictionary",
+        pageOrNumber: "Page / Number",
+        save: "Add"
+    },
+    CharacterImagesCard: {
+        title: "Character Forms in Texts"
+    },
+    CompoundWordsCard: {
+        title: "Compound Words"
+    },
+    RelatedWordsCard: {
+        title: "Related Words (Gyalrongic)"
+    },
+    CorpusExamplesCard: {
+        title: "Corpus Examples"
+    },
+    DictionaryEdit: {
+        createTitle: "Create Dictionary Entry",
+        editTitle: "Edit Entry",
+        sections: {
+            basic: "Basic Information",
+            components: "Component Breakdown",
+            phonology: "Phonology & Structure",
+            compoundWords: "Compound Words"
+        },
+        character: "Character",
+        unicodeCode: "Unicode Code",
+        unicodeKey: "Unicode Key",
+        strokeCountUnicode: "Strokes (Unicode)",
+        strokeCountTotal: "Strokes (Total)",
+        tone: "Tone",
+        seaOfWriting: "Sea of Writing (4 chars)",
+        linkedArticleId: "Linked Article ID",
+        addComponent: "Add Component",
+        compoundText: "Word",
+        compoundMeaning: "Meaning",
+        enterMeaning: "Enter word meaning",
+        addCompoundWord: "Add Compound Word",
+        note: "Note"
+    },
     AuthComponent: {
         email: 'Email',
         nickname: 'Nickname',
@@ -58,7 +149,17 @@ const en = {
         date: "Creation date",
         description: "Description",
         material: "Material",
-        storage: "Storage"
+        storage: "Storage",
+        catalog: "Catalog reference",
+        repository: "Repository",
+        form: "Format",
+        height: "Height",
+        width: "Width",
+        frameType: "Frame type",
+        frameHeight: "Frame height",
+        pages: "Number of pages",
+        linesPerPage: "Lines per page",
+        charactersPerLine: "Characters per line"
     }, TextEditPage: {
         addFragment: "Add fragment",
         textName: "Text name",

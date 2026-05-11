@@ -59,13 +59,13 @@ import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComp
 import {useI18n} from "vue-i18n";
 import {computed, ref, watch} from "vue";
 
-const props = defineProps<{ query?: string; mode?: string }>()
+const props = defineProps<{ query?: string; mode?: 'texts' | 'dict' }>()
 const emit = defineEmits(['update:query', 'update:mode'])
 const searchInput = ref<HTMLInputElement | null>(null)
 const searchButton = ref<HTMLButtonElement | null>(null)
 const searchContainer = ref<HTMLDivElement | null>(null)
 const userQuery = ref(props.query || '')
-const searchMode = ref<'texts' | 'dict'>('texts')
+const searchMode = ref<'texts' | 'dict'>(props.mode || 'texts')
 const showHistory = ref(false)
 const showTangutPopup = ref(false)
 const {t} = useI18n()
@@ -89,13 +89,16 @@ const selectRadical = (radical: string) => {
   userQuery.value += radical
 }
 
+watch(() => props.mode, (newMode) => {
+  if (newMode) {
+    searchMode.value = newMode
+  }
+})
+
 const setSearchMode = (mode: 'texts' | 'dict') => {
   searchMode.value = mode
+  emit('update:mode', mode)
 }
-
-watch(() => props.query, (newQuery) => {
-  userQuery.value = newQuery || ''
-})
 
 const handleSearch = () => {
   showHistory.value = false

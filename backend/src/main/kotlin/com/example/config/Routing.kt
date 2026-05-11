@@ -12,6 +12,7 @@ fun Application.configureRouting(
     textPageService: TextPageService,
     securityService: SecurityService,
     imageService: ImageService,
+    dictionaryService: DictionaryService,
 ) {
     routing {
         authRoutes(securityService, userService)
@@ -20,5 +21,6 @@ fun Application.configureRouting(
         textRoutes(textService)
         textPageRoutes(textPageService)
         imageRoutes(imageService)
+        dictionaryRoutes(dictionaryService)
     }
 }

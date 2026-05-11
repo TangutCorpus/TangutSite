@@ -224,3 +224,83 @@ export async function deleteUser(id: string): Promise<boolean> {
         return false;
     }
 }
+
+import type {
+    DictionaryArticle,
+    DictionaryInfo,
+    DictionaryReference,
+    DictionarySearchResult,
+} from '@/helpers/http/interfaces'
+
+const BASE = import.meta.env.VITE_API_BASE_URL ?? ''
+
+async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
+    const res = await fetch(`${BASE}${path}`, {
+        headers: { 'Content-Type': 'application/json' },
+        ...init,
+    })
+    if (!res.ok) throw new Error(`API error ${res.status}: ${path}`)
+    return res.json() as Promise<T>
+}
+
+export const getAvailableDictionaries = async (): Promise<DictionaryInfo[]> => {
+    try {
+        const res = await api.get('/dict/dictionaries');
+        return res.data;
+    } catch (err) {
+        return [];
+    }
+}
+export const addDictionaryReference = async (
+    articleId: string,
+    reference: DictionaryReference,
+): Promise<DictionaryReference[]> => {
+    const res = await api.post(`/dict/articles/${articleId}/references`, reference);
+    return res.data;
+}
+
+export const removeDictionaryReference = async (
+    articleId: string,
+    dictionaryId: string,
+): Promise<DictionaryReference[]> => {
+    const res = await api.delete(`/dict/articles/${articleId}/references/${dictionaryId}`);
+    return res.data;
+}
+
+export const searchDictionary = async (query: string): Promise<DictionarySearchResult[]> => {
+    try {
+        const res = await api.get(`/dict/search`, { params: { q: query } });
+        return res.data;
+    } catch (err) {
+        return [];
+    }
+}
+export async function getDictionaryArticle(id: string): Promise<DictionaryArticle | null> {
+    try {
+        const res = await api.get<DictionaryArticle>(`/dict/articles/${id}`);
+        return res.data;
+    } catch (err) {
+        sendError(ERRORS.FETCH_TEXT_FAILED, err);
+        return null;
+    }
+}
+
+export async function createDictionaryArticle(article: Partial<DictionaryArticle>): Promise<string | null> {
+    try {
+        const res = await api.post("/dict/articles", article);
+        return res.data;
+    } catch (err) {
+        sendError(ERRORS.CREATE_TEXT_FAILED, err);
+        return null;
+    }
+}
+
+export async function updateDictionaryArticle(id: string, article: DictionaryArticle): Promise<boolean> {
+    try {
+        const res = await api.put(`/dict/articles/${id}`, article);
+        return res.status === 200 || res.status === 204;
+    } catch (err) {
+        sendError(ERRORS.UPDATE_TEXT_FAILED, err);
+        return false;
+    }
+}

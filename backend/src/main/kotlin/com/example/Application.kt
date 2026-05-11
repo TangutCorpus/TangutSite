@@ -34,7 +34,10 @@ fun Application.module() {
     val textPageRepository = TextPageRepository(database)
     val textPageService = TextPageService(textPageRepository)
 
-    val searchService = SearchService(textRepository, textPageRepository)
+    val dictionaryRepository = DictionaryRepository(database)
+    val dictionaryService = DictionaryService(dictionaryRepository)
+
+    val searchService = SearchService(textRepository, textPageRepository, dictionaryRepository)
 
     val imageRepository = ImageRepository()
     val imageService = ImageService(imageRepository)
@@ -44,5 +47,5 @@ fun Application.module() {
     configureExceptionHandling()
     configureMonitoring()
     configureHTTP(isProduction, deploymentHosts)
-    configureRouting(userService, textService, searchService, textPageService, securityService, imageService)
+    configureRouting(userService, textService, searchService, textPageService, securityService, imageService, dictionaryService)
 }

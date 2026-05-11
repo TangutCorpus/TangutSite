@@ -12,7 +12,7 @@
     <div class="col-span-2 card-container self-start">
       <h1 class="text-center text-bold">{{ $t('TextPage.information') }}</h1>
       <div v-for="(fields, section) in JSON.parse(text.metadata)" :key="section" class="text-gray-700">
-        {{ section }}: {{ fields }}
+        {{ availableProperties[section] }}: {{ fields }}
       </div>
     </div>
 
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, Ref, ref} from 'vue'
+import {onMounted, computed, Ref, ref} from 'vue'
 import GlossedText from '@/pages/TextPage/components/GlossedText.vue'
 import {parseXmlComment} from '@/helpers/xml/xmlParser'
 import {useRoute, useRouter} from 'vue-router'
@@ -34,6 +34,7 @@ import {TextPage} from "@/helpers/http/interfaces";
 import {getTextById, getTextPageById} from "@/helpers/http/sessions";
 import NotFoundPage from "@/pages/NotFoundPage/NotFoundPage.vue";
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
+import {useI18n} from "vue-i18n";
 
 const router = useRouter()
 const route = useRoute()
@@ -41,6 +42,7 @@ const text: Ref<Text> = ref(null)
 const textPages: Ref<TextPage[]> = ref([])
 const parsedComment = ref({})
 const currentTextId = route.params.id
+const {t} = useI18n()
 
 const editTextPage = () => {
   router.push(`/text/${currentTextId}/edit`)
@@ -55,4 +57,22 @@ onMounted(async () => {
     textPages.value.push(page)
   }
 })
+
+const availableProperties = computed(() => ({
+  author: t('TextMetadataEdit.author'),
+  date: t('TextMetadataEdit.date'),
+  description: t('TextMetadataEdit.description'),
+  material: t('TextMetadataEdit.material'),
+  storage: t('TextMetadataEdit.storage'),
+  catalog: t('TextMetadataEdit.catalog'),
+  repository: t('TextMetadataEdit.repository'),
+  form: t('TextMetadataEdit.form'),
+  height: t('TextMetadataEdit.height'),
+  width: t('TextMetadataEdit.width'),
+  frameType: t('TextMetadataEdit.frameType'),
+  frameHeight: t('TextMetadataEdit.frameHeight'),
+  pages: t('TextMetadataEdit.pages'),
+  linesPerPage: t('TextMetadataEdit.linesPerPage'),
+  charactersPerLine: t('TextMetadataEdit.charactersPerLine')
+}))
 </script>
