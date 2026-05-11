@@ -11,7 +11,7 @@ fun main(args: Array<String>): Unit = EngineMain.main(args)
 fun Application.module() {
     val config = environment.config
 
-    val isProduction = config.property("ktor.deployment.mode").getString() == "production"
+    val isProduction = config.property("ktor.environment").getString() == "prod"
     val deploymentHosts = config.property("ktor.deployment.hosts").getString()
     val dbUrl = config.property("ktor.db.url").getString()
     val dbUser = config.property("ktor.db.user").getString()
