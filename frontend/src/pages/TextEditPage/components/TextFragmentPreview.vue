@@ -35,7 +35,7 @@ import {ref} from 'vue'
 import BaseButton from '@/components/BaseButtonComponent/BaseButtonComponent.vue'
 import BlockquoteComponent from "@/components/BlockquoteComponent/BlockquoteComponent.vue";
 import {useI18n} from "vue-i18n";
-import {parseTranslationsXML} from "@/helpers/xml/xmlParser";
+import parseTranslationsXML from "@/helpers/xml/xmlParser";
 
 const {t} = useI18n()
 
@@ -46,5 +46,10 @@ const showTranslation = ref(false)
 const toggleTranslation = () => showTranslation.value = !showTranslation.value
 
 const isUnavailable = ref(false)
-const getLanguageName = lang => ({ru: t('TranslationList.russian'), en: t('TranslationList.english')}[lang] || lang)
+const getLanguageName = lang => ({
+  ru: t('languages.ru'),
+  en: t('languages.en'),
+  zh_mn: t('languages.zh_mn'),
+  zh_tw: t('languages.zh_tw'),
+}[lang] || lang)
 </script>

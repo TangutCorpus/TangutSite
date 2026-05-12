@@ -5,7 +5,7 @@ COPY gradle ./gradle
 COPY build.gradle.kts settings.gradle.kts gradle.properties ./
 RUN chmod +x gradlew
 COPY . .
-RUN ./gradlew build --refresh-dependencies -x test
+RUN ./gradlew build -x test
 FROM amazoncorretto:20
 WORKDIR /app
 COPY --from=builder /app/build/libs/org.tangut.tangutsite-all.jar /app/tangutsite-back.jar

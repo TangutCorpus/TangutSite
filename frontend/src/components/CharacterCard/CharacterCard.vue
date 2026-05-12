@@ -19,15 +19,12 @@
             :key="comp.id"
             class="flex flex-col items-center cursor-pointer hover:opacity-80 transition-opacity"
             :title="$t(`CharacterCard.roles.${comp.role}`)"
-            @click="$emit('componentClick', comp.articleId)"
+            @click="handleComponentClick(comp)"
         >
-          <span
-              class="text-3xl p-2 rounded-md border-2"
-              :class="roleClass(comp.role)"
-          >{{ comp.character }}</span>
-          <span class="text-xs mt-1" :class="roleLabelClass(comp.role)">
-            {{ $t(`CharacterCard.roles.${comp.role}`) }}
-          </span>
+        <span
+            class="text-3xl p-2 rounded-md border-2"
+            :class="roleClass(comp.role)"
+        >{{ comp.character }}</span>
         </button>
       </div>
     </div>
@@ -48,9 +45,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import type { CharacterComponent, ComponentRole } from '@/helpers/http/interfaces'
+import {ref} from 'vue'
+import { useRouter } from 'vue-router'
+import type {CharacterComponent, ComponentRole} from '@/helpers/http/interfaces'
 import BadgeTag from '@/components/CharacterCard/subcomponents/BadgeTag.vue'
+
+const router = useRouter()
 
 defineProps<{
   character: string
@@ -77,6 +77,16 @@ const ROLE_LABEL_CLASSES: Record<ComponentRole, string> = {
   phonetic: 'text-teal-700',
   chinesePhonetic: 'text-amber-700',
   other: 'text-gray-500',
+}
+
+const handleComponentClick = (comp: CharacterComponent) => {
+  router.push({
+    path: '/search',
+    query: {
+      query: `components=in="${comp.character}"`,
+      mode: 'dict'
+    }
+  })
 }
 
 const roleClass = (role: ComponentRole) => ROLE_CLASSES[role] ?? ROLE_CLASSES.other

@@ -12,6 +12,7 @@ import SearchResultPage from '@/pages/SearchResultPage/SearchResultPage.vue'
 import TextFragmentEditPage from '@/pages/TextFragmentEditPage/TextFragmentEditPage.vue'
 import DictionaryArticlePage from "@/pages/DictionaryArticlePage/DictionaryArticlePage.vue";
 import DictionaryArticleEditPage from "@/pages/DictionaryArticleEditPage/DictionaryArticleEditPage.vue";
+import DictionaryPage from "@/pages/DictionaryPage/DictionaryPage.vue";
 
 const routes = [
     {path: '/', component: HomePage},
@@ -31,6 +32,7 @@ const routes = [
     {path: '/dict/add', component: DictionaryArticleEditPage},
     {path: '/dict/:id', component: DictionaryArticlePage},
     {path: '/dict/:id/edit', component: DictionaryArticleEditPage},
+    {path: '/dict/', component: DictionaryPage},
 
     {path: '/user/:id', component: UserPage},
     {path: '/user/:id/edit', component: UserEditPage},

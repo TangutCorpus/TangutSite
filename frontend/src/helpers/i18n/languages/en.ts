@@ -7,6 +7,12 @@ const en = {
         hide: "Hide",
         delete: "Delete"
     },
+    languages: {
+        ru: "Russian",
+        en: "English",
+        zh_tw: "Traditional Chinese",
+        zh_cn: "Simplified Chinese",
+    },
     DictionaryArticlePage: {
         title: "Dictionary Entry",
         edit: "Edit",
@@ -90,6 +96,27 @@ const en = {
         addCompoundWord: "Add Compound Word",
         note: "Note"
     },
+    About: {
+        title: "Tangut Heritage",
+        subtitle: "2026",
+        historyTitle: "A Forgotten Script",
+        historyP1: "Tangut script (Xi Xia) is one of the most complex and enigmatic writing systems in human history. Created in the 11th century for the needs of the Great State of Xi Xia, it consists of over 6,000 unique characters, each of which can surpass Chinese characters in complexity.",
+        historyP2: "After the fall of the state under the onslaught of Genghis Khan's troops in 1227, the language was practically forgotten for seven centuries until priceless manuscripts were discovered in the dead city of Khara-Khoto at the beginning of the 20th century.",
+        missionTitle: "Our Project's Mission",
+        missionText: "We are creating a digital environment for the deciphering and study of Tangut texts. Our goal is to make ancient manuscripts accessible to a new generation of researchers and linguists, combining philological precision with modern data processing technologies.",
+        featuresTitle: "System Features",
+        features: [
+            "Complete absence of borrowed characters",
+            "Ultra-complex ideographic structure",
+            "Unique Buddhist canonical texts",
+            "Logical system of radical construction"
+        ],
+        stats: {
+            characters: "Characters",
+            year: "Year",
+            texts: "Texts"
+        }
+    },
     AuthComponent: {
         email: 'Email',
         nickname: 'Nickname',
@@ -104,6 +131,7 @@ const en = {
         registrationHeader: 'Registration',
         signInHeader: 'Sign In'
     }, HeaderNavComponent: {
+        dictionary: 'Dictionary',
         aboutPage: 'About us',
         library: 'Library',
         signIn: 'Sign In',
@@ -139,8 +167,6 @@ const en = {
         error: "Error",
         notAccessible: "Page unavailable…",
         page: "Page",
-        russian: "Russian",
-        english: "English"
     }, TextMetadataEdit: {
         textMetadata: "Text metadata",
         deleteProperty: "Delete property",
@@ -166,8 +192,6 @@ const en = {
         toSave: "Save",
         saved: "Saved"
     }, TranslationListEdit: {
-        russian: "Russian",
-        english: "English",
         editTranslations: "Edit translations",
         addTranslation: "Add translation",
         originalText: "Original text",
@@ -175,11 +199,10 @@ const en = {
     }, TextFragmentEditPage: {
         save: "Save"
     }, TranslationList: {
+        original: "Оригинал",
         translations: "Translations",
         error: "Error",
         noTranslations: "No available translations…",
-        english: "English",
-        russian: "Russian"
     }, TextFragmentPage: {
         text: "Text",
         page: "Page",
@@ -213,6 +236,9 @@ const en = {
         email: "Email",
         realName: "Full name",
         role: "Role"
+    }, DictionaryIndexPage: {
+        title: "Dictionary",
+        totalCount: "Number of articles"
     }
 }
 

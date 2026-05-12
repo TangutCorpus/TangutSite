@@ -2,13 +2,13 @@ package com.example.repository
 
 import com.example.model.Text
 import com.example.model.Texts
-import com.example.utils.toUUIDOrNull
+import com.example.utils.BaseRSQLVisitor
+import com.example.utils.CustomIlikeOp
+import com.example.utils.isRsql
 import cz.jirutka.rsql.parser.RSQLParser
-import cz.jirutka.rsql.parser.ast.*
+import cz.jirutka.rsql.parser.ast.ComparisonNode
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
@@ -24,7 +24,19 @@ class TextRepository(private val db: Database) {
     }
 
     fun getTextsByQuery(query: String): List<Text> = transaction(db) {
-        Texts.selectAll().searchText(query).mapNotNull { it.toText() }
+        val expression = if (query.isRsql()) {
+            RSQLParser().parse(query).accept(TextRSQLVisitor())
+        } else {
+            buildGlobalTextMetadataSearch(query)
+        }
+        Texts.selectAll().where { expression }.map { it.toText() }
+    }
+
+    private fun buildGlobalTextMetadataSearch(query: String): Op<Boolean> {
+        val p = "%$query%"
+        return listOf<Op<Boolean>>(
+            CustomIlikeOp(Texts.title, stringParam(p)), CustomIlikeOp(Texts.metadata, stringParam(p))
+        ).reduce { acc, op -> acc or op }
     }
 
     fun addText(text: Text) = transaction(db) {
@@ -63,52 +75,15 @@ private fun ResultRow.toText(): Text {
     )
 }
 
-
-fun Query.searchText(query: String): Query {
-    val rootNode: Node = RSQLParser().parse(query)
-    val queryExpression = rootNode.accept(TextRSQLVisitor())
-    return this.andWhere { queryExpression }
-}
-
-private class TextRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
-    override fun visit(node: AndNode): Op<Boolean> {
-        val expressions = node.children.map { it.accept(this) }
-        return expressions.reduce { acc, op -> acc and op }
-    }
-
-    override fun visit(node: OrNode): Op<Boolean> {
-        val expressions = node.children.map { it.accept(this) }
-        return expressions.reduce { acc, op -> acc or op }
-    }
-
+private class TextRSQLVisitor : BaseRSQLVisitor() {
     override fun visit(node: ComparisonNode): Op<Boolean> {
         val selector = node.selector
-        val operator = node.operator
-        val argument = node.arguments[0]
-
+        val arg = node.arguments[0]
         return when (selector) {
-            "id" -> applyUUIDComparison(Texts.id, operator, argument)
-            "title" -> applyTextComparison(Texts.title, operator, argument)
-            "metadata" -> applyTextComparison(Texts.metadata, operator, argument)
+            "id" -> applyUUIDComparison(Texts.id, node.operator, arg)
+            "title" -> applyTextComparison(Texts.title, node.operator, arg)
+            "metadata" -> applyTextComparison(Texts.metadata, node.operator, arg)
             else -> throw IllegalArgumentException("Unknown field: $selector")
-        }
-    }
-
-    fun applyUUIDComparison(col: Column<UUID>, op: ComparisonOperator, arg: String): Op<Boolean> {
-        val intValue = arg.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid UUID: $arg")
-        return when (op.symbol) {
-            "==" -> col eq intValue
-            "!=" -> col neq intValue
-            else -> throw IllegalArgumentException("Unsupported operator: ${op.symbol}")
-        }
-    }
-
-    fun applyTextComparison(col: Column<String>, op: ComparisonOperator, arg: String): Op<Boolean> {
-        return when (op.symbol) {
-            "==" -> col eq arg
-            "!=" -> col neq arg
-            "=in=" -> col like "%$arg%"
-            else -> throw IllegalArgumentException("Unsupported operator: ${op.symbol}")
         }
     }
 }

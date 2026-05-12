@@ -7,7 +7,7 @@
       <button class="absolute left-4 center-y button-light p-2"
               @click="prevImage">◀
       </button>
-      <img :src="images[currentImage]" class="max-w-full max-h-full object-contain rounded-lg" @dblclick="toggleZoom">
+      <img src="/home/witbore/Downloads/6_-_0313.webp" class="max-w-full max-h-full object-contain rounded-lg" @dblclick="toggleZoom">
       <button class="absolute right-4 center-y button-light p-2"
               @click="nextImage">▶
       </button>

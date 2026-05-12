@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="mt-3 flex gap-2">
-        <span v-if="result.tone" class="px-2 py-1 bg-slate-100 rounded text-xs">Тон: {{ result.tone }}</span>
+        <span v-if="result.tone" class="px-2 py-1 bg-slate-100 rounded text-xs"> {{ $t('RawDataCard.tone') }} : {{ result.tone }}</span>
       </div>
       <router-link
           :to="`/dict/${result.id}`"

@@ -7,17 +7,13 @@ import com.example.repository.DictionaryRepository
 import com.example.repository.TextPageRepository
 import com.example.repository.TextRepository
 
-class SearchService(private val textRepository: TextRepository, private val textPageRepository: TextPageRepository, private val dictionaryRepository: DictionaryRepository) {
-    fun searchTexts(query: String): List<Text> {
-        return textRepository.getTextsByQuery(query)
-    }
-
+class SearchService(
+    private val textRepository: TextRepository,
+    private val textPageRepository: TextPageRepository,
+    private val dictionaryRepository: DictionaryRepository
+) {
     fun searchTextPages(query: String): List<TextPage> {
         return textPageRepository.getTextPagesByQuery(query)
-    }
-
-    fun returnAllTextSearchResults(): List<Text> {
-        return textRepository.getAllTexts()
     }
 
     fun returnAllTextPageSearchResults(): List<TextPage> {

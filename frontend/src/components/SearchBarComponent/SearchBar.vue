@@ -58,6 +58,7 @@ import {useRouter} from 'vue-router'
 import BaseButtonComponent from "@/components/BaseButtonComponent/BaseButtonComponent.vue";
 import {useI18n} from "vue-i18n";
 import {computed, ref, watch} from "vue";
+import {getRadicals} from "@/helpers/radicals/radicals";
 
 const props = defineProps<{ query?: string; mode?: 'texts' | 'dict' }>()
 const emit = defineEmits(['update:query', 'update:mode'])
@@ -71,15 +72,7 @@ const showTangutPopup = ref(false)
 const {t} = useI18n()
 const router = useRouter()
 
-const radicals = computed(() => {
-  const start = 0x18800
-  const end = 0x18AFF
-  const arr: string[] = []
-  for (let cp = start; cp <= end; cp++) {
-    arr.push(String.fromCodePoint(cp))
-  }
-  return arr
-})
+const radicals = computed(() => getRadicals())
 
 const toggleTangutPopup = () => {
   showTangutPopup.value = !showTangutPopup.value

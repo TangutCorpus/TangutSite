@@ -3,7 +3,7 @@
     <button class="absolute left-2 center-y button-helper"
             @click="prevImage">◀
     </button>
-    <img src="@/assets/images/404.svg" class="w-auto max-h-full mx-auto cursor-pointer rounded-lg"
+    <img src="/home/witbore/Downloads/6_-_0313.webp" class="w-auto max-h-full mx-auto cursor-pointer rounded-lg"
          @click="$emit('open-slider')">
     <button class="absolute right-2 center-y button-helper"
             @click="nextImage">▶

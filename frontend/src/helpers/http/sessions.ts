@@ -195,6 +195,21 @@ export async function getUserById(id: string): Promise<User | null> {
     }
 }
 
+export const getAllDictionaryResults = async (): Promise<DictionaryArticle[]> => {
+    try {
+        const response = await api.get<DictionaryArticle[]>('/search', {
+            params: {
+                query: '',
+                mode: 'dict'
+            }
+        })
+        return response.data
+    } catch (error) {
+        console.error('Error fetching all dictionary articles:', error)
+        throw error
+    }
+}
+
 export async function getAllUsers(): Promise<User[]> {
     try {
         const res = await api.get<User[]>("/users");

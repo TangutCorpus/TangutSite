@@ -1,13 +1,15 @@
 package com.example.repository
 
-import com.example.model.*
-import com.example.utils.toUUIDOrNull
+import com.example.model.DictionaryArticle
+import com.example.model.DictionaryArticles
+import com.example.utils.BaseRSQLVisitor
+import com.example.utils.CustomIlikeOp
+import com.example.utils.CustomJsonbIlikeOp
+import com.example.utils.isRsql
 import cz.jirutka.rsql.parser.RSQLParser
 import cz.jirutka.rsql.parser.ast.*
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.like
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.neq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.*
 
@@ -19,12 +21,27 @@ class DictionaryRepository(private val db: Database) {
     }
 
     fun getArticleById(id: UUID): DictionaryArticle? = transaction(db) {
-        DictionaryArticles.selectAll().where { DictionaryArticles.id eq id }
-            .mapNotNull { it.toDictionaryArticle() }.singleOrNull()
+        DictionaryArticles.selectAll().where { DictionaryArticles.id eq id }.mapNotNull { it.toDictionaryArticle() }
+            .singleOrNull()
     }
 
     fun getArticlesByQuery(query: String): List<DictionaryArticle> = transaction(db) {
-        DictionaryArticles.selectAll().searchArticles(query).mapNotNull { it.toDictionaryArticle() }
+        val expression = if (query.isRsql()) {
+            RSQLParser().parse(query).accept(DictionaryRSQLVisitor())
+        } else {
+            buildGlobalDictionarySearch(query)
+        }
+        DictionaryArticles.selectAll().where { expression }.map { it.toDictionaryArticle() }
+    }
+
+    private fun buildGlobalDictionarySearch(query: String): Op<Boolean> {
+        val p = "%$query%"
+        return listOf<Op<Boolean>>(
+            CustomIlikeOp(DictionaryArticles.character, stringParam(p)),
+            CustomIlikeOp(DictionaryArticles.seaOfWritingAnalysis, stringParam(p)),
+            CustomJsonbIlikeOp(DictionaryArticles.components, p),
+            CustomJsonbIlikeOp(DictionaryArticles.corpusExamples, p)
+        ).reduce { acc, op -> acc or op }
     }
 
     fun addArticle(article: DictionaryArticle) = transaction(db) {
@@ -111,40 +128,16 @@ private fun ResultRow.toDictionaryArticle() = DictionaryArticle(
     corpusExamples = this[DictionaryArticles.corpusExamples]
 )
 
-fun Query.searchArticles(query: String): Query {
-    val rootNode: Node = RSQLParser().parse(query)
-    val queryExpression = rootNode.accept(DictionaryRSQLVisitor())
-    return this.andWhere { queryExpression }
-}
-
-private class DictionaryRSQLVisitor : NoArgRSQLVisitorAdapter<Op<Boolean>>() {
-    override fun visit(node: AndNode): Op<Boolean> = node.children.map { it.accept(this) }.reduce { acc, op -> acc and op }
-    override fun visit(node: OrNode): Op<Boolean> = node.children.map { it.accept(this) }.reduce { acc, op -> acc or op }
-
+private class DictionaryRSQLVisitor : BaseRSQLVisitor() {
     override fun visit(node: ComparisonNode): Op<Boolean> {
         val selector = node.selector
-        val operator = node.operator
-        val argument = node.arguments[0]
-
+        val arg = node.arguments[0]
         return when (selector) {
-            "id" -> applyUUIDComparison(DictionaryArticles.id, operator, argument)
-            "character" -> applyTextComparison(DictionaryArticles.character, operator, argument)
-            "unicodeCode" -> applyTextComparison(DictionaryArticles.unicodeCode, operator, argument)
-            "tone" -> applyTextComparison(DictionaryArticles.tone, operator, argument)
+            "id" -> applyUUIDComparison(DictionaryArticles.id, node.operator, arg)
+            "character" -> applyTextComparison(DictionaryArticles.character, node.operator, arg)
+            "components" -> CustomJsonbIlikeOp(DictionaryArticles.components, "%$arg%")
+            "pureText" -> applyTextComparison(DictionaryArticles.seaOfWritingAnalysis, node.operator, arg)
             else -> throw IllegalArgumentException("Unknown field: $selector")
-        }
-    }
-
-    fun applyUUIDComparison(col: Column<UUID>, op: ComparisonOperator, arg: String): Op<Boolean> {
-        val uuid = arg.toUUIDOrNull() ?: throw IllegalArgumentException("Invalid UUID")
-        return if (op.symbol == "==") col eq uuid else col neq uuid
-    }
-
-    fun applyTextComparison(col: Column<String>, op: ComparisonOperator, arg: String): Op<Boolean> {
-        return when (op.symbol) {
-            "==" -> col eq arg
-            "=in=" -> col like "%$arg%"
-            else -> col neq arg
         }
     }
 }
